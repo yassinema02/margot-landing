@@ -22,7 +22,7 @@ export default function Page() {
   return (
     <>
       <Header lang={lang} setLang={setLang} />
-      <Hero t={t} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} />
+      <Hero t={t} lang={lang} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} />
       <FadeIn>
         <Problem t={t} />
       </FadeIn>
@@ -36,7 +36,7 @@ export default function Page() {
         <Pricing t={t} />
       </FadeIn>
       <FadeIn>
-        <SecondCapture t={t} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} />
+        <SecondCapture t={t} lang={lang} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} />
       </FadeIn>
       <FadeIn>
         <Faq t={t} />

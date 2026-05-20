@@ -6,13 +6,14 @@ import { WaitlistForm } from "./WaitlistForm";
 
 interface Props {
   t: LangContent;
+  lang: "en" | "fr";
   submitted: boolean;
   setSubmitted: (v: boolean) => void;
   email: string;
   setEmail: (v: string) => void;
 }
 
-export function Hero({ t, submitted, setSubmitted, email, setEmail }: Props) {
+export function Hero({ t, lang, submitted, setSubmitted, email, setEmail }: Props) {
   return (
     <section id="top" className="max-w-[1280px] mx-auto px-6 pt-[clamp(48px,8vw,96px)] pb-20">
       <div className="hero-grid grid items-center gap-[clamp(32px,5vw,64px)] grid-cols-1 md:[grid-template-columns:minmax(0,1.3fr)_minmax(0,1fr)]">
@@ -30,7 +31,7 @@ export function Hero({ t, submitted, setSubmitted, email, setEmail }: Props) {
             {t.hero.subline}
           </div>
           <div className="mt-[clamp(28px,3vw,40px)]">
-            <WaitlistForm t={t} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} variant="hero" />
+            <WaitlistForm t={t} lang={lang} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} variant="hero" />
           </div>
         </div>
         <div className="flex justify-center order-1 md:order-2">

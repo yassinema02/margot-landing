@@ -7,6 +7,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface Props {
   t: LangContent;
+  lang: "en" | "fr";
   submitted: boolean;
   setSubmitted: (v: boolean) => void;
   email: string;
@@ -14,11 +15,11 @@ interface Props {
   variant?: "hero" | "footer";
 }
 
-export function WaitlistForm({ t, submitted, setSubmitted, email, setEmail, variant = "hero" }: Props) {
+export function WaitlistForm({ t, lang, submitted, setSubmitted, email, setEmail, variant = "hero" }: Props) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!EMAIL_RE.test(email)) {
       setError(t.hero.placeholder);
@@ -26,11 +27,19 @@ export function WaitlistForm({ t, submitted, setSubmitted, email, setEmail, vari
     }
     setError("");
     setPending(true);
-    // TODO: swap with Beehiiv endpoint.
-    setTimeout(() => {
-      setPending(false);
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, lang }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setSubmitted(true);
-    }, 700);
+    } catch {
+      setError(t.hero.placeholder);
+    } finally {
+      setPending(false);
+    }
   };
 
   const maxW = variant === "hero" ? "max-w-[520px]" : "max-w-[600px]";
