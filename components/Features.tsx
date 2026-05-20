@@ -8,7 +8,7 @@ export function Features({ t }: { t: LangContent }) {
         {t.features.map((f, i) => (
           <div key={i} className="px-6 py-8 bg-surface border border-warm2 rounded-lg flex flex-col items-center text-center">
             <div className="mb-6">
-              <PhoneMockup src={f.img} alt={f.imgAlt} size="feature" />
+              <PhoneMockup variant={f.screen} alt={f.alt} size="feature" />
             </div>
             <div className="font-display font-normal text-ink opsz-96 text-[26px] leading-[1.1] tracking-tight4 mb-3">
               {f.title}

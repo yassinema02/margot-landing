@@ -41,7 +41,7 @@ export function Hero({ t, lang, submitted, setSubmitted, email, setEmail }: Prop
         </div>
         <div className="flex justify-center order-1 md:order-2">
           <div className="relative">
-            <PhoneMockup src="/screenshots/hero-today.png" alt={t.hero.phoneAlt} size="hero" priority />
+            <PhoneMockup variant="today" alt={t.hero.phoneAlt} size="hero" />
             <div
               aria-hidden="true"
               className="absolute -top-6 -right-6 md:-top-8 md:-right-10 w-[80px] md:w-[96px] pointer-events-none"

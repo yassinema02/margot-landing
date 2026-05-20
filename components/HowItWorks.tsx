@@ -25,7 +25,7 @@ export function HowItWorks({ t }: { t: LangContent }) {
             <div className="font-sans text-[15px] leading-relaxed text-ink2 tracking-tight7 [text-wrap:pretty] max-w-[320px] mb-7">
               {step.body}
             </div>
-            <PhoneMockup src={step.img} alt={step.imgAlt} size="step" />
+            <PhoneMockup variant={step.screen} alt={step.alt} size="step" />
           </div>
         ))}
       </div>

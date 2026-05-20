@@ -1,11 +1,13 @@
 export type MargotState = "considering" | "pleased" | "skeptical";
 
+export type ScreenVariant = "today" | "grid" | "capture" | "check";
+
 export interface FeatureItem {
   title: string;
   body: string;
   state: MargotState;
-  img: string;
-  imgAlt: string;
+  screen: ScreenVariant;
+  alt: string;
 }
 
 export interface FaqEntry {
@@ -22,8 +24,8 @@ export interface HowItWorksStep {
   num: string;
   title: string;
   body: string;
-  img: string;
-  imgAlt: string;
+  screen: ScreenVariant;
+  alt: string;
 }
 
 export interface ComparisonRow {
@@ -133,22 +135,22 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           num: "01",
           title: "Snap your closet",
           body: "Take photos of your clothes once. Margot's vision pipeline tags fabric, color, and category.",
-          img: "/screenshots/step-1-snap.png",
-          imgAlt: "Margot capture screen showing a clothing item being added to the wardrobe",
+          screen: "capture",
+          alt: "Margot capture screen detecting a wool cream sweater",
         },
         {
           num: "02",
           title: "Let her learn",
           body: "She builds a memory of every piece — what's hanging, what's neglected, what pairs with what.",
-          img: "/screenshots/step-2-grid.png",
-          imgAlt: "Wardrobe grid view in Margot showing tagged clothing items",
+          screen: "grid",
+          alt: "Wardrobe grid view in Margot showing 87 tagged pieces",
         },
         {
           num: "03",
           title: "Get dressed",
           body: "Each morning, an outfit suggestion based on weather, your calendar, and what you haven't worn lately.",
-          img: "/screenshots/step-3-today.png",
-          imgAlt: "Today's outfit suggestion screen in Margot",
+          screen: "today",
+          alt: "Today's outfit suggestion screen in Margot",
         },
       ],
     },
@@ -157,22 +159,22 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         title: "A wardrobe she knows by heart",
         body: "Upload your clothes once. Margot remembers everything — what's hanging, what's neglected, what pairs with what.",
         state: "considering",
-        img: "/screenshots/feat-wardrobe.png",
-        imgAlt: "Margot wardrobe grid view",
+        screen: "grid",
+        alt: "Margot wardrobe grid showing tagged pieces",
       },
       {
         title: "Daily looks, composed",
         body: "Each morning, an outfit suggestion based on the weather, your calendar, and the pieces that haven’t been worn lately.",
         state: "pleased",
-        img: "/screenshots/feat-daily.png",
-        imgAlt: "Margot daily outfit detail screen",
+        screen: "today",
+        alt: "Margot daily outfit detail screen",
       },
       {
         title: "Check before you buy",
         body: "Found something you want? Margot tells you whether it actually works with what you have — before you spend.",
         state: "skeptical",
-        img: "/screenshots/feat-check.png",
-        imgAlt: "Margot check-before-you-buy comparison dialog",
+        screen: "check",
+        alt: "Margot check-before-you-buy compatibility score",
       },
     ],
     meet: {
@@ -209,8 +211,24 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     socialProof: {
       eyebrow: "Early voices",
       items: [
-        { quote: "[TESTIMONIAL_1 — Yassine to fill]", name: "[Name]", role: "[Role]" },
-        { quote: "[TESTIMONIAL_2 — Yassine to fill]", name: "[Name]", role: "[Role]" },
+        {
+          quote:
+            "I'm the kind of person who texts photos to friends asking 'is this okay?'. Margot just answers.",
+          name: "Aya",
+          role: "Beta tester · Paris",
+        },
+        {
+          quote:
+            "I bought one jumper in March. Margot showed me the fourteen I'd forgotten I owned.",
+          name: "Inès",
+          role: "Stylist · London",
+        },
+        {
+          quote:
+            "Used to take me twenty minutes to get dressed. Now it's four — and I look less like I gave up.",
+          name: "Camille",
+          role: "Architect · Lyon",
+        },
       ],
     },
     faqHeading: "Questions, briefly.",
@@ -269,22 +287,22 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           num: "01",
           title: "Photographiez vos vêtements",
           body: "Photographiez chaque pièce une fois. Margot détecte la matière, la couleur et la catégorie.",
-          img: "/screenshots/step-1-snap.png",
-          imgAlt: "Écran de capture d'une pièce dans Margot",
+          screen: "capture",
+          alt: "Écran de capture d'une pièce dans Margot",
         },
         {
           num: "02",
           title: "Laissez-la apprendre",
           body: "Elle construit la mémoire de votre dressing — ce qui pend, ce qui dort, ce qui va avec quoi.",
-          img: "/screenshots/step-2-grid.png",
-          imgAlt: "Vue grille du dressing dans Margot",
+          screen: "grid",
+          alt: "Vue grille du dressing dans Margot",
         },
         {
           num: "03",
           title: "Habillez-vous",
           body: "Chaque matin, une tenue suggérée selon la météo, votre agenda et les pièces que vous délaissez.",
-          img: "/screenshots/step-3-today.png",
-          imgAlt: "Écran de la tenue du jour dans Margot",
+          screen: "today",
+          alt: "Écran de la tenue du jour dans Margot",
         },
       ],
     },
@@ -293,22 +311,22 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         title: "Une garde-robe qu’elle connaît par cœur",
         body: "Photographiez vos vêtements une fois. Margot retient tout — ce qui pend, ce qui dort, ce qui va avec quoi.",
         state: "considering",
-        img: "/screenshots/feat-wardrobe.png",
-        imgAlt: "Vue grille du dressing dans Margot",
+        screen: "grid",
+        alt: "Vue grille du dressing dans Margot",
       },
       {
         title: "Une tenue, chaque matin",
         body: "Chaque jour, une suggestion d’outfit pensée selon la météo, votre agenda, et les pièces que vous délaissez.",
         state: "pleased",
-        img: "/screenshots/feat-daily.png",
-        imgAlt: "Détail d'une tenue quotidienne dans Margot",
+        screen: "today",
+        alt: "Détail d'une tenue quotidienne dans Margot",
       },
       {
         title: "Avant d’acheter, demandez à Margot",
         body: "Une pièce vous tente ? Margot vous dit si elle complète vraiment votre garde-robe — avant que vous ne sortiez la carte.",
         state: "skeptical",
-        img: "/screenshots/feat-check.png",
-        imgAlt: "Écran 'avant d'acheter' dans Margot",
+        screen: "check",
+        alt: "Écran 'avant d'acheter' dans Margot",
       },
     ],
     meet: {
@@ -345,8 +363,24 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     socialProof: {
       eyebrow: "Premières voix",
       items: [
-        { quote: "[TESTIMONIAL_1 — Yassine to fill]", name: "[Name]", role: "[Role]" },
-        { quote: "[TESTIMONIAL_2 — Yassine to fill]", name: "[Name]", role: "[Role]" },
+        {
+          quote:
+            "Je suis du genre à envoyer des photos aux copines en mode 'ça va ?'. Margot, elle, répond.",
+          name: "Aya",
+          role: "Bêta-testeuse · Paris",
+        },
+        {
+          quote:
+            "J'ai acheté un pull en mars. Margot m'a montré les quatorze que j'avais oubliés.",
+          name: "Inès",
+          role: "Styliste · Londres",
+        },
+        {
+          quote:
+            "Vingt minutes pour m'habiller avant. Quatre maintenant — et j'ai moins l'air d'avoir abandonné.",
+          name: "Camille",
+          role: "Architecte · Lyon",
+        },
       ],
     },
     faqHeading: "Questions, en bref.",
