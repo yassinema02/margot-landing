@@ -50,7 +50,7 @@ function FaqItem({ q, a, isOpen, onToggle }: ItemProps) {
 }
 
 export function Faq({ t }: { t: LangContent }) {
-  const [open, setOpen] = useState<number>(-1);
+  const [open, setOpen] = useState<number>(0);
   return (
     <section className="max-w-[880px] mx-auto px-6 py-[clamp(64px,8vw,120px)]">
       <div className="mb-8">

@@ -4,10 +4,12 @@ import { useState } from "react";
 import { LANDING_CONTENT } from "@/lib/content";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { Problem } from "@/components/Problem";
+import { HowItWorks } from "@/components/HowItWorks";
 import { Features } from "@/components/Features";
+import { WhyMargot } from "@/components/WhyMargot";
 import { MeetMargot } from "@/components/MeetMargot";
 import { Pricing } from "@/components/Pricing";
+import { SocialProof } from "@/components/SocialProof";
 import { SecondCapture } from "@/components/SecondCapture";
 import { Faq } from "@/components/Faq";
 import { Footer } from "@/components/Footer";
@@ -24,10 +26,13 @@ export default function Page() {
       <Header lang={lang} setLang={setLang} />
       <Hero t={t} lang={lang} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} />
       <FadeIn>
-        <Problem t={t} />
+        <HowItWorks t={t} />
       </FadeIn>
       <FadeIn>
         <Features t={t} />
+      </FadeIn>
+      <FadeIn>
+        <WhyMargot t={t} />
       </FadeIn>
       <FadeIn>
         <MeetMargot t={t} />
@@ -36,12 +41,15 @@ export default function Page() {
         <Pricing t={t} />
       </FadeIn>
       <FadeIn>
+        <SocialProof t={t} />
+      </FadeIn>
+      <FadeIn>
         <SecondCapture t={t} lang={lang} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} />
       </FadeIn>
       <FadeIn>
         <Faq t={t} />
       </FadeIn>
-      <Footer t={t} />
+      <Footer t={t} lang={lang} />
     </>
   );
 }

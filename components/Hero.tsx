@@ -2,7 +2,9 @@
 
 import type { LangContent } from "@/lib/content";
 import { MargotSVG } from "./MargotSVG";
+import { PhoneMockup } from "./PhoneMockup";
 import { WaitlistForm } from "./WaitlistForm";
+import { WaitlistCounter } from "./WaitlistCounter";
 
 interface Props {
   t: LangContent;
@@ -27,16 +29,25 @@ export function Hero({ t, lang, submitted, setSubmitted, email, setEmail }: Prop
             <br />
             <em>{t.hero.headline[1]}</em>
           </h1>
-          <div className="mt-[clamp(20px,2.5vw,32px)] font-display italic text-ink2 opsz-96 text-[clamp(18px,2vw,26px)] leading-[1.3] tracking-tight6 max-w-[540px]">
+          <div className="mt-[clamp(20px,2.5vw,32px)] font-display italic text-ink2 opsz-96 text-[clamp(17px,1.8vw,22px)] leading-[1.4] tracking-tight6 max-w-[560px] [text-wrap:pretty]">
             {t.hero.subline}
           </div>
           <div className="mt-[clamp(28px,3vw,40px)]">
             <WaitlistForm t={t} lang={lang} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} variant="hero" />
+            <div className="mt-3.5 ml-1">
+              <WaitlistCounter fallback={t.hero.counterFallback} template={t.hero.counterTemplate} />
+            </div>
           </div>
         </div>
         <div className="flex justify-center order-1 md:order-2">
-          <div className="w-full max-w-[420px]">
-            <MargotSVG state="considering" size={420} showLegs />
+          <div className="relative">
+            <PhoneMockup src="/screenshots/hero-today.png" alt={t.hero.phoneAlt} size="hero" priority />
+            <div
+              aria-hidden="true"
+              className="absolute -top-6 -right-6 md:-top-8 md:-right-10 w-[80px] md:w-[96px] pointer-events-none"
+            >
+              <MargotSVG state="pleased" size={96} showLegs={false} crop="face" />
+            </div>
           </div>
         </div>
       </div>
