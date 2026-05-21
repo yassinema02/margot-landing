@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter_Tight } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -26,7 +27,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
-      <body className="font-sans bg-bg text-ink">{children}</body>
+      <body className="font-sans bg-bg text-ink">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
