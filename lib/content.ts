@@ -28,11 +28,10 @@ export interface HowItWorksStep {
   alt: string;
 }
 
-export interface ComparisonRow {
-  feature: string;
-  margot: boolean;
-  whering: boolean;
-  aesty: boolean;
+export interface DiffCard {
+  label: string;
+  headline: string;
+  body: string;
 }
 
 export interface Testimonial {
@@ -73,8 +72,8 @@ export interface LangContent {
   whyMargot: {
     eyebrow: string;
     headline: string;
-    headers: { feature: string; margot: string; whering: string; aesty: string };
-    rows: ComparisonRow[];
+    lead: string;
+    cards: DiffCard[];
   };
   pricing: {
     eyebrow: string;
@@ -183,14 +182,25 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       body: "In French folklore, Margot is the name of the magpie — the bird that collects everything that shines. She remembers where she put it. She returns to it when the season turns. Now, she keeps your closet.",
     },
     whyMargot: {
-      eyebrow: "Why Margot",
-      headline: "Other wardrobe apps stop at the closet. Margot dresses you.",
-      headers: { feature: "Feature", margot: "Margot", whering: "Whering", aesty: "Aesty" },
-      rows: [
-        { feature: "Daily AI outfit", margot: true, whering: false, aesty: false },
-        { feature: "Calendar-aware", margot: true, whering: false, aesty: false },
-        { feature: "Check-before-you-buy", margot: true, whering: false, aesty: true },
-        { feature: "7-day free trial", margot: true, whering: true, aesty: false },
+      eyebrow: "Built different",
+      headline: "Built different.",
+      lead: "Three things Margot does that other wardrobe apps don't.",
+      cards: [
+        {
+          label: "Context",
+          headline: "She reads your day, not just your closet.",
+          body: "Margot pulls your weather and calendar each morning to pick outfits that match your actual life — the meeting, the rain, the dinner you forgot you had.",
+        },
+        {
+          label: "Restraint",
+          headline: "She tells you when not to buy.",
+          body: "Found a piece you love? Margot checks if it pairs with three things you already own before you swipe. If not, she'll say so.",
+        },
+        {
+          label: "Recirculation",
+          headline: "She helps you sell what's collecting dust.",
+          body: "Items you haven't worn in months get auto-generated Vinted listings — title, description, suggested price — ready to publish in one tap.",
+        },
       ],
     },
     pricing: {
@@ -335,14 +345,25 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       body: "Dans la tradition française, Margot est le nom de la pie — l'oiseau qui collectionne tout ce qui brille. Elle se souvient d'où elle l'a posé. Elle y revient à chaque changement de saison. Aujourd'hui, elle s'occupe de votre garde-robe.",
     },
     whyMargot: {
-      eyebrow: "Pourquoi Margot",
-      headline: "Les autres apps s'arrêtent au dressing. Margot vous habille.",
-      headers: { feature: "Fonctionnalité", margot: "Margot", whering: "Whering", aesty: "Aesty" },
-      rows: [
-        { feature: "Tenue IA quotidienne", margot: true, whering: false, aesty: false },
-        { feature: "Agenda intégré", margot: true, whering: false, aesty: false },
-        { feature: "Avant d'acheter", margot: true, whering: false, aesty: true },
-        { feature: "7 jours d'essai gratuit", margot: true, whering: true, aesty: false },
+      eyebrow: "Pensée autrement",
+      headline: "Pensée autrement.",
+      lead: "Trois choses que Margot fait, et que les autres apps ne font pas.",
+      cards: [
+        {
+          label: "Contexte",
+          headline: "Elle lit votre journée, pas seulement votre dressing.",
+          body: "Chaque matin, Margot lit votre météo et votre agenda pour proposer une tenue adaptée à votre vraie journée — la réunion, la pluie, le dîner que vous aviez oublié.",
+        },
+        {
+          label: "Retenue",
+          headline: "Elle vous dit quand ne pas acheter.",
+          body: "Une pièce qui vous plaît ? Margot vérifie si elle s'associe avec au moins trois choses que vous avez déjà avant de valider. Sinon, elle vous le dit.",
+        },
+        {
+          label: "Circulation",
+          headline: "Elle vous aide à vendre ce qui prend la poussière.",
+          body: "Les pièces que vous n'avez pas portées depuis des mois génèrent automatiquement une annonce Vinted — titre, description, prix suggéré — prête à publier en un clic.",
+        },
       ],
     },
     pricing: {
