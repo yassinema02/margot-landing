@@ -2,7 +2,35 @@ import { NextResponse } from "next/server";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Simple in-memory rate limiter — 5 requests per IP per minute.
+ * Resets automatically when entries expire. Not distributed (single-process),
+ * but sufficient for a landing-page waitlist endpoint on Vercel.
+ */
+const RATE_WINDOW_MS = 60_000;
+const RATE_LIMIT = 5;
+const ipHits = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const hits = (ipHits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (hits.length >= RATE_LIMIT) return true;
+  hits.push(now);
+  ipHits.set(ip, hits);
+  return false;
+}
+
 export async function POST(req: Request) {
+  // --- rate limit ---
+  const forwarded = req.headers.get("x-forwarded-for");
+  const ip = forwarded?.split(",")[0]?.trim() ?? "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: "rate_limited" },
+      { status: 429, headers: { "Retry-After": "60" } }
+    );
+  }
+
   const apiKey = process.env.BEEHIIV_API_KEY;
   const pubId = process.env.BEEHIIV_PUBLICATION_ID;
   if (!apiKey || !pubId) {
@@ -38,8 +66,10 @@ export async function POST(req: Request) {
   });
 
   if (!res.ok) {
+    // Log detail server-side only — never expose Beehiiv error body to the client
     const text = await res.text().catch(() => "");
-    return NextResponse.json({ error: "beehiiv_error", status: res.status, detail: text.slice(0, 400) }, { status: 502 });
+    console.error(`[waitlist] Beehiiv ${res.status}: ${text.slice(0, 400)}`);
+    return NextResponse.json({ error: "upstream_error" }, { status: 502 });
   }
 
   return NextResponse.json({ ok: true });
