@@ -15,7 +15,7 @@ import { Faq } from "@/components/Faq";
 import { Footer } from "@/components/Footer";
 import { FadeIn } from "@/components/FadeIn";
 
-const REF_RE = /^[A-Z0-9]{4,16}$/;
+const REF_RE = /^[a-z0-9]{4,16}$/;
 
 export default function Page() {
   const [lang, setLang] = useState<"en" | "fr">("en");
@@ -31,7 +31,7 @@ export default function Page() {
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
-      const raw = params.get("ref")?.trim().toUpperCase();
+      const raw = params.get("ref")?.trim().toLowerCase();
       if (raw && REF_RE.test(raw)) {
         localStorage.setItem("margot:incoming_ref", raw);
       }

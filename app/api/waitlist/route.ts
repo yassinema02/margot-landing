@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { createHash } from "crypto";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const REF_RE = /^[A-Z0-9]{4,16}$/;
+// Lowercase to match how Beehiiv stores utm_content — keeps lookups
+// case-insensitive in practice across the whole pipeline.
+const REF_RE = /^[a-z0-9]{4,16}$/;
 
 /**
  * Simple in-memory rate limiter — 5 requests per IP per minute.
@@ -28,8 +30,7 @@ function refCodeForEmail(email: string): string {
   return createHash("sha256")
     .update(email.toLowerCase())
     .digest("hex")
-    .slice(0, 8)
-    .toUpperCase();
+    .slice(0, 8);
 }
 
 function positionForEmail(email: string): number {
@@ -69,8 +70,8 @@ export async function POST(req: Request) {
   }
 
   // Sanitize the referring code coming from the URL. Anything not matching the
-  // 4-16 uppercase-alphanumeric shape is dropped — we never trust the client.
-  const rawRef = body.ref?.trim().toUpperCase();
+  // 4-16 alphanumeric shape is dropped — we never trust the client.
+  const rawRef = body.ref?.trim().toLowerCase();
   const referredBy = rawRef && REF_RE.test(rawRef) ? rawRef : null;
 
   const refCode = refCodeForEmail(email);
