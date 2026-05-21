@@ -10,8 +10,8 @@ export function MeetMargot({ t }: { t: LangContent }) {
       <div className="max-w-[1200px] mx-auto">
         <div className="meet-grid grid items-center gap-[clamp(40px,6vw,96px)] grid-cols-1 md:[grid-template-columns:minmax(0,1fr)_minmax(0,1.2fr)]">
           <div className="flex justify-center order-1">
-            <div className="w-[70%] max-w-[360px]">
-              <MargotSVG state="considering" size={400} showLegs />
+            <div className="w-[60%] max-w-[220px]">
+              <MargotSVG state="considering" size={240} showLegs />
             </div>
           </div>
           <div className="order-2">

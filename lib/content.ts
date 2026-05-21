@@ -1,13 +1,11 @@
 export type MargotState = "considering" | "pleased" | "skeptical";
 
-export type ScreenVariant = "today" | "grid" | "capture" | "check";
-
 export interface FeatureItem {
   title: string;
   body: string;
   state: MargotState;
-  screen: ScreenVariant;
-  alt: string;
+  label: string;
+  epigraph: string;
 }
 
 export interface FaqEntry {
@@ -24,8 +22,7 @@ export interface HowItWorksStep {
   num: string;
   title: string;
   body: string;
-  screen: ScreenVariant;
-  alt: string;
+  stamp: string;
 }
 
 export interface DiffCard {
@@ -52,7 +49,6 @@ export interface LangContent {
     micro: string;
     counterFallback: string;
     counterTemplate: string; // e.g. "Join {n} others on the waitlist."
-    phoneAlt: string;
   };
   success: {
     eyebrow: string;
@@ -115,7 +111,6 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       micro: "No spam. One email when Margot opens her doors.",
       counterFallback: "Join the waitlist.",
       counterTemplate: "Join {n} others on the waitlist.",
-      phoneAlt: "Margot's daily look screen showing today's suggested outfit",
     },
     success: {
       eyebrow: "you're in.",
@@ -134,22 +129,19 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           num: "01",
           title: "Snap your closet",
           body: "Take photos of your clothes once. Margot's vision pipeline tags fabric, color, and category.",
-          screen: "capture",
-          alt: "Margot capture screen detecting a wool cream sweater",
+          stamp: "One photo, one piece, one memory.",
         },
         {
           num: "02",
           title: "Let her learn",
           body: "She builds a memory of every piece — what's hanging, what's neglected, what pairs with what.",
-          screen: "grid",
-          alt: "Wardrobe grid view in Margot showing 87 tagged pieces",
+          stamp: "She watches more than she speaks.",
         },
         {
           num: "03",
           title: "Get dressed",
           body: "Each morning, an outfit suggestion based on weather, your calendar, and what you haven't worn lately.",
-          screen: "today",
-          alt: "Today's outfit suggestion screen in Margot",
+          stamp: "By the time the kettle whistles.",
         },
       ],
     },
@@ -158,22 +150,22 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         title: "A wardrobe she knows by heart",
         body: "Upload your clothes once. Margot remembers everything — what's hanging, what's neglected, what pairs with what.",
         state: "considering",
-        screen: "grid",
-        alt: "Margot wardrobe grid showing tagged pieces",
+        label: "Memory",
+        epigraph: "hung",
       },
       {
         title: "Daily looks, composed",
         body: "Each morning, an outfit suggestion based on the weather, your calendar, and the pieces that haven’t been worn lately.",
         state: "pleased",
-        screen: "today",
-        alt: "Margot daily outfit detail screen",
+        label: "Morning",
+        epigraph: "poured",
       },
       {
         title: "Check before you buy",
         body: "Found something you want? Margot tells you whether it actually works with what you have — before you spend.",
         state: "skeptical",
-        screen: "check",
-        alt: "Margot check-before-you-buy compatibility score",
+        label: "Check",
+        epigraph: "weighed",
       },
     ],
     meet: {
@@ -278,7 +270,6 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       micro: "Pas de spam. Un seul email à l'ouverture.",
       counterFallback: "Rejoignez la liste d'attente.",
       counterTemplate: "Rejoignez {n} autres sur la liste d'attente.",
-      phoneAlt: "Écran de la tenue du jour dans Margot",
     },
     success: {
       eyebrow: "inscrite.",
@@ -297,22 +288,19 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           num: "01",
           title: "Photographiez vos vêtements",
           body: "Photographiez chaque pièce une fois. Margot détecte la matière, la couleur et la catégorie.",
-          screen: "capture",
-          alt: "Écran de capture d'une pièce dans Margot",
+          stamp: "Une à une, elle les retient.",
         },
         {
           num: "02",
           title: "Laissez-la apprendre",
           body: "Elle construit la mémoire de votre dressing — ce qui pend, ce qui dort, ce qui va avec quoi.",
-          screen: "grid",
-          alt: "Vue grille du dressing dans Margot",
+          stamp: "Elle observe avant de parler.",
         },
         {
           num: "03",
           title: "Habillez-vous",
           body: "Chaque matin, une tenue suggérée selon la météo, votre agenda et les pièces que vous délaissez.",
-          screen: "today",
-          alt: "Écran de la tenue du jour dans Margot",
+          stamp: "Le temps d'un café.",
         },
       ],
     },
@@ -321,22 +309,22 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         title: "Une garde-robe qu’elle connaît par cœur",
         body: "Photographiez vos vêtements une fois. Margot retient tout — ce qui pend, ce qui dort, ce qui va avec quoi.",
         state: "considering",
-        screen: "grid",
-        alt: "Vue grille du dressing dans Margot",
+        label: "Mémoire",
+        epigraph: "suspendu",
       },
       {
         title: "Une tenue, chaque matin",
         body: "Chaque jour, une suggestion d’outfit pensée selon la météo, votre agenda, et les pièces que vous délaissez.",
         state: "pleased",
-        screen: "today",
-        alt: "Détail d'une tenue quotidienne dans Margot",
+        label: "Matin",
+        epigraph: "versé",
       },
       {
         title: "Avant d’acheter, demandez à Margot",
         body: "Une pièce vous tente ? Margot vous dit si elle complète vraiment votre garde-robe — avant que vous ne sortiez la carte.",
         state: "skeptical",
-        screen: "check",
-        alt: "Écran 'avant d'acheter' dans Margot",
+        label: "Doute",
+        epigraph: "pesé",
       },
     ],
     meet: {
