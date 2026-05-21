@@ -12,9 +12,24 @@ interface Props {
   setSubmitted: (v: boolean) => void;
   email: string;
   setEmail: (v: string) => void;
+  refCode: string | null;
+  setRefCode: (v: string | null) => void;
+  position: number | null;
+  setPosition: (v: number | null) => void;
 }
 
-export function Hero({ t, lang, submitted, setSubmitted, email, setEmail }: Props) {
+export function Hero({
+  t,
+  lang,
+  submitted,
+  setSubmitted,
+  email,
+  setEmail,
+  refCode,
+  setRefCode,
+  position,
+  setPosition,
+}: Props) {
   return (
     <section
       id="top"
@@ -50,6 +65,10 @@ export function Hero({ t, lang, submitted, setSubmitted, email, setEmail }: Prop
           setSubmitted={setSubmitted}
           email={email}
           setEmail={setEmail}
+          refCode={refCode}
+          setRefCode={setRefCode}
+          position={position}
+          setPosition={setPosition}
           variant="hero"
         />
         <WaitlistCounter fallback={t.hero.counterFallback} template={t.hero.counterTemplate} />

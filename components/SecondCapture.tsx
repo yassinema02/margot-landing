@@ -10,9 +10,24 @@ interface Props {
   setSubmitted: (v: boolean) => void;
   email: string;
   setEmail: (v: string) => void;
+  refCode: string | null;
+  setRefCode: (v: string | null) => void;
+  position: number | null;
+  setPosition: (v: number | null) => void;
 }
 
-export function SecondCapture({ t, lang, submitted, setSubmitted, email, setEmail }: Props) {
+export function SecondCapture({
+  t,
+  lang,
+  submitted,
+  setSubmitted,
+  email,
+  setEmail,
+  refCode,
+  setRefCode,
+  position,
+  setPosition,
+}: Props) {
   return (
     <section className="bg-bg border-t border-warm2 px-6 py-[clamp(64px,8vw,112px)]">
       <div className="max-w-[620px] mx-auto flex flex-col items-center gap-6 text-center">
@@ -25,7 +40,19 @@ export function SecondCapture({ t, lang, submitted, setSubmitted, email, setEmai
           {t.hero.subline}
         </div>
         <div className="w-full flex justify-center">
-          <WaitlistForm t={t} lang={lang} submitted={submitted} setSubmitted={setSubmitted} email={email} setEmail={setEmail} variant="footer" />
+          <WaitlistForm
+            t={t}
+            lang={lang}
+            submitted={submitted}
+            setSubmitted={setSubmitted}
+            email={email}
+            setEmail={setEmail}
+            refCode={refCode}
+            setRefCode={setRefCode}
+            position={position}
+            setPosition={setPosition}
+            variant="footer"
+          />
         </div>
       </div>
     </section>

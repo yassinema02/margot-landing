@@ -52,10 +52,12 @@ export interface LangContent {
   };
   success: {
     eyebrow: string;
-    headline: string;
+    headline: string; // contains "{N}" — replaced with position at render time
     body: string;
     cta: string;
+    copied: string;
     hint: string;
+    shareText: string;
   };
   problem: string;
   howItWorks: {
@@ -113,10 +115,12 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     },
     success: {
       eyebrow: "you're in.",
-      headline: "You're #2,847.",
-      body: "Skip the line — invite three friends and we'll move you up the list.",
+      headline: "You're #{N}.",
+      body: "Invite 5 friends to unlock 7 days of Margot premium, on the house.",
       cta: "Copy your invite link",
+      copied: "Copied ✓",
       hint: "Or share directly →",
+      shareText: "I just joined the Margot waitlist — daily outfit suggestions from what you already own.",
     },
     problem:
       "You own a hundred pieces of clothing. You wear thirty. Every morning, you stand in front of your closet and feel like you have nothing. Margot fixes that — without asking you to buy a single new thing.",
@@ -275,10 +279,12 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     },
     success: {
       eyebrow: "inscrite.",
-      headline: "Vous êtes n°2 847.",
-      body: "Passez devant — invitez trois amies, et nous vous remontons dans la file.",
+      headline: "Vous êtes n°{N}.",
+      body: "Invitez 5 amies pour débloquer 7 jours de Margot premium, offerts.",
       cta: "Copier votre lien",
+      copied: "Copié ✓",
       hint: "Ou partager directement →",
+      shareText: "Je viens de rejoindre la liste d'attente de Margot — une tenue chaque matin, à partir de ce que vous avez déjà.",
     },
     problem:
       "Vous possédez cent vêtements. Vous en portez trente. Chaque matin, vous restez devant votre dressing en pensant que vous n'avez rien à mettre. Margot règle ça — sans vous demander d'acheter quoi que ce soit de nouveau.",
