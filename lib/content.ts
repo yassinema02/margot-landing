@@ -74,8 +74,7 @@ export interface LangContent {
   pricing: {
     eyebrow: string;
     headline: string;
-    price: string;
-    priceSub: string;
+    prices: { gbp: string; eur: string; usd: string };
     trial: string;
     bullets: string[];
     note: string;
@@ -198,8 +197,11 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     pricing: {
       eyebrow: "Pricing",
       headline: "Free to start. Premium when you're ready.",
-      price: "£4.99 / month",
-      priceSub: "€5.99 · $5.99 · available worldwide",
+      prices: {
+        gbp: "£4.99 / month",
+        eur: "€5.99 / month",
+        usd: "$5.99 / month",
+      },
       trial: "7-day free trial",
       bullets: [
         "Unlimited daily outfit suggestions",
@@ -357,8 +359,11 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     pricing: {
       eyebrow: "Tarifs",
       headline: "Gratuit pour commencer. Premium quand vous êtes prêt·e.",
-      price: "4,99 £ / mois",
-      priceSub: "5,99 € · 5,99 $ · disponible dans le monde entier",
+      prices: {
+        gbp: "4,99 £ / mois",
+        eur: "5,99 € / mois",
+        usd: "5,99 $ / mois",
+      },
       trial: "7 jours d'essai gratuit",
       bullets: [
         "Suggestions de tenues illimitées",

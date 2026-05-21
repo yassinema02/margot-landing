@@ -1,8 +1,11 @@
 "use client";
 
 import type { LangContent } from "@/lib/content";
+import { useDetectedCurrency } from "@/lib/useDetectedCurrency";
 
 export function Pricing({ t }: { t: LangContent }) {
+  const currency = useDetectedCurrency();
+  const price = t.pricing.prices[currency];
   return (
     <section id="pricing" className="max-w-[680px] mx-auto px-6 py-[clamp(64px,8vw,112px)] text-center">
       <div className="mb-[clamp(28px,3.5vw,48px)]">
@@ -19,11 +22,8 @@ export function Pricing({ t }: { t: LangContent }) {
           {t.pricing.trial}
         </div>
 
-        <div>
-          <div className="font-display font-normal text-ink opsz-144 text-[clamp(40px,5.5vw,64px)] leading-none tracking-tightest">
-            {t.pricing.price}
-          </div>
-          <div className="mt-2 font-sans text-[13px] text-ink3 tracking-tight7">{t.pricing.priceSub}</div>
+        <div className="font-display font-normal text-ink opsz-144 text-[clamp(40px,5.5vw,64px)] leading-none tracking-tightest">
+          {price}
         </div>
 
         <ul className="flex flex-col gap-3 w-full max-w-[360px] text-left m-0 p-0 list-none">
