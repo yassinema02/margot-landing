@@ -49,6 +49,7 @@ export interface LangContent {
     micro: string;
     counterFallback: string;
     counterTemplate: string; // e.g. "Join {n} others on the waitlist."
+    seoLine: string;
   };
   success: {
     eyebrow: string;
@@ -112,6 +113,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       micro: "No spam. One email when Margot opens her doors.",
       counterFallback: "Join the waitlist.",
       counterTemplate: "Join {n} others on the waitlist.",
+      seoLine: "AI wardrobe app · daily outfits · for what you already own.",
     },
     success: {
       eyebrow: "you're in.",
@@ -276,6 +278,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       micro: "Pas de spam. Un seul email à l'ouverture.",
       counterFallback: "Rejoignez la liste d'attente.",
       counterTemplate: "Rejoignez {n} autres sur la liste d'attente.",
+      seoLine: "Application garde-robe IA · tenues quotidiennes · à partir de ce que vous avez déjà.",
     },
     success: {
       eyebrow: "inscrite.",
