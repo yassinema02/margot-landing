@@ -256,7 +256,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       newsletterLabel: "Subscribe to the magpie's notes",
       newsletterButton: "Subscribe",
       links: [
-        { label: "Privacy Policy", href: "https://yasine123456.github.io/margot-privacy-policy/" },
+        { label: "Privacy Policy", href: "/privacy" },
         { label: "Contact", href: "mailto:yassine@benlahmr.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
         { label: "TikTok", href: "https://tiktok.com/@margotwardrobe" },
@@ -421,7 +421,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       newsletterLabel: "Recevez les carnets de la pie",
       newsletterButton: "S'inscrire",
       links: [
-        { label: "Confidentialité", href: "https://yasine123456.github.io/margot-privacy-policy/" },
+        { label: "Confidentialité", href: "/privacy" },
         { label: "Contact", href: "mailto:yassine@benlahmr.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
         { label: "TikTok", href: "https://tiktok.com/@margotwardrobe" },
