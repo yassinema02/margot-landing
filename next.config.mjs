@@ -22,7 +22,14 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.beehiiv.com; frame-ancestors 'none';",
+            // Next.js 15 + React 18 does not require 'unsafe-eval'. If a hard
+            // refresh on a fresh production deploy shows blocked scripts in
+            // the browser console, verify the bundle was built with
+            // `next build` (not `next dev`) before reintroducing 'unsafe-eval'.
+            // 'unsafe-inline' on script-src remains for Next.js's inline
+            // bootstrap script; prefer a nonce-based fallback when a CSP
+            // refactor lands.
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.beehiiv.com; frame-ancestors 'none';",
           },
         ],
       },
