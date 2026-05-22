@@ -1,0 +1,80 @@
+---
+title: "Does AI outfit planning actually work?"
+slug: "ai-outfit-planner-does-it-work"
+date: "2026-05-27"
+locale: "en"
+excerpt: "AI stylists are easy to dismiss — they sound like 2018 startup decks. But three things changed quietly between 2023 and 2026, and the answer to the question in the headline is no longer obviously no."
+metaTitle: "Does AI outfit planning actually work? · A 2026 answer"
+metaDescription: "AI stylists used to be a punchline. In 2026 they are not. Here is what an AI outfit planner can and cannot do, written by the people who build one."
+keywords:
+  - "AI outfit planner"
+  - "AI stylist app"
+  - "does AI outfit planning work"
+  - "AI fashion assistant"
+ogImage: "/og/ai-outfit-planner.jpg"
+readingTime: 7
+---
+
+The honest answer is: it depends what you mean by *work*.
+
+If you mean *replace a stylist* — no. A good stylist does something AI cannot, which is to look at you as a whole person and tell you the truth about what suits you. Software does not yet have a body in a room with you, and probably should not pretend to.
+
+If you mean *help you get dressed in the morning faster, without buying more clothes* — yes. That has actually become possible. Three things changed between 2023 and 2026, quietly enough that most people missed them.
+
+## The three things that changed
+
+**Vision pipelines got cheap and accurate.** Photographing a piece of clothing and getting back a structured set of tags — *cotton, navy, button-up, mid-weight, casual* — used to be either expensive (custom models, real money in inference) or wrong (consumer apps that tagged a wool blazer as a t-shirt). Both stopped being true around 2024. The current generation of vision models can read a closet photo and produce useful, accurate categorisation in under a second. That is the foundation of every digital wardrobe.
+
+**The embeddings under "what goes with what" got good enough.** Outfit compatibility — does this top work with this skirt — is a surprisingly hard problem. It is partly logical (don't pair two competing prints), partly cultural (what counts as a "smart" outfit in Paris versus London), partly personal. Modern multimodal models do not solve this perfectly. They solve it well enough that an AI's suggested outfit is *usually* defensible. Not always great, but rarely ridiculous. That was not true in 2022.
+
+**Context APIs are universal now.** Every modern phone exposes calendar and weather to apps that ask. An AI stylist that pulls "fifteen degrees, light rain, 9am all-hands, 7pm wine bar" can suggest a meaningfully better outfit than one that only sees your closet. The bar for relevance shifted from "does this look ok in the abstract" to "does this look ok for the specific day in front of you." That second question is much easier to answer well.
+
+Put those three together, and the category got viable.
+
+## What an AI outfit planner does well
+
+Three things, mainly.
+
+**It remembers your closet for you.** The most boring thing an AI does, and the most useful. Most people own clothes they have forgotten they own. A digital wardrobe surfaces the forgotten half. The AI part is the photo-to-tag step that makes the wardrobe build itself, rather than asking you to type "navy linen shirt" 150 times.
+
+**It picks an outfit for a specific morning.** Given your closet, the weather, and your calendar, it can compose a credible suggestion in a second. The suggestion is rarely the *best* outfit you could have come up with. It is usually a perfectly acceptable one, available immediately. For most mornings, the difference between best and acceptable is worth eight minutes of your time.
+
+**It tracks what you actually wear.** This is the part that makes the rest improve over time. Logging what you wore today is a small action, but it teaches the model your real taste, not your aspirational one. After a month or so the suggestions start to look uncannily like you.
+
+## What an AI outfit planner does badly
+
+Worth being precise about this too.
+
+**It cannot give you a personal style.** If you are 22 and figuring out what you like, no app will accelerate that. You need to wear things and find out what feels right. AI is a memory aid for taste you already have, not a substitute for developing it.
+
+**It cannot surprise you well.** Software is risk-averse about combinations it has not seen. It will rarely suggest the *strange*, *interesting* outfit a stylist might. If part of getting dressed for you is discovery, AI tools will feel narrow.
+
+**It cannot tell you the truth about your body.** A friend can say "that doesn't sit right on you." Software, today, mostly cannot. Virtual try-on is improving but still feels like a parlour trick more than a styling tool.
+
+## The version of "works" that matters
+
+The right question is not whether AI outfit planning is impressive. It is whether it solves a problem you actually have.
+
+If your problem is *I have no idea what to wear and the act of choosing is exhausting*, a well-built AI outfit planner solves that in about forty seconds a morning, indefinitely.
+
+If your problem is *I want to feel more myself in my clothes*, an AI is, at best, a small part of the answer. The bigger part is wearing what you have for long enough to know what feels right.
+
+If your problem is *I keep buying things I do not wear*, an AI can help — surprisingly, in the negative direction. The most useful sentence an AI outfit planner can produce is "this piece does not pair with three things you already own." That is a real product, and almost nobody in the category has built it.
+
+## The version Margot built
+
+For the record, Margot is the one we build. She reads your closet, the weather, and your calendar. She suggests one outfit each morning. She tells you when *not* to buy something, and drafts Vinted listings for the pieces you have stopped wearing. The premise is that the right product in this category is small, restrained, and slightly judgmental about consumption.
+
+Whether that sounds like the kind of AI you want in your phone is the better question than whether AI outfit planning *works*.
+
+*Reserve your spot.* Private beta is open; public launch is soon.
+
+— *Margot*
+
+---
+
+### Related reading
+
+- [What to wear today, finally answered](/blog/what-to-wear-today)
+- [An honest alternative to Whering](/blog/alternative-to-whering)
+- [How to sell on Vinted, properly](/blog/how-to-sell-on-vinted)
