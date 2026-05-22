@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { StructuredData } from "@/components/StructuredData";
 import "./globals.css";
 
 // TODO: bind to active locale once /fr ships
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang={DEFAULT_LOCALE} className={`${fraunces.variable} ${interTight.variable}`}>
       <body className="font-sans bg-bg text-ink">
         {children}
+        <StructuredData />
         <Analytics />
       </body>
     </html>
