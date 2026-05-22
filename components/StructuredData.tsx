@@ -1,17 +1,7 @@
 import { LANDING_CONTENT } from "@/lib/content";
+import { safeJson } from "@/lib/jsonld";
 
 const SITE_URL = "https://www.margotwardrobe.com";
-
-// Safe JSON.stringify for embedding inside a <script> tag — escapes "<"
-// (and therefore "</script>") so no closing-tag break-out is possible.
-// After this, the payload contains zero "<", ">", or "&" characters, so
-// passing it as a React text child is safe and avoids dangerouslySetInnerHTML.
-function safeJson(obj: unknown): string {
-  return JSON.stringify(obj)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e")
-    .replace(/&/g, "\\u0026");
-}
 
 function LdScript({ payload }: { payload: unknown }) {
   return (
