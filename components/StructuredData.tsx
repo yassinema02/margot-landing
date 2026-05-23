@@ -25,19 +25,44 @@ export function StructuredData() {
     ],
   };
 
+  // WebSite schema enables Google's sitelinks search box and gives LLMs a
+  // canonical entity to anchor to when reasoning about the brand.
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Margot",
+    alternateName: "Margot Wardrobe",
+    url: `${SITE_URL}/`,
+    inLanguage: ["en", "fr"],
+    publisher: { "@type": "Organization", name: "Margot" },
+  };
+
   const softwareApplication = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: "Margot",
     applicationCategory: "LifestyleApplication",
+    applicationSubCategory: "FashionApplication",
     operatingSystem: "iOS",
     description:
       "AI wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware.",
+    url: `${SITE_URL}/`,
+    image: `${SITE_URL}/opengraph-image`,
+    featureList: [
+      "Daily AI outfit suggestions from your existing wardrobe",
+      "Weather-aware styling",
+      "Calendar-aware styling (suits the meeting, the rain, the dinner)",
+      "Check Before You Buy — compatibility scoring against your closet",
+      "Auto-generated Vinted listings for unworn pieces",
+      "Sustainability and cost-per-wear analytics",
+    ],
     offers: {
       "@type": "Offer",
       price: "5.99",
       priceCurrency: "EUR",
+      availability: "https://schema.org/PreOrder",
     },
+    author: { "@type": "Organization", name: "Margot" },
   };
 
   // Source FAQ from the same dictionary that renders the FAQ section so the
@@ -55,6 +80,7 @@ export function StructuredData() {
   return (
     <>
       <LdScript payload={organization} />
+      <LdScript payload={website} />
       <LdScript payload={softwareApplication} />
       <LdScript payload={faqPage} />
     </>
