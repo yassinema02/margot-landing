@@ -6,7 +6,7 @@ const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/press`;
 const TITLE = "Press kit · Margot";
 const DESCRIPTION =
-  "Press kit for Margot — the AI wardrobe app for people who want to get dressed from what they already own. Boilerplate, founder bio, downloadable brand assets, and contact.";
+  "Press kit for Margot, the AI wardrobe app. Boilerplate at three lengths, founder bio, downloadable brand assets, founder soundbites, and contact for journalists.";
 const PRESS_EMAIL = "yassine@benlahmr.com"; // TODO: switch to press@margotwardrobe.com once the alias is set up
 
 export const metadata: Metadata = {

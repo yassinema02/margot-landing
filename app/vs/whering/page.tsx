@@ -6,7 +6,7 @@ const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/vs/whering`;
 const TITLE = "Margot vs Whering: which AI wardrobe app fits how you actually get dressed";
 const DESCRIPTION =
-  "An honest comparison: Whering is a social wardrobe with seven million users. Margot is a quiet daily-styling app built for restraint. Both pick outfits with AI. Here's how they actually differ.";
+  "Honest comparison of two AI wardrobe apps. Whering is a social wardrobe with 7M users. Margot is built for restraint. Here's how they actually differ.";
 
 export const metadata: Metadata = {
   title: TITLE,

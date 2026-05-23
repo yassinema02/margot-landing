@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy · Margot",
   description:
-    "How Margot collects, uses, and protects your personal information when you use the app.",
+    "How Margot collects, uses, and protects your personal information — data we hold, how AI uses it, what's never shared, and how to request deletion. GDPR-compliant.",
   alternates: { canonical: "/privacy" },
   robots: { index: true, follow: true },
 };

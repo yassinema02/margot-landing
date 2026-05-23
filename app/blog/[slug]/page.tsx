@@ -66,7 +66,21 @@ export default async function BlogPostPage({
     "@type": "Article",
     headline: f.title,
     description: f.excerpt,
-    author: { "@type": "Organization", "name": "Margot" },
+    // Person author rather than Organization — feeds E-E-A-T signals
+    // (Google treats individual byline + sameAs links as a stronger
+    // expertise indicator than a faceless org).
+    author: {
+      "@type": "Person",
+      name: "Yassine Benlahmr",
+      url: `${SITE_URL}/press`,
+      jobTitle: "Founder",
+      worksFor: { "@type": "Organization", name: "Margot", url: `${SITE_URL}/` },
+      sameAs: [
+        "https://instagram.com/margotwardrobe",
+        "https://tiktok.com/@margotwardrobe",
+        "https://x.com/margotwardrobe",
+      ],
+    },
     publisher: {
       "@type": "Organization",
       name: "Margot",
