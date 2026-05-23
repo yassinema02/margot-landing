@@ -7,7 +7,9 @@ html, body { background: #ECEAE5; color: #2D3A33; -webkit-font-smoothing: antial
 ::selection { background: #2D3A33; color: #F6F4EF; }
 a:hover { opacity: 0.7; }
 
-/* Fraunces tuning — opsz / SOFT axes for editorial display.
-   Apply with `font-display` + the matching `opsz-*` utility. */
-.opsz-96  { font-variation-settings: "opsz" 96, "SOFT" 50; }
-.opsz-144 { font-variation-settings: "opsz" 144, "SOFT" 50; }
+/* Fraunces tuning — opsz axis for editorial display.
+   Apply with `font-display` + the matching `opsz-*` utility.
+   (SOFT axis was removed to shrink the woff2 payload; the corners are
+   marginally sharper but the LCP win is worth it on mobile.) */
+.opsz-96  { font-variation-settings: "opsz" 96; }
+.opsz-144 { font-variation-settings: "opsz" 144; }

@@ -10,7 +10,10 @@ const DEFAULT_LOCALE = "en";
 const fraunces = Fraunces({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  axes: ["SOFT", "opsz"],
+  // Drop the SOFT axis to shrink the variable woff2 — opsz stays because it's
+  // what makes Fraunces look right at 100px+ display sizes. SOFT only softens
+  // corners slightly; not worth the LCP cost on the hero H1.
+  axes: ["opsz"],
   display: "swap",
   variable: "--font-fraunces",
 });
