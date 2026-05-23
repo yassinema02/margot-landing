@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getAllPostSlugs, getPostBySlug } from "@/lib/blog";
+import { loadFraunces } from "@/lib/og-fonts";
 
 export const alt = "Margot — the magpie's notes";
 export const size = { width: 1200, height: 630 };
@@ -25,17 +26,6 @@ export async function generateStaticParams() {
 // Fetch a single Google Fonts woff2 instance. We pull one regular + one italic
 // of Fraunces so the wordmark renders italic and the title renders upright,
 // matching the homepage register.
-async function loadFraunces(italic: boolean, weight: number): Promise<ArrayBuffer> {
-  // Satori supports TTF/OTF/WOFF natively, not WOFF2. Google Fonts only serves
-  // WOFF2 now, so we pull TTF from fontsource via jsdelivr instead. Same
-  // glyphs, no extra decompressor dep.
-  const style = italic ? "italic" : "normal";
-  const url = `https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-${weight}-${style}.ttf`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Fraunces TTF ${weight}/${style} fetch failed: ${res.status}`);
-  return res.arrayBuffer();
-}
-
 export default async function Image({ params }: { params: { slug: string } }) {
   const post = getPostBySlug(params.slug);
   const title = post?.frontmatter.title ?? "The magpie's notes";

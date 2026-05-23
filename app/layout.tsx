@@ -44,12 +44,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     alternateLocale: ["fr_FR"],
-    images: [
-      // TODO: generate /public/og.jpg — 1200×630, magpie illustration on cream bg
-      // (#ECEAE5) with the "Margot." wordmark and the tagline "Your wardrobe,
-      // observed." Aim for the existing brand palette + Fraunces italic.
-      { url: "/og.jpg", width: 1200, height: 630, alt: "Margot — AI wardrobe app" },
-    ],
+    // og:image + twitter:image are auto-injected from app/opengraph-image.tsx.
   },
   twitter: {
     card: "summary_large_image",
@@ -57,7 +52,6 @@ export const metadata: Metadata = {
     creator: "@margotwardrobe",
     title: "Margot · AI wardrobe app",
     description: DESCRIPTION,
-    images: ["/og.jpg"],
   },
   robots: { index: true, follow: true },
 };

@@ -18,7 +18,8 @@ export const metadata: Metadata = {
     description: INDEX_LEAD,
     url: `${SITE_URL}/blog`,
     type: "website",
-    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Margot — the magpie's notes" }],
+    // og:image inherits from app/opengraph-image.tsx (root). Blog index doesn't
+    // need its own variant — the homepage OG carries the brand identity well.
   },
   twitter: {
     card: "summary_large_image",
@@ -26,7 +27,6 @@ export const metadata: Metadata = {
     creator: "@margotwardrobe",
     title: `${INDEX_TITLE} · Margot`,
     description: INDEX_LEAD,
-    images: ["/og.jpg"],
   },
 };
 
