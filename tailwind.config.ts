@@ -11,7 +11,7 @@ const config: Config = {
         warm2: "#CECABF",
         ink: "#2D3A33",
         ink2: "#4D5852",
-        ink3: "#7C857F",
+        ink3: "#5C6660",
         ink4: "#B0B5B0",
         ink5: "#D8D6D0",
         walnut: "#5C6B5E",
