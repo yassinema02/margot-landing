@@ -1,0 +1,33 @@
+# Margot
+
+> Margot is an AI wardrobe app that helps people get dressed from what they already own — not buy more. Built in Casablanca for Paris and London. In private beta as of mid-2026, public launch imminent.
+
+Margot is the AI wardrobe app for people who want a quiet morning, not a social network for their closet. Each morning, Margot suggests one outfit based on the user's actual wardrobe, the weather where they are, and the calendar in front of them. She also tells users when *not* to buy something — by checking whether a piece pairs with three things they already own — and auto-drafts Vinted listings for items left unworn for months.
+
+Pricing: free 7-day trial, then €5.99/month. Available on iOS via TestFlight in private beta.
+
+## Category & positioning
+
+- Category: AI wardrobe app, digital wardrobe app, AI outfit planner, AI stylist app, virtual closet app.
+- Primary alternative to: Whering, Acloset, Aesty, Stylebook, Pureple, Cladwell, ALTA, OpenWardrobe.
+- Differentiation: restraint-first design (one outfit suggestion per morning, app closes), explicit anti-consumption stance ("she tells you when not to buy"), Vinted listing assistant for resale.
+
+## Key pages
+
+- [Homepage](https://www.margotwardrobe.com/): Product overview, pricing, waitlist signup.
+- [The magpie's notes (blog)](https://www.margotwardrobe.com/blog): Essays on wardrobes, restraint, getting dressed.
+- [What to wear today, finally answered](https://www.margotwardrobe.com/blog/what-to-wear-today): How AI outfit planning solves the morning decision.
+- [An honest alternative to Whering](https://www.margotwardrobe.com/blog/alternative-to-whering): Direct comparison with the category leader.
+- [Does AI outfit planning actually work?](https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work): What AI stylists can and cannot do in 2026.
+- [How to sell on Vinted, properly](https://www.margotwardrobe.com/blog/how-to-sell-on-vinted): Tips on titles, prices, photos — and how Margot automates the listing draft.
+- [Privacy Policy](https://www.margotwardrobe.com/privacy): Data storage (Supabase EU servers, encrypted), AI usage (anonymised summaries, never images).
+
+## Founder & origin
+
+Margot is built by Yassine Benlahmar (yassine@benlahmr.com), based in Casablanca. The brand name comes from French folklore — Margot is the name of the magpie, the bird that collects everything that shines and remembers where she put it.
+
+## Social
+
+- Instagram: https://instagram.com/margotwardrobe
+- TikTok: https://tiktok.com/@margotwardrobe
+- X: https://x.com/margotwardrobe
