@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import fs from "node:fs";
-import path from "node:path";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getAllPostSlugs, getPostBySlug, formatPostDate } from "@/lib/blog";
@@ -10,21 +8,12 @@ import { mdxComponents } from "@/components/blog/MdxComponents";
 import { safeJson } from "@/lib/jsonld";
 
 const SITE_URL = "https://www.margotwardrobe.com";
-const FALLBACK_OG = "/og.jpg";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return getAllPostSlugs().map((slug) => ({ slug }));
-}
-
-function resolveOgImage(ogImage: string | undefined): string {
-  if (!ogImage) return FALLBACK_OG;
-  // Per-post OG images live in /public/og/<slug>.jpg. Fall back to the
-  // sitewide /og.jpg if they haven't been designed yet.
-  const localPath = path.join(process.cwd(), "public", ogImage.replace(/^\//, ""));
-  return fs.existsSync(localPath) ? ogImage : FALLBACK_OG;
 }
 
 export async function generateMetadata({
@@ -36,8 +25,10 @@ export async function generateMetadata({
   const post = getPostBySlug(slug);
   if (!post) return {};
   const { frontmatter: f } = post;
-  const ogImage = resolveOgImage(f.ogImage);
   const url = `${SITE_URL}/blog/${f.slug}`;
+  // openGraph.images / twitter.images are auto-populated by Next from the
+  // sibling opengraph-image.tsx file convention. Don't duplicate here or
+  // Next will use the explicit value and skip the generated one.
   return {
     title: f.metaTitle,
     description: f.metaDescription,
@@ -49,7 +40,6 @@ export async function generateMetadata({
       url,
       type: "article",
       publishedTime: f.date,
-      images: [{ url: ogImage, width: 1200, height: 630, alt: f.title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -57,7 +47,6 @@ export async function generateMetadata({
       creator: "@margotwardrobe",
       title: f.metaTitle,
       description: f.metaDescription,
-      images: [ogImage],
     },
   };
 }
@@ -85,7 +74,7 @@ export default async function BlogPostPage({
     },
     datePublished: f.date,
     dateModified: f.date,
-    image: `${SITE_URL}${resolveOgImage(f.ogImage)}`,
+    image: `${SITE_URL}/blog/${f.slug}/opengraph-image`,
     mainEntityOfPage: `${SITE_URL}/blog/${f.slug}`,
   };
 
