@@ -42,6 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/vs/whering`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/press`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    // TODO: /fr/privacy, /fr/press, /fr/blog, /fr/vs/whering when those translate
+    { url: `${BASE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    // TODO: /fr/privacy, /fr/terms, /fr/press, /fr/blog, /fr/vs/whering when those translate
   ];
 }
