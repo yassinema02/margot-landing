@@ -18,10 +18,12 @@ export function Header({ lang, setLang }: Props) {
       </a>
       <button
         onClick={() => setLang(lang === "en" ? "fr" : "en")}
-        aria-label="Switch language"
         className="font-sans text-[11px] font-semibold tracking-wider2 uppercase px-3 py-1.5 rounded-full border border-ink text-ink bg-transparent cursor-pointer flex items-center gap-1.5"
       >
-        {t.lang} <span className="text-ink3">·</span> <span className="text-ink3">{t.toggle}</span>
+        {t.lang}
+        <span className="text-ink3">·</span>
+        {t.toggle}
+        <span className="sr-only"> — switch language</span>
       </button>
     </header>
   );

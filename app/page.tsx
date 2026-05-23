@@ -43,38 +43,8 @@ export default function Page() {
   return (
     <>
       <Header lang={lang} setLang={setLang} />
-      <Hero
-        t={t}
-        lang={lang}
-        submitted={submitted}
-        setSubmitted={setSubmitted}
-        email={email}
-        setEmail={setEmail}
-        refCode={refCode}
-        setRefCode={setRefCode}
-        position={position}
-        setPosition={setPosition}
-      />
-      <FadeIn>
-        <HowItWorks t={t} />
-      </FadeIn>
-      <FadeIn>
-        <Features t={t} />
-      </FadeIn>
-      <FadeIn>
-        <WhyMargot t={t} />
-      </FadeIn>
-      <FadeIn>
-        <MeetMargot t={t} />
-      </FadeIn>
-      <FadeIn>
-        <Pricing t={t} />
-      </FadeIn>
-      <FadeIn>
-        <SocialProof t={t} />
-      </FadeIn>
-      <FadeIn>
-        <SecondCapture
+      <main>
+        <Hero
           t={t}
           lang={lang}
           submitted={submitted}
@@ -86,10 +56,42 @@ export default function Page() {
           position={position}
           setPosition={setPosition}
         />
-      </FadeIn>
-      <FadeIn>
-        <Faq t={t} />
-      </FadeIn>
+        <FadeIn>
+          <HowItWorks t={t} />
+        </FadeIn>
+        <FadeIn>
+          <Features t={t} />
+        </FadeIn>
+        <FadeIn>
+          <WhyMargot t={t} />
+        </FadeIn>
+        <FadeIn>
+          <MeetMargot t={t} />
+        </FadeIn>
+        <FadeIn>
+          <Pricing t={t} />
+        </FadeIn>
+        <FadeIn>
+          <SocialProof t={t} />
+        </FadeIn>
+        <FadeIn>
+          <SecondCapture
+            t={t}
+            lang={lang}
+            submitted={submitted}
+            setSubmitted={setSubmitted}
+            email={email}
+            setEmail={setEmail}
+            refCode={refCode}
+            setRefCode={setRefCode}
+            position={position}
+            setPosition={setPosition}
+          />
+        </FadeIn>
+        <FadeIn>
+          <Faq t={t} />
+        </FadeIn>
+      </main>
       <Footer t={t} lang={lang} />
     </>
   );
