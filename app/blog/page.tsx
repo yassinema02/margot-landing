@@ -33,18 +33,25 @@ export const metadata: Metadata = {
 export default function BlogIndexPage() {
   const posts = getAllPosts();
 
-  const collectionPage = {
+  // Blog (schema.org/Blog) is more semantically precise than CollectionPage
+  // for an index of editorial posts — LLMs and rich-results engines treat the
+  // two types differently when extracting article lists.
+  const blogSchema = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
+    "@type": "Blog",
     name: `${INDEX_TITLE} · Margot`,
     description: INDEX_LEAD,
     url: `${SITE_URL}/blog`,
-    hasPart: posts.map((p) => ({
+    inLanguage: "en",
+    publisher: { "@type": "Organization", name: "Margot" },
+    blogPost: posts.map((p) => ({
       "@type": "BlogPosting",
       headline: p.frontmatter.title,
       url: `${SITE_URL}/blog/${p.frontmatter.slug}`,
       datePublished: p.frontmatter.date,
       description: p.frontmatter.excerpt,
+      image: `${SITE_URL}/blog/${p.frontmatter.slug}/opengraph-image`,
+      author: { "@type": "Organization", name: "Margot" },
     })),
   };
 
@@ -88,7 +95,7 @@ export default function BlogIndexPage() {
       </article>
 
       <script type="application/ld+json" suppressHydrationWarning>
-        {safeJson(collectionPage)}
+        {safeJson(blogSchema)}
       </script>
     </main>
   );
