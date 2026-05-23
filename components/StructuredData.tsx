@@ -58,7 +58,7 @@ export function StructuredData() {
     ],
     offers: {
       "@type": "Offer",
-      price: "5.99",
+      price: "9.99",
       priceCurrency: "EUR",
       availability: "https://schema.org/PreOrder",
     },

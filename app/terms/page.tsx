@@ -93,18 +93,19 @@ export default function TermsPage() {
         <Section title="3. Subscriptions and billing">
           <Sub title="3.1 Margot Premium">
             <P>
-              Margot offers a paid subscription called <Strong>Margot Premium</Strong>.
-              Pricing, billing period, and any introductory free-trial duration are shown
-              inside the App before you confirm purchase. Local currency conversion is
-              handled by Apple.
+              Margot offers a paid subscription called <Strong>Margot Premium</Strong>,
+              available as a monthly or annual plan. Margot Premium supports{" "}
+              <em>Apple Family Sharing</em>. Pricing and billing period are shown inside
+              the App before you confirm purchase. Local currency conversion is handled
+              by Apple.
             </P>
           </Sub>
 
           <Sub title="3.2 Apple-managed billing">
             <P>
               All subscriptions are sold and managed through the Apple App Store. Payment
-              is charged to your Apple ID account at the end of any free trial period and
-              at the start of each renewal period. Your Apple{" "}
+              is charged to your Apple ID account at the start of each billing period.
+              Your Apple{" "}
               <a
                 href="https://www.apple.com/legal/internet-services/itunes/"
                 className="underline hover:text-peach"
@@ -132,16 +133,7 @@ export default function TermsPage() {
             </P>
           </Sub>
 
-          <Sub title="3.4 Free trials">
-            <P>
-              If the App offers a free trial when you subscribe, you will not be charged
-              during the trial period. The trial converts to a paid subscription at the
-              listed price unless you cancel at least 24 hours before the trial ends. Only
-              one free trial per Apple ID and product is supported.
-            </P>
-          </Sub>
-
-          <Sub title="3.5 Refunds">
+          <Sub title="3.4 Refunds">
             <P>
               All purchase refunds are handled by Apple under their{" "}
               <a
@@ -157,7 +149,7 @@ export default function TermsPage() {
             </P>
           </Sub>
 
-          <Sub title="3.6 Subscription content">
+          <Sub title="3.5 Subscription content">
             <P>
               We may change which features are part of the free tier vs Margot Premium at
               any time. Features available at purchase that later move behind Premium
