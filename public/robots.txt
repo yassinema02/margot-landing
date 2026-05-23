@@ -1,0 +1,58 @@
+# Margot — robots.txt
+# We explicitly allow LLM crawlers because we want to be cited by ChatGPT, Claude, Gemini, Perplexity, and similar systems.
+# Site description for LLMs: https://www.margotwardrobe.com/llms.txt
+# Full LLM-readable context: https://www.margotwardrobe.com/llms-full.txt
+
+User-Agent: *
+Allow: /
+
+User-Agent: GPTBot
+Allow: /
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+User-Agent: Claude-Web
+Allow: /
+
+User-Agent: anthropic-ai
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: Perplexity-User
+Allow: /
+
+User-Agent: Google-Extended
+Allow: /
+
+User-Agent: cohere-ai
+Allow: /
+
+User-Agent: CCBot
+Allow: /
+
+User-Agent: Bytespider
+Allow: /
+
+User-Agent: Diffbot
+Allow: /
+
+User-Agent: Omgilibot
+Allow: /
+
+User-Agent: FacebookBot
+Allow: /
+
+User-Agent: Applebot-Extended
+Allow: /
+
+User-Agent: YouBot
+Allow: /
+
+Sitemap: https://www.margotwardrobe.com/sitemap.xml
+Host: https://www.margotwardrobe.com
