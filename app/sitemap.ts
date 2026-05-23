@@ -3,6 +3,11 @@ import { getAllPosts } from "@/lib/blog";
 
 const BASE = "https://www.margotwardrobe.com";
 
+// hreflang in sitemap: each URL declares its language alternates via the
+// `alternates.languages` field. Google reads this to serve the right
+// language version per visitor. /fr only mirrors the landing for now —
+// sub-pages stay EN-only and don't declare a French alternate.
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
@@ -14,12 +19,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   return [
-    { url: `${BASE}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
+    {
+      url: `${BASE}/`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 1,
+      alternates: {
+        languages: { en: `${BASE}/`, fr: `${BASE}/fr` },
+      },
+    },
+    {
+      url: `${BASE}/fr`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 1,
+      alternates: {
+        languages: { en: `${BASE}/`, fr: `${BASE}/fr` },
+      },
+    },
     { url: `${BASE}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     ...blogEntries,
     { url: `${BASE}/vs/whering`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/press`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    // TODO: add /fr, /how-it-works, /pricing, /faq, /vs/acloset once those routes ship
+    // TODO: /fr/privacy, /fr/press, /fr/blog, /fr/vs/whering when those translate
   ];
 }

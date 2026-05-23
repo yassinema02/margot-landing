@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter_Tight } from "next/font/google";
+import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { StructuredData } from "@/components/StructuredData";
 import "./globals.css";
-
-// TODO: bind to active locale once /fr ships
-const DEFAULT_LOCALE = "en";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -30,6 +28,9 @@ const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
   "Margot is the AI wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware. Join the private beta.";
 
+// EN metadata only — /fr ships its own metadata override via app/fr/layout.tsx.
+// alternates.languages adds the hreflang annotations that point Google at the
+// FR equivalent of every EN page.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Margot · AI wardrobe app — daily outfits from what you own",
@@ -38,6 +39,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Margot" }],
   alternates: {
     canonical: "/",
+    languages: {
+      en: "/",
+      fr: "/fr",
+      "x-default": "/",
+    },
   },
   openGraph: {
     title: "Margot · AI wardrobe app",
@@ -59,9 +65,15 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // middleware.ts sets x-locale from the pathname (en for /, fr for /fr*).
+  // Falling back to en covers any request that bypasses the middleware
+  // (e.g. /api routes, though those don't render this layout anyway).
+  const h = await headers();
+  const lang = h.get("x-locale") ?? "en";
+
   return (
-    <html lang={DEFAULT_LOCALE} className={`${fraunces.variable} ${interTight.variable}`}>
+    <html lang={lang} className={`${fraunces.variable} ${interTight.variable}`}>
       <body className="font-sans bg-bg text-ink">
         {children}
         <StructuredData />
