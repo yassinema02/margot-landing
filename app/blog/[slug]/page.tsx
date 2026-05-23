@@ -78,6 +78,62 @@ export default async function BlogPostPage({
     mainEntityOfPage: `${SITE_URL}/blog/${f.slug}`,
   };
 
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Margot", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "The magpie's notes", item: `${SITE_URL}/blog` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: f.title,
+        item: `${SITE_URL}/blog/${f.slug}`,
+      },
+    ],
+  };
+
+  // Per-post HowTo schemas. Keyed by slug so we can add more later (e.g.
+  // "how to digitise your wardrobe in fifteen minutes") without churning
+  // the page shell.
+  const howTo: Record<string, Record<string, unknown>> = {
+    "how-to-sell-on-vinted": {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: "How to sell on Vinted, properly",
+      description:
+        "A precise five-minute routine for titles, prices, photos and descriptions that move on Vinted.",
+      totalTime: "PT5M",
+      step: [
+        {
+          "@type": "HowToStep",
+          position: 1,
+          name: "Write a specific title",
+          text: "Use the shape Brand · Item description · Notable detail · Size. Example: Acne Studios cigarette trousers · charcoal · pleated front · 36.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 2,
+          name: "Research the price",
+          text: "Filter Vinted to sold listings of the same brand and item. List ten to fifteen percent above the median sold price.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 3,
+          name: "Take three photos",
+          text: "Full piece flat in natural light, a fabric close-up, and a label or honest flaw close-up.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 4,
+          name: "Write a short description",
+          text: "Three to four sentences: piece, size, condition, fit note. Skip personality.",
+        },
+      ],
+    },
+  };
+  const postHowTo = howTo[f.slug];
+
   return (
     <main className="bg-bg text-ink min-h-screen px-6 pt-[clamp(48px,7vw,88px)] pb-[clamp(48px,7vw,96px)]">
       <article className="max-w-[720px] mx-auto">
@@ -132,6 +188,14 @@ export default async function BlogPostPage({
       <script type="application/ld+json" suppressHydrationWarning>
         {safeJson(article)}
       </script>
+      <script type="application/ld+json" suppressHydrationWarning>
+        {safeJson(breadcrumb)}
+      </script>
+      {postHowTo ? (
+        <script type="application/ld+json" suppressHydrationWarning>
+          {safeJson(postHowTo)}
+        </script>
+      ) : null}
     </main>
   );
 }
