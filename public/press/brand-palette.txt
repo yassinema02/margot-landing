@@ -1,0 +1,25 @@
+Margot — brand palette
+
+Background
+  Cream            #ECEAE5    primary canvas
+  Surface          #F6F4EF    cards, secondary surfaces
+  Warm divider     #CECABF    hairlines, borders
+
+Type
+  Ink              #2D3A33    primary text, the dark green-charcoal
+  Ink subtle       #4D5852    secondary body
+  Ink muted        #5C6660    captions, eyebrows
+
+Accent
+  Peach            #A84A2D    the period in "Margot.", small-caps eyebrows
+  Sage             #5F7560    occasional warm accent
+  Rust             #A0421F    deeper alternative to peach
+
+Typefaces
+  Display          Fraunces (variable, opsz axis; italic carries emphasis)
+  Body             Inter Tight (400–700)
+
+Notes
+  The peach period after "Margot" is non-negotiable brand detail.
+  Italic Fraunces is for warmth and emphasis; regular Fraunces is for body of headlines.
+  Never use Fraunces upright for small caps (use Inter Tight 600 instead).

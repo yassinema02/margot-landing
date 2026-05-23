@@ -257,6 +257,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       newsletterButton: "Subscribe",
       links: [
         { label: "Notes", href: "/blog" },
+        { label: "Press", href: "/press" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Contact", href: "mailto:yassine@benlahmr.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
@@ -424,6 +425,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       newsletterButton: "S'inscrire",
       links: [
         { label: "Notes", href: "/blog" },
+        { label: "Presse", href: "/press" },
         { label: "Confidentialité", href: "/privacy" },
         { label: "Contact", href: "mailto:yassine@benlahmr.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <title>Margot — wordmark</title>
+  <desc>The Margot wordmark in Fraunces italic with a peach period. Render at any scale; embed the Fraunces webfont for accurate display.</desc>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,144,400&amp;display=swap');
+    .wm { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 96px; letter-spacing: -0.045em; }
+  </style>
+  <text x="20" y="92" class="wm" fill="#2D3A33">Margot<tspan font-style="normal" fill="#A84A2D">.</tspan></text>
+</svg>
