@@ -9,7 +9,10 @@ export function Features({ t }: { t: LangContent }) {
             key={i}
             className="px-[clamp(24px,2.5vw,32px)] py-[clamp(28px,3vw,40px)] bg-surface border border-warm2 rounded-2xl flex flex-col"
           >
-            <div className="font-display italic text-ink3 opsz-96 text-[13px] tracking-tight5 opacity-50 mb-1">
+            <div
+              aria-hidden="true"
+              className="font-display italic text-ink3 opsz-96 text-[13px] tracking-tight5 opacity-50 mb-1"
+            >
               {f.epigraph}
             </div>
             <div className="font-sans text-[11px] font-semibold tracking-wider2 uppercase text-peach mb-5">

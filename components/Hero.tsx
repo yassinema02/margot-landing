@@ -53,7 +53,7 @@ export function Hero({
         <em>{t.hero.headline[1]}</em>
       </h1>
 
-      <p className="mx-auto mt-3 font-display italic text-ink3 opsz-96 text-[clamp(12px,1.1vw,14px)] tracking-tight5 opacity-80 [text-wrap:balance]">
+      <p className="mx-auto mt-3 font-display italic text-ink3 opsz-96 text-[clamp(12px,1.1vw,14px)] tracking-tight5 [text-wrap:balance]">
         {t.hero.seoLine}
       </p>
 

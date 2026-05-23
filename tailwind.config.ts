@@ -15,7 +15,7 @@ const config: Config = {
         ink4: "#B0B5B0",
         ink5: "#D8D6D0",
         walnut: "#5C6B5E",
-        peach: "#B85133",
+        peach: "#A84A2D",
         sage: "#5F7560",
         rust: "#A0421F",
       },
