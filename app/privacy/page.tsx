@@ -34,7 +34,7 @@ export default function PrivacyPage() {
         <Section>
           <P>
             This Privacy Policy describes how <Strong>Margot</Strong> ("we", "us", "our"),
-            operated by Yassine Benlahmr, collects, uses, and protects your personal information
+            operated by BRAMS Technologies LLC, collects, uses, and protects your personal information
             when you use the Margot mobile application (the "App").
           </P>
           <P>
@@ -49,12 +49,12 @@ export default function PrivacyPage() {
           <P>
             Margot is a mobile application that helps you digitise your wardrobe, get AI-powered
             outfit suggestions, and decide whether new clothing items fit your existing closet.
-            The App is developed and operated by Yassine Benlahmr.
+            The App is developed and operated by BRAMS Technologies LLC.
           </P>
           <P>
             <Strong>Contact email:</Strong>{" "}
-            <a href="mailto:yassine@benlahmr.com" className="underline hover:text-peach">
-              yassine@benlahmr.com
+            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
+              hello@margotwardrobe.com
             </a>
           </P>
         </Section>
@@ -251,8 +251,8 @@ export default function PrivacyPage() {
           </Ul>
           <P>
             To exercise any of these rights, email{" "}
-            <a href="mailto:yassine@benlahmr.com" className="underline hover:text-peach">
-              yassine@benlahmr.com
+            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
+              hello@margotwardrobe.com
             </a>
             . We will respond within 30 days.
           </P>
@@ -278,8 +278,8 @@ export default function PrivacyPage() {
             Margot is not directed at children under 13. We do not knowingly collect personal data
             from children under 13. If you believe we have collected data from a child under 13,
             please contact us at{" "}
-            <a href="mailto:yassine@benlahmr.com" className="underline hover:text-peach">
-              yassine@benlahmr.com
+            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
+              hello@margotwardrobe.com
             </a>{" "}
             and we will delete it promptly.
           </P>
@@ -311,11 +311,11 @@ export default function PrivacyPage() {
             contact:
           </P>
           <P>
-            <Strong>Yassine Benlahmr</Strong>
+            <Strong>BRAMS Technologies LLC</Strong>
             <br />
             Email:{" "}
-            <a href="mailto:yassine@benlahmr.com" className="underline hover:text-peach">
-              yassine@benlahmr.com
+            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
+              hello@margotwardrobe.com
             </a>
           </P>
           <P className="text-ink3 text-[13px] italic">

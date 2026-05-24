@@ -90,7 +90,7 @@ export default function VsWheringPage() {
         name: "Which is cheaper, Margot or Whering?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Whering offers a free tier with most core features and a paid Plus tier. Margot is £4.99 a month after a 7-day free trial — no free permanent tier yet. If price is the main constraint, Whering wins. If you want a focused product with no upsell surface, Margot is the cleaner fit.",
+          text: "Both Margot and Whering offer a free tier with paid upgrades. Margot Premium is $9.99 a month or $59.99 a year (Save 50%), with Family Sharing on iOS. Whering's Plus tier is priced separately. If you want a focused product with no upsell surface, Margot is the cleaner fit.",
         },
       },
       {
@@ -113,7 +113,7 @@ export default function VsWheringPage() {
     { feature: "Social wardrobe feed", margot: "No — by design", whering: "Yes — core experience" },
     { feature: "Cost-per-wear analytics", margot: "Yes", whering: "Yes" },
     { feature: "Platform", margot: "iOS (Android later)", whering: "iOS + Android" },
-    { feature: "Free tier", margot: "7-day trial, then £4.99/month", whering: "Free + paid tier" },
+    { feature: "Free tier", margot: "Free + Premium $9.99/mo or $59.99/yr", whering: "Free + paid tier" },
     { feature: "Established userbase", margot: "Private beta", whering: "≈ 7 million users" },
   ];
 

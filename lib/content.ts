@@ -77,11 +77,26 @@ export interface LangContent {
   pricing: {
     eyebrow: string;
     headline: string;
-    prices: { gbp: string; eur: string; usd: string };
-    trial: string;
-    bullets: string[];
+    free: {
+      label: string;
+      price: string;
+      tagline: string;
+      bullets: string[];
+      cta: string;
+    };
+    premium: {
+      label: string;
+      tagline: string;
+      monthly: { gbp: string; eur: string; usd: string };
+      annual: { gbp: string; eur: string; usd: string };
+      annualBadge: string;
+      annualMonthly: { gbp: string; eur: string; usd: string };
+      cadenceMonth: string;
+      cadenceYear: string;
+      bullets: string[];
+      cta: string;
+    };
     note: string;
-    cta: string;
   };
   socialProof: {
     eyebrow: string;
@@ -118,7 +133,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     success: {
       eyebrow: "you're in.",
       headline: "You're #{N}.",
-      body: "Invite 5 friends to unlock 7 days of Margot premium, on the house.",
+      body: "Invite 5 friends to unlock a month of Margot Premium, on the house.",
       cta: "Copy your invite link",
       copied: "Copied ✓",
       hint: "Or share directly →",
@@ -203,20 +218,52 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     pricing: {
       eyebrow: "Pricing",
       headline: "Free to start. Premium when you're ready.",
-      prices: {
-        gbp: "£4.99 / month",
-        eur: "€5.99 / month",
-        usd: "$5.99 / month",
+      free: {
+        label: "Free",
+        price: "$0",
+        tagline: "Get a feel for Margot, no card required.",
+        bullets: [
+          "Unlimited wardrobe items (manual entry)",
+          "5 AI auto-categorization scans · lifetime",
+          "1 outfit suggestion per day",
+        ],
+        cta: "Download Free",
       },
-      trial: "7-day free trial",
-      bullets: [
-        "Unlimited daily outfit suggestions",
-        "Unlimited shopping checks",
-        "Calendar & weather context",
-        "Vinted listing assistant",
-      ],
-      note: "Early waitlist members get an extra month free.",
-      cta: "Reserve my spot",
+      premium: {
+        label: "Margot Premium",
+        tagline: "Everything Margot can do, unlocked.",
+        monthly: {
+          gbp: "£8.99",
+          eur: "€9.99",
+          usd: "$9.99",
+        },
+        annual: {
+          gbp: "£54.99",
+          eur: "€59.99",
+          usd: "$59.99",
+        },
+        annualBadge: "Save 50%",
+        annualMonthly: {
+          gbp: "£4.58 / mo",
+          eur: "€4.99 / mo",
+          usd: "$4.99 / mo",
+        },
+        cadenceMonth: "/ month",
+        cadenceYear: "/ year",
+        bullets: [
+          "Unlimited AI auto-categorization",
+          "Bulk upload",
+          "Unlimited outfit suggestions",
+          "Check Before You Buy verdict",
+          "Steal the Look from any photo",
+          "Event outfits, from your calendar",
+          "Gap analysis, find wardrobe holes",
+          "Trip packing, the AI suitcase",
+          "Unlimited resale listings",
+        ],
+        cta: "Download Free",
+      },
+      note: "Family Sharing supported. Cancel anytime in Settings.",
     },
     socialProof: {
       eyebrow: "Early voices",
@@ -259,7 +306,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         { label: "Notes", href: "/blog" },
         { label: "Press", href: "/press" },
         { label: "Privacy Policy", href: "/privacy" },
-        { label: "Contact", href: "mailto:yassine@benlahmr.com" },
+        { label: "Contact", href: "mailto:hello@margotwardrobe.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
         { label: "TikTok", href: "https://tiktok.com/@margotwardrobe" },
         { label: "X", href: "https://x.com/margotwardrobe" },
@@ -286,7 +333,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     success: {
       eyebrow: "inscrite.",
       headline: "Vous êtes n°{N}.",
-      body: "Invitez 5 amies pour débloquer 7 jours de Margot premium, offerts.",
+      body: "Invitez 5 amies pour débloquer un mois de Margot Premium, offert.",
       cta: "Copier votre lien",
       copied: "Copié ✓",
       hint: "Ou partager directement →",
@@ -371,20 +418,52 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     pricing: {
       eyebrow: "Tarifs",
       headline: "Gratuit pour commencer. Premium quand vous êtes prêt·e.",
-      prices: {
-        gbp: "4,99 £ / mois",
-        eur: "5,99 € / mois",
-        usd: "5,99 $ / mois",
+      free: {
+        label: "Gratuit",
+        price: "0 €",
+        tagline: "Découvrez Margot, sans carte bancaire.",
+        bullets: [
+          "Garde-robe illimitée (saisie manuelle)",
+          "5 analyses IA · à vie",
+          "1 suggestion de tenue par jour",
+        ],
+        cta: "Télécharger gratuitement",
       },
-      trial: "7 jours d'essai gratuit",
-      bullets: [
-        "Suggestions de tenues illimitées",
-        "Vérifications d'achat illimitées",
-        "Météo et agenda intégrés",
-        "Assistant de revente Vinted",
-      ],
-      note: "Les membres de la liste d'attente reçoivent un mois supplémentaire gratuit.",
-      cta: "Réserver ma place",
+      premium: {
+        label: "Margot Premium",
+        tagline: "Tout ce que Margot sait faire, débloqué.",
+        monthly: {
+          gbp: "8,99 £",
+          eur: "9,99 €",
+          usd: "9,99 $",
+        },
+        annual: {
+          gbp: "54,99 £",
+          eur: "59,99 €",
+          usd: "59,99 $",
+        },
+        annualBadge: "−50 %",
+        annualMonthly: {
+          gbp: "4,58 £ / mois",
+          eur: "4,99 € / mois",
+          usd: "4,99 $ / mois",
+        },
+        cadenceMonth: "/ mois",
+        cadenceYear: "/ an",
+        bullets: [
+          "Catégorisation IA illimitée",
+          "Import groupé",
+          "Suggestions de tenues illimitées",
+          "Verdict avant achat",
+          "Steal the Look depuis une photo",
+          "Tenues d'événement, depuis votre agenda",
+          "Analyse des manques",
+          "Valise IA pour vos voyages",
+          "Annonces de revente illimitées",
+        ],
+        cta: "Télécharger gratuitement",
+      },
+      note: "Partage familial pris en charge. Résiliable à tout moment.",
     },
     socialProof: {
       eyebrow: "Premières voix",
@@ -427,7 +506,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         { label: "Notes", href: "/blog" },
         { label: "Presse", href: "/press" },
         { label: "Confidentialité", href: "/privacy" },
-        { label: "Contact", href: "mailto:yassine@benlahmr.com" },
+        { label: "Contact", href: "mailto:hello@margotwardrobe.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
         { label: "TikTok", href: "https://tiktok.com/@margotwardrobe" },
         { label: "X", href: "https://x.com/margotwardrobe" },
