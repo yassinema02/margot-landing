@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter_Tight } from "next/font/google";
 import { headers } from "next/headers";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { StructuredData } from "@/components/StructuredData";
 import "./globals.css";
+
+const META_PIXEL_ID = "2371377616601057";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -26,14 +29,14 @@ const interTight = Inter_Tight({
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot is the AI wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware. Join the private beta.";
+  "Margot turns your closet into daily outfits, shopping verdicts, packing lists, and wardrobe insights from what you already own. Join the private beta.";
 
 // EN metadata only — /fr ships its own metadata override via app/fr/layout.tsx.
 // alternates.languages adds the hreflang annotations that point Google at the
 // FR equivalent of every EN page.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Margot · AI wardrobe app — daily outfits from what you own",
+  title: "Margot · Wardrobe Made Easy",
   description: DESCRIPTION,
   applicationName: "Margot",
   authors: [{ name: "Margot" }],
@@ -46,7 +49,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Margot · AI wardrobe app",
+    title: "Margot · Wardrobe Made Easy",
     description: DESCRIPTION,
     url: `${SITE_URL}/`,
     siteName: "Margot",
@@ -59,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@margotwardrobe",
     creator: "@margotwardrobe",
-    title: "Margot · AI wardrobe app",
+    title: "Margot · Wardrobe Made Easy",
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },
@@ -75,6 +78,27 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={lang} className={`${fraunces.variable} ${interTight.variable}`}>
       <body className="font-sans bg-bg text-ink">
+        <Script id="meta-pixel" strategy="afterInteractive">
+          {`!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '${META_PIXEL_ID}');
+fbq('track', 'PageView');`}
+        </Script>
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+            alt=""
+          />
+        </noscript>
         {children}
         <StructuredData />
         <Analytics />

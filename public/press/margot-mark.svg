@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
   <title>Margot — magpie mark</title>
-  <desc>Stylised magpie face on a cream rounded square. Dark green-charcoal head with a peach beak and a sage iridescent crown. Brand mark for Margot, the AI wardrobe app.</desc>
+  <desc>Stylised magpie face on a cream rounded square. Dark green-charcoal head with a peach beak and a sage iridescent crown. Brand mark for Margot, the wardrobe app.</desc>
   <rect width="32" height="32" rx="7" fill="#ECEAE5"/>
   <path d="M 9 13 C 9 7 14 5 18 5.5 C 24 6 25 11 24.5 16 C 24 21 19 22 16 22 C 12 21.5 9 18.5 9 13 Z" fill="#2D3A33"/>
   <ellipse cx="17" cy="10" rx="6" ry="2" fill="#3F5F52" opacity="0.55"/>

@@ -36,7 +36,7 @@ const content = {
     },
     pricing: [
       'Margot will be free for the essentials.',
-      'Premium, with daily AI outfits and unlimited shopping checks, will be £4.99 a month — with a 7-day free trial.',
+      'Premium is $9.99 a month or $39.99 a year, with a 7-day free trial.',
       'Early waitlist members get an extra month.',
     ],
     faqHeading: 'Questions, briefly.',
@@ -55,15 +55,15 @@ const content = {
       },
       {
         q: 'What about my privacy?',
-        a: "Your wardrobe photos stay yours. Margot uses anonymised summaries for the AI suggestions — never images or identity. Full policy in the footer.",
+        a: "Your wardrobe photos stay yours. Photos you submit may be processed to power Margot's image features, but we do not send your identity or payment details to model providers. Full policy in the footer.",
       },
     ],
     footer: {
       madeIn: 'Made with care in London / Paris',
       tagline: 'the magpie who reads your closet.',
       links: [
-        { label: 'Privacy Policy', href: 'https://yasine123456.github.io/margot-privacy-policy/' },
-        { label: 'Contact',        href: 'mailto:yassine@benlahmr.com' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Contact',        href: 'mailto:hello@margotwardrobe.com' },
         { label: 'Instagram',      href: 'https://instagram.com/margotwardrobe' },
         { label: 'TikTok',         href: 'https://tiktok.com/@margotwardrobe' },
         { label: 'X',              href: 'https://x.com/margotwardrobe' },
@@ -105,7 +105,7 @@ const content = {
     },
     pricing: [
       'Margot sera gratuite pour l\u2019essentiel.',
-      'Premium — les suggestions quotidiennes et les v\u00e9rifications d\u2019achat illimit\u00e9es — sera \u00e0 4,99\u00a0\u00a3 par mois, apr\u00e8s un essai gratuit de 7 jours.',
+      'Premium sera \u00e0 9,99 $ par mois ou 39,99 $ par an, avec un essai gratuit de 7 jours.',
       'Les premi\u00e8res inscrites re\u00e7oivent un mois suppl\u00e9mentaire.',
     ],
     faqHeading: 'Questions, en bref.',
@@ -124,15 +124,15 @@ const content = {
       },
       {
         q: 'Et ma vie priv\u00e9e\u00a0?',
-        a: "Vos photos de v\u00eatements vous appartiennent. Margot n'envoie que des r\u00e9sum\u00e9s anonymis\u00e9s \u00e0 l'IA — jamais les images ni votre identit\u00e9. Politique compl\u00e8te en bas de page.",
+        a: "Vos photos de v\u00eatements vous appartiennent. Les photos que vous envoyez peuvent \u00eatre trait\u00e9es pour les fonctionnalit\u00e9s visuelles de Margot, mais nous n'envoyons pas votre identit\u00e9 ni vos informations de paiement aux fournisseurs de mod\u00e8les. Politique compl\u00e8te en bas de page.",
       },
     ],
     footer: {
       madeIn: 'Fait avec soin \u00e0 Londres / Paris',
       tagline: 'la pie qui lit votre garde-robe.',
       links: [
-        { label: 'Confidentialit\u00e9', href: 'https://yasine123456.github.io/margot-privacy-policy/' },
-        { label: 'Contact',          href: 'mailto:yassine@benlahmr.com' },
+        { label: 'Confidentialit\u00e9', href: '/privacy' },
+        { label: 'Contact',          href: 'mailto:hello@margotwardrobe.com' },
         { label: 'Instagram',        href: 'https://instagram.com/margotwardrobe' },
         { label: 'TikTok',           href: 'https://tiktok.com/@margotwardrobe' },
         { label: 'X',                href: 'https://x.com/margotwardrobe' },

@@ -7,7 +7,7 @@ const URL = `${SITE_URL}/press`;
 const TITLE = "Press kit · Margot";
 const DESCRIPTION =
   "Press kit for Margot, the AI wardrobe app. Boilerplate at three lengths, founder bio, downloadable brand assets, founder soundbites, and contact for journalists.";
-const PRESS_EMAIL = "yassine@benlahmr.com"; // TODO: switch to press@margotwardrobe.com once the alias is set up
+const PRESS_EMAIL = "hello@margotwardrobe.com";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -54,7 +54,7 @@ export default function PressPage() {
     ["What it is", "AI wardrobe app for daily outfit suggestions from clothes you already own"],
     ["Status", "Private beta · public launch mid-2026"],
     ["Platform", "iOS first; Android later"],
-    ["Pricing", "Free tier + Premium at $9.99 / mo or $59.99 / yr (Save 50%) · regional pricing in EUR + GBP · Family Sharing"],
+    ["Pricing", "Free tier + Premium at $9.99 / mo or $39.99 / yr (Save 67%) · regional pricing in EUR + GBP · Family Sharing"],
     ["Headquarters", "Casablanca, Morocco"],
     ["Primary markets", "France · United Kingdom"],
     ["Founder", "Yassine Benlahmr"],
@@ -139,7 +139,7 @@ export default function PressPage() {
             <br />
             Currently in private TestFlight. Built in Casablanca for Paris and London by founder
             Yassine Benlahmr. Public launch imminent. Margot is free to start, with a Premium tier at
-            $9.99 per month or $59.99 per year (Save 50%), and regional equivalents in EUR and GBP.
+            $9.99 per month or $39.99 per year (Save 67%), and regional equivalents in EUR and GBP.
           </Quote>
         </Section>
 
@@ -168,7 +168,7 @@ export default function PressPage() {
             <br />
             Built in Casablanca by founder Yassine Benlahmr and currently in private TestFlight,
             Margot launches publicly mid-2026. Margot is free to start, with a Premium tier at $9.99
-            per month or $59.99 per year (Save 50%), and Family Sharing on iOS.
+            per month or $39.99 per year (Save 67%), and Family Sharing on iOS.
             The brand voice is literary and restrained, the visual identity is editorial cream and
             terracotta, and the brand mascot is a magpie — the bird who collects everything that
             shines and remembers where she put it.

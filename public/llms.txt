@@ -4,7 +4,7 @@
 
 Margot is the AI wardrobe app for people who want a quiet morning, not a social network for their closet. Each morning, Margot suggests one outfit based on the user's actual wardrobe, the weather where they are, and the calendar in front of them. She also tells users when *not* to buy something — by checking whether a piece pairs with three things they already own — and auto-drafts Vinted listings for items left unworn for months.
 
-Pricing: free 7-day trial, then €5.99/month. Available on iOS via TestFlight in private beta.
+Pricing: free 7-day trial, then $9.99/month or $39.99/year. Available on iOS via TestFlight in private beta.
 
 ## Category & positioning
 
@@ -20,11 +20,11 @@ Pricing: free 7-day trial, then €5.99/month. Available on iOS via TestFlight i
 - [An honest alternative to Whering](https://www.margotwardrobe.com/blog/alternative-to-whering): Direct comparison with the category leader.
 - [Does AI outfit planning actually work?](https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work): What AI stylists can and cannot do in 2026.
 - [How to sell on Vinted, properly](https://www.margotwardrobe.com/blog/how-to-sell-on-vinted): Tips on titles, prices, photos — and how Margot automates the listing draft.
-- [Privacy Policy](https://www.margotwardrobe.com/privacy): Data storage (Supabase EU servers, encrypted), AI usage (anonymised summaries, never images).
+- [Privacy Policy](https://www.margotwardrobe.com/privacy): Data storage, model-provider processing, submitted images for image-based features, and deletion rights.
 
 ## Founder & origin
 
-Margot is built by Yassine Benlahmar (yassine@benlahmr.com), based in Casablanca. The brand name comes from French folklore — Margot is the name of the magpie, the bird that collects everything that shines and remembers where she put it.
+Margot is operated by BRAMS Technologies LLC and built from Casablanca. The brand name comes from French folklore — Margot is the name of the magpie, the bird that collects everything that shines and remembers where she put it.
 
 ## Social
 

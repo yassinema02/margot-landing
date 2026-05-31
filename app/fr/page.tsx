@@ -3,10 +3,10 @@ import { LandingBody } from "@/components/LandingBody";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot est l'app garde-robe IA qui vous habille à partir de ce que vous avez déjà — une tenue chaque matin, météo et agenda intégrés. Rejoignez la bêta privée.";
+  "Margot simplifie votre garde-robe : tenues quotidiennes, avis avant achat, valise de voyage et suivi de ce que vous possédez déjà. Rejoignez la bêta privée.";
 
 export const metadata: Metadata = {
-  title: "Margot · App garde-robe IA — votre tenue, chaque matin",
+  title: "Margot · La garde-robe simplifiée",
   description: DESCRIPTION,
   alternates: {
     canonical: "/fr",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Margot · App garde-robe IA",
+    title: "Margot · La garde-robe simplifiée",
     description: DESCRIPTION,
     url: `${SITE_URL}/fr`,
     siteName: "Margot",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@margotwardrobe",
     creator: "@margotwardrobe",
-    title: "Margot · App garde-robe IA",
+    title: "Margot · La garde-robe simplifiée",
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },

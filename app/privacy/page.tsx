@@ -4,12 +4,12 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy · Margot",
   description:
-    "How Margot collects, uses, and protects your personal information — data we hold, how AI uses it, what's never shared, and how to request deletion. GDPR-compliant.",
+    "How Margot collects, uses, and protects your personal information — data we hold, how styling features use it, what's never sold, and how to request deletion.",
   alternates: { canonical: "/privacy" },
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "20 May 2026";
+const LAST_UPDATED = "31 May 2026";
 
 export default function PrivacyPage() {
   return (
@@ -47,9 +47,9 @@ export default function PrivacyPage() {
 
         <Section title="1. Who we are">
           <P>
-            Margot is a mobile application that helps you digitise your wardrobe, get AI-powered
-            outfit suggestions, and decide whether new clothing items fit your existing closet.
-            The App is developed and operated by BRAMS Technologies LLC.
+            Margot is a mobile application that helps you digitise your wardrobe, get outfit
+            suggestions, and decide whether new clothing items fit your existing closet. The App is
+            developed and operated by BRAMS Technologies LLC.
           </P>
           <P>
             <Strong>Contact email:</Strong>{" "}
@@ -73,6 +73,10 @@ export default function PrivacyPage() {
                 (category, color, brand, tags, notes).
               </Li>
               <Li>
+                <Strong>Shopping and scan data:</Strong> product links, screenshots, item photos,
+                and related notes you submit for purchase checks or wardrobe import.
+              </Li>
+              <Li>
                 <Strong>Wear logs:</Strong> which items you wore on which dates.
               </Li>
               <Li>
@@ -94,8 +98,8 @@ export default function PrivacyPage() {
               </Li>
               <Li>
                 <Strong>Calendar access</Strong> (iOS, optional): used to read event titles and
-                times so the AI can suggest outfits appropriate for your day. Calendar data is
-                processed in memory and not stored persistently.
+                times so Margot can suggest outfits appropriate for your day. Calendar data may be
+                synced to your account so event outfits and reminders can work across sessions.
               </Li>
               <Li>
                 <Strong>Location access</Strong> (iOS, optional): used to fetch local weather data
@@ -133,8 +137,8 @@ export default function PrivacyPage() {
           <P>We use your data exclusively to:</P>
           <Ul>
             <Li>
-              Power the App's core features (digital wardrobe, AI outfit suggestions, "Check
-              Before You Buy", Vinted listing generation).
+              Power the App's core features (digital wardrobe, outfit suggestions, "Check Before
+              You Buy", Vinted listing generation).
             </Li>
             <Li>
               Personalise outfit recommendations based on your wear history, style preferences,
@@ -147,28 +151,30 @@ export default function PrivacyPage() {
             <Li>Communicate with you about account or subscription matters.</Li>
           </Ul>
           <P>
-            We do <Strong>not</Strong> use your data for advertising, sell it to third parties,
-            or share it with data brokers.
+            We do <Strong>not</Strong> sell your app data, share wardrobe contents with data
+            brokers, or use your wardrobe data for advertising.
           </P>
         </Section>
 
-        <Section title="4. AI processing">
+        <Section title="4. Automated styling and image processing">
           <P>
-            Margot uses large language models (currently OpenAI GPT-4o-mini) to generate outfit
-            suggestions and shopping advice. When the AI generates a suggestion, the following
-            information is sent to OpenAI's API:
+            Margot uses Google Gemini through a server-side proxy to generate outfit suggestions,
+            analyse clothing, create shopping verdicts, and prepare wardrobe or resale content.
+            Depending on the feature you use, the following information may be sent for processing:
           </P>
           <Ul>
             <Li>
-              Anonymised wardrobe item descriptions (categories, colors, materials — no images or
-              personal identifiers).
+              Wardrobe item descriptions such as categories, colors, materials, seasons, and style
+              tags.
             </Li>
-            <Li>The day's context (weather and calendar summary, anonymised).</Li>
-            <Li>Your stated style preferences.</Li>
+            <Li>Photos or screenshots you explicitly submit for wardrobe import, item analysis, product photo generation, or purchase checks.</Li>
+            <Li>The day's context, such as weather and relevant calendar event titles or times.</Li>
+            <Li>Your stated style preferences and app settings.</Li>
           </Ul>
           <P>
-            We do <Strong>not</Strong> send your photos, your name, or any direct identifier to
-            AI providers. OpenAI is contractually bound not to use API data for model training.
+            We do <Strong>not</Strong> send your name, email address, payment details, or direct
+            account identifier to model providers. Requests are routed through our backend so API
+            keys stay private and usage can be rate-limited.
           </P>
         </Section>
 
@@ -185,7 +191,7 @@ export default function PrivacyPage() {
               </thead>
               <tbody>
                 <Tr provider="Supabase" purpose="Storage of wardrobe data, accounts, wear logs" data="All wardrobe data, account data" />
-                <Tr provider="OpenAI" purpose="Outfit suggestion generation" data="Anonymised wardrobe summaries + context" />
+                <Tr provider="Google Gemini" purpose="Outfit suggestions, clothing analysis, shopping verdicts, and image processing" data="Wardrobe summaries, submitted photos/screenshots, style context" />
                 <Tr provider="RevenueCat" purpose="Validate and manage premium subscriptions" data="Subscription receipt + anonymous user ID" />
                 <Tr provider="Apple" purpose="Payment processing, app distribution" data="Per Apple's privacy policy" />
                 <Tr provider="OpenWeatherMap" purpose="Local weather for outfit context" data="Approximate location only" />
@@ -194,8 +200,8 @@ export default function PrivacyPage() {
             </table>
           </div>
           <P>
-            We do not share data with advertising networks, data brokers, or third-party marketing
-            services.
+            We do not share wardrobe or account data with advertising networks, data brokers, or
+            third-party marketing services.
           </P>
         </Section>
 
@@ -203,7 +209,8 @@ export default function PrivacyPage() {
           <Ul>
             <Li>
               <Strong>Wardrobe data, wear logs, account data:</Strong> retained as long as your
-              account exists. Deleted within 30 days after account deletion.
+              account exists. Active account data is deleted when you delete your account, while
+              backups and operational logs may take up to 30 days to expire.
             </Li>
             <Li>
               <Strong>Crash reports and analytics:</Strong> retained for 90 days, then
@@ -215,8 +222,9 @@ export default function PrivacyPage() {
             </Li>
           </Ul>
           <P>
-            You can delete your account at any time from the App's Settings screen, which triggers
-            deletion of all your personal data within 30 days.
+            You can delete your account at any time from the App's Settings screen. This removes
+            your active account and wardrobe data immediately, subject to the backup, log, and legal
+            retention periods described above.
           </P>
         </Section>
 
@@ -291,8 +299,8 @@ export default function PrivacyPage() {
 
         <Section title="10. International data transfers">
           <P>
-            Some of our service providers are located outside the European Economic Area (notably
-            OpenAI and RevenueCat in the United States). Where data is transferred internationally,
+            Some of our service providers are located outside the European Economic Area, including
+            Google, RevenueCat, and other infrastructure providers in the United States. Where data is transferred internationally,
             we rely on Standard Contractual Clauses adopted by the European Commission to ensure
             your data receives an equivalent level of protection.
           </P>

@@ -45,23 +45,33 @@ export function StructuredData() {
     applicationSubCategory: "FashionApplication",
     operatingSystem: "iOS",
     description:
-      "AI wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware.",
+      "Wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware.",
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/opengraph-image`,
     featureList: [
-      "Daily AI outfit suggestions from your existing wardrobe",
+      "Daily outfit suggestions from your existing wardrobe",
       "Weather-aware styling",
       "Calendar-aware styling (suits the meeting, the rain, the dinner)",
       "Check Before You Buy — compatibility scoring against your closet",
       "Auto-generated Vinted listings for unworn pieces",
       "Sustainability and cost-per-wear analytics",
     ],
-    offers: {
-      "@type": "Offer",
-      price: "9.99",
-      priceCurrency: "EUR",
-      availability: "https://schema.org/PreOrder",
-    },
+    offers: [
+      {
+        "@type": "Offer",
+        name: "Margot Premium Monthly",
+        price: "9.99",
+        priceCurrency: "USD",
+        availability: "https://schema.org/PreOrder",
+      },
+      {
+        "@type": "Offer",
+        name: "Margot Premium Annual",
+        price: "39.99",
+        priceCurrency: "USD",
+        availability: "https://schema.org/PreOrder",
+      },
+    ],
     author: { "@type": "Organization", name: "Margot" },
   };
 
