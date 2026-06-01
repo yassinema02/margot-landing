@@ -29,7 +29,7 @@ const nextConfig = {
             // 'unsafe-inline' on script-src remains for Next.js's inline
             // bootstrap script; prefer a nonce-based fallback when a CSP
             // refactor lands.
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.beehiiv.com; frame-ancestors 'none';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://eu-assets.i.posthog.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.beehiiv.com https://eu.i.posthog.com https://eu-assets.i.posthog.com https://www.facebook.com; frame-ancestors 'none';",
           },
         ],
       },

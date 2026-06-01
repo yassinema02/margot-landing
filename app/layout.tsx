@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { StructuredData } from "@/components/StructuredData";
+import { PostHogProvider } from "@/components/PostHogProvider";
 import "./globals.css";
 
 const META_PIXEL_ID = "2371377616601057";
@@ -109,7 +110,7 @@ fbq('track', 'PageView');`}
             alt=""
           />
         </noscript>
-        {children}
+        <PostHogProvider>{children}</PostHogProvider>
         <StructuredData />
         <Analytics />
       </body>
