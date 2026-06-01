@@ -29,7 +29,7 @@ const interTight = Inter_Tight({
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot turns your closet into daily outfits, shopping verdicts, packing lists, and wardrobe insights from what you already own. Join the private beta.";
+  "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Join the private beta.";
 
 // EN metadata only — /fr ships its own metadata override via app/fr/layout.tsx.
 // alternates.languages adds the hreflang annotations that point Google at the
