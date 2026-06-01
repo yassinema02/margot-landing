@@ -27,7 +27,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
 
       {children}
 
-      <Footer t={t} lang="en" />
+      <Footer t={t} />
     </>
   );
 }

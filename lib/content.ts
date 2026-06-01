@@ -60,6 +60,13 @@ export interface LangContent {
     hint: string;
     shareText: string;
   };
+  countdown: {
+    eyebrow: string;
+    labels: { days: string; hours: string; minutes: string; seconds: string };
+    liveEyebrow: string;
+    liveHeadline: string;
+    cta: string;
+  };
   problem: string;
   howItWorks: {
     eyebrow: string;
@@ -119,7 +126,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     lang: "EN",
     toggle: "FR",
     hero: {
-      eyebrow: "Now in private beta. Reserve your spot.",
+      eyebrow: "Launching Saturday, June 6.",
       headline: ["Your wardrobe,", "observed."],
       subline:
         "So apparently we all have ‘nothing to wear’… with full wardrobes. Makes total sense. Anyway, Margot just fixes that little illusion for you.",
@@ -138,6 +145,13 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       copied: "Copied ✓",
       hint: "Or share directly →",
       shareText: "I just joined the Margot waitlist — daily outfit suggestions from what you already own.",
+    },
+    countdown: {
+      eyebrow: "Margot opens June 6",
+      labels: { days: "days", hours: "hours", minutes: "min", seconds: "sec" },
+      liveEyebrow: "we're live",
+      liveHeadline: "Margot has opened her doors.",
+      cta: "Download on the App Store",
     },
     problem:
       "You own a hundred pieces of clothing. You wear thirty. Every morning, you stand in front of your closet and feel like you have nothing. Margot fixes that — without asking you to buy a single new thing.",
@@ -290,7 +304,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     },
     faqHeading: "Questions, briefly.",
     faq: [
-      { q: "When can I actually use Margot?", a: "Margot is in private TestFlight now. Waitlist members will receive an invite during the public launch in the coming weeks." },
+      { q: "When can I actually use Margot?", a: "Margot launches on the App Store on June 6. The countdown at the top of the page is ticking down to the moment she opens her doors." },
       { q: "Do I need to upload every single piece of clothing?", a: "No. Margot starts working with five items. She learns the rest of your wardrobe as you log what you wear each day." },
       { q: "Will Margot try to sell me things?", a: "No. Margot is built to help you wear what you already own. The 'Check Before You Buy' feature is designed to help you buy less, not more." },
       { q: "What about my privacy?", a: "Your wardrobe photos stay yours. Image features process only the photos you choose to submit, and Margot never sends your name, email, payment details, or direct account ID to model providers. Full policy in the footer." },
@@ -319,7 +333,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     lang: "FR",
     toggle: "EN",
     hero: {
-      eyebrow: "En bêta privée. Réservez votre place.",
+      eyebrow: "Lancement samedi 6 juin.",
       headline: ["Votre garde-robe,", "observée."],
       subline:
         "Apparemment, on a toutes « rien à se mettre »… avec un dressing plein. Logique. Bref, Margot règle cette petite illusion pour vous.",
@@ -338,6 +352,13 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       copied: "Copié ✓",
       hint: "Ou partager directement →",
       shareText: "Je viens de rejoindre la liste d'attente de Margot — une tenue chaque matin, à partir de ce que vous avez déjà.",
+    },
+    countdown: {
+      eyebrow: "Margot ouvre le 6 juin",
+      labels: { days: "jours", hours: "heures", minutes: "min", seconds: "sec" },
+      liveEyebrow: "c'est ouvert",
+      liveHeadline: "Margot a ouvert ses portes.",
+      cta: "Télécharger sur l'App Store",
     },
     problem:
       "Vous possédez cent vêtements. Vous en portez trente. Chaque matin, vous restez devant votre dressing en pensant que vous n'avez rien à mettre. Margot règle ça — sans vous demander d'acheter quoi que ce soit de nouveau.",
@@ -490,7 +511,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     },
     faqHeading: "Questions, en bref.",
     faq: [
-      { q: "Quand est-ce que je pourrai utiliser Margot ?", a: "Margot est en TestFlight privé. Les inscrites recevront une invitation lors de l'ouverture publique dans les semaines qui viennent." },
+      { q: "Quand est-ce que je pourrai utiliser Margot ?", a: "Margot arrive sur l'App Store le 6 juin. Le compte à rebours en haut de la page décompte jusqu'à l'ouverture de ses portes." },
       { q: "Dois-je photographier toute ma garde-robe d'un coup ?", a: "Non. Margot démarre avec cinq pièces. Elle apprend le reste au fur et à mesure que vous notez ce que vous portez." },
       { q: "Margot va-t-elle me pousser à acheter ?", a: "Non. Margot existe pour vous aider à mieux porter ce que vous avez déjà. Le 'Check Before You Buy' est fait pour vous aider à acheter moins, pas plus." },
       { q: "Et ma vie privée ?", a: "Vos photos de vêtements vous appartiennent. Les fonctions d'image ne traitent que les photos que vous choisissez d'envoyer, et Margot n'envoie jamais votre nom, email, paiement ou identifiant direct aux fournisseurs de modèles. Politique complète en bas de page." },

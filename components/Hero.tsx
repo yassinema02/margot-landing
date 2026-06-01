@@ -2,34 +2,9 @@
 
 import type { LangContent } from "@/lib/content";
 import { MargotSVG } from "./MargotSVG";
-import { WaitlistForm } from "./WaitlistForm";
-import { WaitlistCounter } from "./WaitlistCounter";
+import { Countdown } from "./Countdown";
 
-interface Props {
-  t: LangContent;
-  lang: "en" | "fr";
-  submitted: boolean;
-  setSubmitted: (v: boolean) => void;
-  email: string;
-  setEmail: (v: string) => void;
-  refCode: string | null;
-  setRefCode: (v: string | null) => void;
-  position: number | null;
-  setPosition: (v: number | null) => void;
-}
-
-export function Hero({
-  t,
-  lang,
-  submitted,
-  setSubmitted,
-  email,
-  setEmail,
-  refCode,
-  setRefCode,
-  position,
-  setPosition,
-}: Props) {
+export function Hero({ t }: { t: LangContent }) {
   return (
     <section
       id="top"
@@ -61,21 +36,8 @@ export function Hero({
         {t.hero.subline}
       </p>
 
-      <div className="mt-[clamp(28px,3.5vw,44px)] flex flex-col items-center gap-3.5">
-        <WaitlistForm
-          t={t}
-          lang={lang}
-          submitted={submitted}
-          setSubmitted={setSubmitted}
-          email={email}
-          setEmail={setEmail}
-          refCode={refCode}
-          setRefCode={setRefCode}
-          position={position}
-          setPosition={setPosition}
-          variant="hero"
-        />
-        <WaitlistCounter fallback={t.hero.counterFallback} template={t.hero.counterTemplate} />
+      <div className="mt-[clamp(28px,3.5vw,44px)] flex flex-col items-center">
+        <Countdown c={t.countdown} size="lg" />
       </div>
     </section>
   );

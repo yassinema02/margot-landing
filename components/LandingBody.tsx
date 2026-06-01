@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { LANDING_CONTENT } from "@/lib/content";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
@@ -15,50 +14,20 @@ import { Faq } from "@/components/Faq";
 import { Footer } from "@/components/Footer";
 import { FadeIn } from "@/components/FadeIn";
 
-const REF_RE = /^[a-z0-9]{4,16}$/;
-
-// Locale is now URL-derived. Each route (`/` or `/fr`) passes its locked
-// locale as a prop. The EN/FR toggle in <Header> navigates between URLs
-// rather than mutating in-page state.
+// Locale is URL-derived. Each route (`/` or `/fr`) passes its locked locale
+// as a prop. The EN/FR toggle in <Header> navigates between URLs.
+//
+// Email capture was removed ahead of the public launch — both the hero and the
+// closing section now show a launch countdown (see <Countdown>) instead.
 
 export function LandingBody({ lang }: { lang: "en" | "fr" }) {
-  const [submitted, setSubmitted] = useState(false);
-  const [email, setEmail] = useState("");
-  const [refCode, setRefCode] = useState<string | null>(null);
-  const [position, setPosition] = useState<number | null>(null);
   const t = LANDING_CONTENT[lang];
-
-  // Capture incoming ?ref= once on mount and persist it. Survives across
-  // form submit + page navigation so attribution holds even if the visitor
-  // bounces and comes back.
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("ref")?.trim().toLowerCase();
-      if (raw && REF_RE.test(raw)) {
-        localStorage.setItem("margot:incoming_ref", raw);
-      }
-    } catch {
-      // localStorage / URLSearchParams unavailable — silently ignore
-    }
-  }, []);
 
   return (
     <>
       <Header />
       <main>
-        <Hero
-          t={t}
-          lang={lang}
-          submitted={submitted}
-          setSubmitted={setSubmitted}
-          email={email}
-          setEmail={setEmail}
-          refCode={refCode}
-          setRefCode={setRefCode}
-          position={position}
-          setPosition={setPosition}
-        />
+        <Hero t={t} />
         <FadeIn>
           <HowItWorks t={t} />
         </FadeIn>
@@ -78,24 +47,13 @@ export function LandingBody({ lang }: { lang: "en" | "fr" }) {
           <SocialProof t={t} />
         </FadeIn>
         <FadeIn>
-          <SecondCapture
-            t={t}
-            lang={lang}
-            submitted={submitted}
-            setSubmitted={setSubmitted}
-            email={email}
-            setEmail={setEmail}
-            refCode={refCode}
-            setRefCode={setRefCode}
-            position={position}
-            setPosition={setPosition}
-          />
+          <SecondCapture t={t} />
         </FadeIn>
         <FadeIn>
           <Faq t={t} />
         </FadeIn>
       </main>
-      <Footer t={t} lang={lang} />
+      <Footer t={t} />
     </>
   );
 }
