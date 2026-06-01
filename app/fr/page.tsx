@@ -6,8 +6,17 @@ const DESCRIPTION =
   "Margot simplifie votre garde-robe : tenues quotidiennes, avis avant achat, valise de voyage et suivi de ce que vous possédez déjà. Rejoignez la bêta privée.";
 
 export const metadata: Metadata = {
-  title: "Margot · La garde-robe simplifiée",
+  title: "Margot · Application garde-robe — tenues quotidiennes",
   description: DESCRIPTION,
+  // Mot-clé invisible "application garde-robe IA" pour le SEO, sans l'afficher.
+  keywords: [
+    "application garde-robe IA",
+    "application garde-robe",
+    "tenues quotidiennes",
+    "quoi porter",
+    "planificateur de tenues",
+    "garde-robe capsule",
+  ],
   alternates: {
     canonical: "/fr",
     languages: {
@@ -17,7 +26,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Margot · La garde-robe simplifiée",
+    title: "Margot · Application garde-robe — tenues quotidiennes",
     description: DESCRIPTION,
     url: `${SITE_URL}/fr`,
     siteName: "Margot",
@@ -29,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@margotwardrobe",
     creator: "@margotwardrobe",
-    title: "Margot · La garde-robe simplifiée",
+    title: "Margot · Application garde-robe — tenues quotidiennes",
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },

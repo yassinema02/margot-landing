@@ -36,10 +36,20 @@ const DESCRIPTION =
 // FR equivalent of every EN page.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Margot · Wardrobe Made Easy",
+  title: "Margot · Wardrobe app — daily outfits from what you own",
   description: DESCRIPTION,
   applicationName: "Margot",
   authors: [{ name: "Margot" }],
+  // Invisible SEO keywords — "AI wardrobe app" lives here (not in the visible
+  // title) so the brand stays AI-free on screen while keeping the search anchor.
+  keywords: [
+    "AI wardrobe app",
+    "wardrobe app",
+    "outfit planner",
+    "daily outfit ideas",
+    "what to wear",
+    "capsule wardrobe",
+  ],
   alternates: {
     canonical: "/",
     languages: {
@@ -49,7 +59,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Margot · Wardrobe Made Easy",
+    title: "Margot · Wardrobe app — daily outfits from what you own",
     description: DESCRIPTION,
     url: `${SITE_URL}/`,
     siteName: "Margot",
@@ -62,7 +72,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@margotwardrobe",
     creator: "@margotwardrobe",
-    title: "Margot · Wardrobe Made Easy",
+    title: "Margot · Wardrobe app — daily outfits from what you own",
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },

@@ -44,8 +44,12 @@ export function StructuredData() {
     applicationCategory: "LifestyleApplication",
     applicationSubCategory: "FashionApplication",
     operatingSystem: "iOS",
+    // "AI" lives here (and in meta keywords + llms.txt) for the search/LLM
+    // signal on "AI wardrobe app" WITHOUT showing in the visible title/snippet.
     description:
-      "Wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware.",
+      "AI wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware.",
+    keywords:
+      "AI wardrobe app, AI stylist, outfit planner, wardrobe app, daily outfits, what to wear, capsule wardrobe",
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/opengraph-image`,
     featureList: [
