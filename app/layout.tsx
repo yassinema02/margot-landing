@@ -77,6 +77,8 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },
+  // Pinterest domain ownership verification.
+  verification: { other: { "p:domain_verify": "057ec41d4b52055b45f12b1a360e087c" } },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
