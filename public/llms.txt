@@ -1,10 +1,10 @@
 # Margot
 
-> Margot is an AI wardrobe app that helps people get dressed from what they already own — not buy more. Built in Casablanca for Paris and London. In private beta as of mid-2026, public launch imminent.
+> Margot is an AI wardrobe app that helps people get dressed from what they already own — not buy more. Live and free on the App Store: https://apps.apple.com/app/margot-wardrobe-made-easy/id6766047882
 
 Margot is the AI wardrobe app for people who want a quiet morning, not a social network for their closet. Each morning, Margot suggests one outfit based on the user's actual wardrobe, the weather where they are, and the calendar in front of them. She also tells users when *not* to buy something — by checking whether a piece pairs with three things they already own — and auto-drafts Vinted listings for items left unworn for months.
 
-Pricing: free 7-day trial, then $9.99/month or $39.99/year. Available on iOS via TestFlight in private beta.
+Pricing: free to download and use, with an optional Premium tier at $9.99/month or $39.99/year. Available on iOS.
 
 ## Category & positioning
 
@@ -14,7 +14,8 @@ Pricing: free 7-day trial, then $9.99/month or $39.99/year. Available on iOS via
 
 ## Key pages
 
-- [Homepage](https://www.margotwardrobe.com/): Product overview, pricing, waitlist signup.
+- [App Store listing](https://apps.apple.com/app/margot-wardrobe-made-easy/id6766047882): Download Margot, free on iOS.
+- [Homepage](https://www.margotwardrobe.com/): Product overview, screenshots, pricing.
 - [The magpie's notes (blog)](https://www.margotwardrobe.com/blog): Essays on wardrobes, restraint, getting dressed.
 - [What to wear today, finally answered](https://www.margotwardrobe.com/blog/what-to-wear-today): How AI outfit planning solves the morning decision.
 - [An honest alternative to Whering](https://www.margotwardrobe.com/blog/alternative-to-whering): Direct comparison with the category leader.
@@ -24,7 +25,7 @@ Pricing: free 7-day trial, then $9.99/month or $39.99/year. Available on iOS via
 
 ## Founder & origin
 
-Margot is operated by BRAMS Technologies LLC and built from Casablanca. The brand name comes from French folklore — Margot is the name of the magpie, the bird that collects everything that shines and remembers where she put it.
+Margot is operated by BRAMS Technologies LLC. The brand name comes from French folklore — Margot is the name of the magpie, the bird that collects everything that shines and remembers where she put it.
 
 ## Social
 

@@ -1,5 +1,6 @@
 import { LANDING_CONTENT } from "@/lib/content";
 import { safeJson } from "@/lib/jsonld";
+import { APP_STORE_URL } from "@/lib/launch";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 
@@ -52,6 +53,8 @@ export function StructuredData() {
       "AI wardrobe app, AI stylist, outfit planner, wardrobe app, daily outfits, what to wear, capsule wardrobe",
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/opengraph-image`,
+    downloadUrl: APP_STORE_URL,
+    installUrl: APP_STORE_URL,
     featureList: [
       "Daily outfit suggestions from your existing wardrobe",
       "Weather-aware styling",
@@ -66,14 +69,16 @@ export function StructuredData() {
         name: "Margot Premium Monthly",
         price: "9.99",
         priceCurrency: "USD",
-        availability: "https://schema.org/PreOrder",
+        availability: "https://schema.org/InStock",
+        url: APP_STORE_URL,
       },
       {
         "@type": "Offer",
         name: "Margot Premium Annual",
         price: "39.99",
         priceCurrency: "USD",
-        availability: "https://schema.org/PreOrder",
+        availability: "https://schema.org/InStock",
+        url: APP_STORE_URL,
       },
     ],
     author: { "@type": "Organization", name: "Margot" },
