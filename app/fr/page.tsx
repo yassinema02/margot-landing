@@ -3,7 +3,7 @@ import { LandingBody } from "@/components/LandingBody";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot, l'application garde-robe IA : tenues quotidiennes, avis avant achat, valise de voyage et suivi de ce que vous possédez déjà. Rejoignez la bêta privée.";
+  "Margot, l'application garde-robe IA : tenues quotidiennes, avis avant achat, valise de voyage et suivi de ce que vous possédez déjà. Disponible sur l'App Store.";
 
 export const metadata: Metadata = {
   title: "Margot · Application garde-robe — tenues quotidiennes",

@@ -2,6 +2,7 @@
 
 import type { LangContent } from "@/lib/content";
 import { useDetectedCurrency } from "@/lib/useDetectedCurrency";
+import { APP_STORE_URL } from "@/lib/launch";
 
 export function Pricing({ t }: { t: LangContent }) {
   const currency = useDetectedCurrency();
@@ -60,7 +61,10 @@ export function Pricing({ t }: { t: LangContent }) {
 
           <div className="mt-auto pt-2">
             <a
-              href="#top"
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cta="app-store"
               className="inline-block px-6 py-3 rounded-full border border-ink text-ink no-underline font-sans text-[14px] font-semibold tracking-tight7 hover:bg-ink hover:text-surface transition-colors"
             >
               {t.pricing.free.cta}
@@ -119,7 +123,10 @@ export function Pricing({ t }: { t: LangContent }) {
 
           <div className="mt-auto pt-2">
             <a
-              href="#top"
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cta="app-store"
               className="inline-block px-6 py-3 rounded-full bg-surface text-ink no-underline font-sans text-[14px] font-semibold tracking-tight7 hover:opacity-90 transition-opacity"
             >
               {t.pricing.premium.cta}

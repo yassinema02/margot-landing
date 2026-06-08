@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { APP_STORE_URL } from "@/lib/launch";
 
 // Locale toggle is now URL-based, not in-page state. When on /, link to /fr
 // for the SEO-indexable French route; when on /fr, link back to /. Sub-routes
@@ -24,15 +25,26 @@ export function Header() {
           Margot<span className="text-peach not-italic">.</span>
         </div>
       </Link>
-      <Link
-        href={switchHref}
-        className="font-sans text-[11px] font-semibold tracking-wider2 uppercase px-3 py-1.5 rounded-full border border-ink text-ink no-underline cursor-pointer flex items-center gap-1.5 hover:opacity-80 transition-opacity"
-      >
-        {current}
-        <span className="text-ink3">·</span>
-        {other}
-        <span className="sr-only"> — switch language</span>
-      </Link>
+      <div className="flex items-center gap-2.5">
+        <Link
+          href={switchHref}
+          className="font-sans text-[11px] font-semibold tracking-wider2 uppercase px-3 py-1.5 rounded-full border border-ink text-ink no-underline cursor-pointer flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+        >
+          {current}
+          <span className="text-ink3">·</span>
+          {other}
+          <span className="sr-only"> — switch language</span>
+        </Link>
+        <a
+          href={APP_STORE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cta="app-store"
+          className="font-sans text-[11px] font-semibold tracking-wider2 uppercase px-3.5 py-1.5 rounded-full bg-ink text-surface no-underline cursor-pointer hover:opacity-90 transition-opacity whitespace-nowrap"
+        >
+          {isFr ? "Télécharger" : "Download"}
+        </a>
+      </div>
     </header>
   );
 }

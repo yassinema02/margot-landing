@@ -2,7 +2,7 @@
 
 import type { LangContent } from "@/lib/content";
 import { MargotSVG } from "./MargotSVG";
-import { Countdown } from "./Countdown";
+import { AppStoreBadge } from "./AppStoreBadge";
 
 export function Footer({ t }: { t: LangContent }) {
   return (
@@ -18,7 +18,7 @@ export function Footer({ t }: { t: LangContent }) {
               <div className="font-display italic text-[13px] text-ink3 mt-1">{t.footer.tagline}</div>
             </div>
           </div>
-          <Countdown c={t.countdown} size="sm" />
+          <AppStoreBadge lang={t.lang} size="sm" />
         </div>
 
         <nav className="flex gap-[clamp(14px,2vw,28px)] flex-wrap items-center">

@@ -2,7 +2,8 @@
 
 import type { LangContent } from "@/lib/content";
 import { MargotSVG } from "./MargotSVG";
-import { Countdown } from "./Countdown";
+import { AppStoreBadge } from "./AppStoreBadge";
+import { APP_STORE_URL } from "@/lib/launch";
 
 export function Hero({ t }: { t: LangContent }) {
   return (
@@ -18,10 +19,18 @@ export function Hero({ t }: { t: LangContent }) {
         <MargotSVG state="considering" size={56} showLegs={false} crop="face" />
       </div>
 
-      <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-7 rounded-full border border-warm2 bg-surface font-sans text-[11px] font-semibold tracking-wider2 uppercase text-ink3">
-        <span className="w-1.5 h-1.5 rounded-full bg-peach" />
+      <a
+        href={APP_STORE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 px-3 py-1.5 mb-7 rounded-full border border-warm2 bg-surface font-sans text-[11px] font-semibold tracking-wider2 uppercase text-ink3 no-underline hover:border-sage transition-colors"
+      >
+        <span className="relative flex w-1.5 h-1.5">
+          <span className="absolute inline-flex w-full h-full rounded-full bg-sage opacity-60 animate-ping" />
+          <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-sage" />
+        </span>
         {t.hero.eyebrow}
-      </div>
+      </a>
 
       <h1 className="font-display font-normal text-ink opsz-144 m-0 text-[clamp(56px,9.5vw,120px)] leading-[0.95] tracking-tightest [text-wrap:balance]">
         {t.hero.headline[0]}{" "}
@@ -36,8 +45,11 @@ export function Hero({ t }: { t: LangContent }) {
         {t.hero.subline}
       </p>
 
-      <div className="mt-[clamp(28px,3.5vw,44px)] flex flex-col items-center">
-        <Countdown c={t.countdown} size="lg" />
+      <div className="mt-[clamp(28px,3.5vw,44px)] flex flex-col items-center gap-3">
+        <AppStoreBadge lang={t.lang} size="lg" />
+        <span className="font-sans text-[12px] text-ink3 tracking-tight7">
+          {t.lang === "FR" ? "Gratuit · iPhone" : "Free · iPhone"}
+        </span>
       </div>
     </section>
   );

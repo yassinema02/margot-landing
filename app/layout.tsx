@@ -30,7 +30,7 @@ const interTight = Inter_Tight({
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Join the private beta.";
+  "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store.";
 
 // EN metadata only — /fr ships its own metadata override via app/fr/layout.tsx.
 // alternates.languages adds the hreflang annotations that point Google at the
@@ -79,6 +79,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   // Pinterest domain ownership verification.
   verification: { other: { "p:domain_verify": "057ec41d4b52055b45f12b1a360e087c" } },
+  // iOS Smart App Banner — Safari on iPhone shows a native "Margot · Get" banner
+  // that deep-links to the App Store listing.
+  itunes: { appId: "6766047882" },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

@@ -17,8 +17,8 @@ import { FadeIn } from "@/components/FadeIn";
 // Locale is URL-derived. Each route (`/` or `/fr`) passes its locked locale
 // as a prop. The EN/FR toggle in <Header> navigates between URLs.
 //
-// Email capture was removed ahead of the public launch — both the hero and the
-// closing section now show a launch countdown (see <Countdown>) instead.
+// Email capture was removed at public launch — the hero, closing section and
+// footer now drive straight to the App Store (see <AppStoreBadge>).
 
 export function LandingBody({ lang }: { lang: "en" | "fr" }) {
   const t = LANDING_CONTENT[lang];

@@ -122,7 +122,7 @@ export default async function Image() {
           </div>
         </div>
 
-        {/* Bottom row — domain + beta badge */}
+        {/* Bottom row — domain + live badge */}
         <div
           style={{
             display: "flex",
@@ -154,7 +154,7 @@ export default async function Image() {
               textTransform: "uppercase",
             }}
           >
-            Now in private beta
+            Now on the App Store
           </div>
         </div>
       </div>
