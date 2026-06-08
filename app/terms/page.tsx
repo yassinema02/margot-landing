@@ -76,8 +76,8 @@ export default function TermsPage() {
             You are responsible for the accuracy of the information you provide and for
             keeping your account credentials confidential. You agree to notify us promptly
             of any unauthorised access at{" "}
-            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
-              hello@margotwardrobe.com
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
             </a>
             .
           </P>
@@ -304,8 +304,8 @@ export default function TermsPage() {
         <Section title="14. Contact">
           <P>
             Questions about these Terms? Email{" "}
-            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
-              hello@margotwardrobe.com
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
             </a>
             .
           </P>

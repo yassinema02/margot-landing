@@ -7,7 +7,7 @@ const URL = `${SITE_URL}/press`;
 const TITLE = "Press kit · Margot";
 const DESCRIPTION =
   "Press kit for Margot, the AI wardrobe app. Boilerplate at three lengths, founder bio, downloadable brand assets, founder soundbites, and contact for journalists.";
-const PRESS_EMAIL = "hello@margotwardrobe.com";
+const PRESS_EMAIL = "margot@margotwardrobe.com";
 
 export const metadata: Metadata = {
   title: TITLE,

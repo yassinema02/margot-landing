@@ -53,8 +53,8 @@ export default function PrivacyPage() {
           </P>
           <P>
             <Strong>Contact email:</Strong>{" "}
-            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
-              hello@margotwardrobe.com
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
             </a>
           </P>
         </Section>
@@ -259,8 +259,8 @@ export default function PrivacyPage() {
           </Ul>
           <P>
             To exercise any of these rights, email{" "}
-            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
-              hello@margotwardrobe.com
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
             </a>
             . We will respond within 30 days.
           </P>
@@ -286,8 +286,8 @@ export default function PrivacyPage() {
             Margot is not directed at children under 13. We do not knowingly collect personal data
             from children under 13. If you believe we have collected data from a child under 13,
             please contact us at{" "}
-            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
-              hello@margotwardrobe.com
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
             </a>{" "}
             and we will delete it promptly.
           </P>
@@ -322,8 +322,8 @@ export default function PrivacyPage() {
             <Strong>BRAMS Technologies LLC</Strong>
             <br />
             Email:{" "}
-            <a href="mailto:hello@margotwardrobe.com" className="underline hover:text-peach">
-              hello@margotwardrobe.com
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
             </a>
           </P>
           <P className="text-ink3 text-[13px] italic">
