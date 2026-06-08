@@ -57,6 +57,8 @@ export function StructuredData() {
     installUrl: APP_STORE_URL,
     featureList: [
       "Daily outfit suggestions from your existing wardrobe",
+      "Personal color analysis — reads your skin tone and undertone from a photo, places you in a 12-season color palette, and recommends colors that flatter you",
+      "49-rule styling engine — every outfit scored on color harmony, fabric, silhouette and formality",
       "Weather-aware styling",
       "Calendar-aware styling (suits the meeting, the rain, the dinner)",
       "Check Before You Buy — compatibility scoring against your closet",

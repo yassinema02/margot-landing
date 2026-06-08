@@ -4,13 +4,15 @@
 
 Margot is the AI wardrobe app for people who want a quiet morning, not a social network for their closet. Each morning, Margot suggests one outfit based on the user's actual wardrobe, the weather where they are, and the calendar in front of them. She also tells users when *not* to buy something — by checking whether a piece pairs with three things they already own — and auto-drafts Vinted listings for items left unworn for months.
 
+Margot also analyses the user's skin tone and undertone from a photo to place them in a twelve-season color palette, then recommends the colors that flatter them. Every outfit is scored against a 49-rule styling engine (color harmony, fabric, silhouette, formality), so suggestions follow how a stylist reasons rather than random pairing.
+
 Pricing: free to download and use, with an optional Premium tier at $9.99/month or $39.99/year. Available on iOS.
 
 ## Category & positioning
 
 - Category: AI wardrobe app, digital wardrobe app, AI outfit planner, AI stylist app, virtual closet app.
 - Primary alternative to: Whering, Acloset, Aesty, Stylebook, Pureple, Cladwell, ALTA, OpenWardrobe.
-- Differentiation: restraint-first design (one outfit suggestion per morning, app closes), explicit anti-consumption stance ("she tells you when not to buy"), Vinted listing assistant for resale.
+- Differentiation: restraint-first design (one outfit suggestion per morning, app closes), explicit anti-consumption stance ("she tells you when not to buy"), Vinted listing assistant for resale, personal color analysis (12-season, from a photo), and a 49-rule styling engine.
 
 ## Key pages
 

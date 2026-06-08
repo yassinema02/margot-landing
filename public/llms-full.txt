@@ -22,6 +22,10 @@ Margot is an AI wardrobe app that suggests outfits from clothes the user already
 
 **Calendar + weather context.** Pulled each morning from the phone's standard APIs. Calendar reads titles, not contents.
 
+**Personal color analysis.** From a single photo during onboarding, Margot reads the user's skin tone, undertone and contrast and places them in a twelve-season color palette (the seasonal color analysis system — Spring/Summer/Autumn/Winter, each split into three). It then steers daily outfits and "check before you buy" toward the shades that flatter that palette, and tells the user which colors to wear and which to avoid. The photo is used for analysis only and is never stored.
+
+**A 49-rule styling engine.** Margot does not pair clothes at random. Every suggested outfit is scored against a rulebook of 49 stylist rules — 21 on color harmony, 15 on fabric and season, 8 on silhouette and proportion, 5 on formality — combined with the user's personal color palette and preferred formality range. The outcome reflects how a stylist actually reasons, not statistical co-occurrence.
+
 ## What Margot does NOT do
 
 - Margot does not have a social feed. Friends cannot see your closet. There is no community styling, no lookbooks, no shuffle showcase.
@@ -46,6 +50,7 @@ Margot's distinct positioning within this set:
 - **Restraint over engagement.** Margot is designed to be opened once a morning and closed. No content feed, no infinite scroll, no nudges to add more clothes.
 - **Anti-consumption, explicit.** "She tells you when not to buy" is on the homepage. No other major app in the category leads with this.
 - **Vinted resale loop.** Items not worn become drafted listings. The wardrobe → resale loop is automated end-to-end. No competitor in the EU market has built this.
+- **Color science, built in.** Seasonal color analysis (12-season, from a photo) tells the user which colors flatter them, and a 49-rule styling engine scores every outfit. Most wardrobe apps stop at tagging items and pairing them at random.
 - **European-first.** Supabase EU server hosting. Data stays in the EU.
 
 ## Pricing
