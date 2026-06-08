@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { safeJson } from "@/lib/jsonld";
+import { AppStoreBadge } from "@/components/AppStoreBadge";
+import { APP_STORE_URL } from "@/lib/launch";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/vs/whering`;
@@ -58,7 +60,7 @@ export default function VsWheringPage() {
     },
     primaryImageOfPage: { "@type": "ImageObject", url: `${SITE_URL}/opengraph-image` },
     about: [
-      { "@type": "SoftwareApplication", name: "Margot", url: SITE_URL },
+      { "@type": "SoftwareApplication", name: "Margot", url: SITE_URL, downloadUrl: APP_STORE_URL, applicationCategory: "LifestyleApplication", operatingSystem: "iOS" },
       { "@type": "SoftwareApplication", name: "Whering" },
     ],
   };
@@ -112,9 +114,9 @@ export default function VsWheringPage() {
     { feature: "Vinted listing auto-draft", margot: "Yes — for unworn pieces", whering: "Not as a feature" },
     { feature: "Social wardrobe feed", margot: "No — by design", whering: "Yes — core experience" },
     { feature: "Cost-per-wear analytics", margot: "Yes", whering: "Yes" },
-    { feature: "Platform", margot: "iOS (Android later)", whering: "iOS + Android" },
+    { feature: "Platform", margot: "Live on the App Store — iOS (Android later)", whering: "iOS + Android" },
     { feature: "Free tier", margot: "Free + Premium $9.99/mo or $39.99/yr", whering: "Free + paid tier" },
-    { feature: "Established userbase", margot: "Private beta", whering: "≈ 7 million users" },
+    { feature: "Established userbase", margot: "New — launched 2026", whering: "≈ 7 million users" },
   ];
 
   return (
@@ -146,10 +148,10 @@ export default function VsWheringPage() {
             <Strong>Whering</Strong> is a community-first social wardrobe with about seven million users. You photograph your clothes, get outfit suggestions, and follow friends to see what they wore. It is the broader, busier product. <a href="https://whering.co.uk" target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-peach underline-offset-4">whering.co.uk</a>.
           </P>
           <P>
-            <Strong>Margot</Strong> is a single-purpose styling app. One outfit a morning, picked from the closet you already own, with weather and calendar context, plus a small set of restraint features (check before you buy, auto-drafted Vinted listings for unworn pieces). No social feed. No game mechanics. Currently in private beta.
+            <Strong>Margot</Strong> is a single-purpose styling app. One outfit a morning, picked from the closet you already own, with weather and calendar context, plus a small set of restraint features (check before you buy, auto-drafted Vinted listings for unworn pieces). No social feed. No game mechanics. Live and free on the App Store.
           </P>
           <P>
-            Pick Whering if you enjoy seeing friends' outfits and want one app for everything. Pick Margot if you want the morning decision finished by the time the kettle whistles and would rather your wardrobe stay private.
+            <Strong>Bottom line:</Strong> choose Whering if you want a social wardrobe community and one app for everything; choose Margot if you want the morning decision finished by the time the kettle whistles and would rather your wardrobe stay private.
           </P>
         </Section>
 
@@ -231,19 +233,14 @@ export default function VsWheringPage() {
           </P>
         </Section>
 
-        <aside className="mt-16 rounded-3xl border border-warm2 bg-surface px-[clamp(24px,4vw,40px)] py-[clamp(28px,4vw,40px)] text-center">
+        <aside className="mt-16 rounded-3xl border border-warm2 bg-surface px-[clamp(24px,4vw,40px)] py-[clamp(28px,4vw,40px)] flex flex-col items-center text-center">
           <div className="font-sans text-[11px] font-semibold tracking-wider2 uppercase text-peach mb-3">
             Try Margot
           </div>
-          <p className="font-display italic text-ink opsz-96 text-[clamp(18px,2vw,22px)] leading-[1.4] tracking-tight5 max-w-[460px] mx-auto m-0 [text-wrap:pretty]">
-            Margot is in private beta. The waitlist is open.
+          <p className="font-display italic text-ink opsz-96 text-[clamp(18px,2vw,22px)] leading-[1.4] tracking-tight5 max-w-[460px] mx-auto m-0 mb-5 [text-wrap:pretty]">
+            Margot is live and free on the App Store. One outfit, every morning.
           </p>
-          <Link
-            href="/#top"
-            className="inline-block mt-5 px-6 py-3 rounded-full bg-ink text-surface no-underline font-sans text-[14px] font-semibold tracking-tight7 hover:opacity-90 transition-opacity"
-          >
-            Reserve my spot
-          </Link>
+          <AppStoreBadge lang="EN" size="lg" />
         </aside>
 
         <div className="mt-12 font-display italic text-ink3 text-[13px]">
