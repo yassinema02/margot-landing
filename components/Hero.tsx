@@ -3,6 +3,7 @@
 import type { LangContent } from "@/lib/content";
 import { MargotSVG } from "./MargotSVG";
 import { AppStoreBadge } from "./AppStoreBadge";
+import { TrustStrip } from "./TrustStrip";
 import { APP_STORE_URL } from "@/lib/launch";
 
 export function Hero({ t }: { t: LangContent }) {
@@ -45,11 +46,9 @@ export function Hero({ t }: { t: LangContent }) {
         {t.hero.subline}
       </p>
 
-      <div className="mt-[clamp(28px,3.5vw,44px)] flex flex-col items-center gap-3">
+      <div className="mt-[clamp(28px,3.5vw,44px)] flex flex-col items-center gap-3.5">
         <AppStoreBadge lang={t.lang} size="lg" />
-        <span className="font-sans text-[12px] text-ink3 tracking-tight7">
-          {t.lang === "FR" ? "Gratuit · iPhone" : "Free · iPhone"}
-        </span>
+        <TrustStrip lang={t.lang} />
       </div>
     </section>
   );

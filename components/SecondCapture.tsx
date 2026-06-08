@@ -2,6 +2,7 @@
 
 import type { LangContent } from "@/lib/content";
 import { AppStoreBadge } from "./AppStoreBadge";
+import { DownloadQR } from "./DownloadQR";
 
 export function SecondCapture({ t }: { t: LangContent }) {
   return (
@@ -19,6 +20,9 @@ export function SecondCapture({ t }: { t: LangContent }) {
         <span className="font-sans text-[12px] text-ink3 tracking-tight7">
           {t.lang === "FR" ? "Gratuit · iPhone" : "Free · iPhone"}
         </span>
+        <div className="mt-2">
+          <DownloadQR lang={t.lang} />
+        </div>
       </div>
     </section>
   );
