@@ -3,6 +3,8 @@
 import { LANDING_CONTENT } from "@/lib/content";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
+import { Screenshots } from "@/components/Screenshots";
+import { MobileCTA } from "@/components/MobileCTA";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Features } from "@/components/Features";
 import { WhyMargot } from "@/components/WhyMargot";
@@ -29,6 +31,9 @@ export function LandingBody({ lang }: { lang: "en" | "fr" }) {
       <main>
         <Hero t={t} />
         <FadeIn>
+          <Screenshots lang={t.lang} />
+        </FadeIn>
+        <FadeIn>
           <HowItWorks t={t} />
         </FadeIn>
         <FadeIn>
@@ -54,6 +59,8 @@ export function LandingBody({ lang }: { lang: "en" | "fr" }) {
         </FadeIn>
       </main>
       <Footer t={t} />
+      <div className="h-[76px] md:hidden" aria-hidden="true" />
+      <MobileCTA lang={t.lang} />
     </>
   );
 }
