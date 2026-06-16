@@ -13,3 +13,10 @@ a:hover { opacity: 0.7; }
    marginally sharper but the LCP win is worth it on mobile.) */
 .opsz-96  { font-variation-settings: "opsz" 96; }
 .opsz-144 { font-variation-settings: "opsz" 144; }
+
+/* Margot's loading breathe — exactly 1.4s (--dur-pulse), no bounce. */
+@keyframes sr-pulse { 0%, 100% { opacity: .55; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.05); } }
+@keyframes sr-dots  { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+.sr-pulse { animation: sr-pulse 1.4s cubic-bezier(.4,0,.2,1) infinite; }
+.sr-dot   { animation: sr-dots 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .sr-pulse, .sr-dot { animation: none !important; } }
