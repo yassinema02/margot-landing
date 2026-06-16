@@ -71,9 +71,12 @@ export function applyReframe(raw: RawArchetypeRead, locale: Locale): StudioReadR
   const primaryId = raw.primary.id as ArchetypeId;
   const secondaryId = raw.secondary && isArchetypeId(raw.secondary.id) ? (raw.secondary.id as ArchetypeId) : null;
 
-  // 2) Neutral / dustbin — low distinctiveness (REGARDLESS of confidence) OR partial signal.
-  //    Aspirational reframe; never "undefined" / "minimalist by default".
-  if (distinct === "low" || sig === "partial") {
+  // 2) Neutral / dustbin — PRUDENCE: only a CLEARLY HIGH distinctiveness earns a
+  //    confident "read". Anything less (medium OR low), regardless of confidence,
+  //    OR a partial signal → aspirational neutral. A false confident verdict on a
+  //    banal fit is worse than "you read pared-back, your lean is {X}". This is the
+  //    durable fix: routing depends on the distinctiveness AXIS, not the label.
+  if (distinct !== "high" || sig === "partial") {
     const leanId = secondaryId ?? primaryId;
     const lean = ARCHETYPES[leanId];
     const leanLabel = lean.label[locale];

@@ -34,6 +34,12 @@ describe("applyReframe", () => {
     expect(r.status).toBe("neutral");
   });
 
+  it("PRUDENCE: strong signal + MEDIUM distinctiveness -> neutral (not a confident read), even at high confidence", () => {
+    const r = applyReframe(raw({ style_signal: "strong", distinctiveness: "medium", primary: { id: "streetwear", confidence: "high" }, secondary: null }), "en");
+    expect(r.status).toBe("neutral");
+    expect(JSON.stringify(r).toLowerCase()).not.toContain("undefined");
+  });
+
   it("strong + high distinctiveness -> read, with deterministic taxonomy content", () => {
     const r = applyReframe(raw({ distinctiveness: "high", style_signal: "strong", primary: { id: "boho", confidence: "high" }, secondary: { id: "romantic" } }), "en");
     expect(r.status).toBe("read");

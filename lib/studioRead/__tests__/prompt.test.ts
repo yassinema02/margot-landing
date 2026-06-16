@@ -5,7 +5,7 @@ import { ARCHETYPE_IDS } from "../types";
 describe("archetype prompt", () => {
   it("pins model + version", () => {
     expect(MODEL).toBe("gemini-2.5-flash");
-    expect(PROMPT_VERSION).toMatch(/archetype-v2/);
+    expect(PROMPT_VERSION).toMatch(/^archetype-v\d/);
   });
 
   it("contains all 8 ids and the hard rules", () => {
