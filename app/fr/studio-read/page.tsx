@@ -32,7 +32,7 @@ export default function StudioReadPageFr() {
     <main className="min-h-screen bg-bg">
       <nav className="flex items-center justify-between border-b px-6 py-4 sm:px-14" style={{ borderColor: "#E0DDD6" }}>
         <Link href="/fr" className="no-underline">
-          <MargotMark size={26} tone="ink" accent="#B85133" showWordmark wordSize={24} />
+          <MargotMark fontSize={24} />
         </Link>
         <Link href="/fr" className="flex h-[42px] items-center rounded-full border px-5 font-sans text-sm font-semibold text-ink no-underline transition-colors hover:bg-surface" style={{ borderColor: "#CFCBC3" }}>
           {t.bridgeBtn}

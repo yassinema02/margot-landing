@@ -56,7 +56,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Habillé·e pour être vu·e — éclat, drame, intention.",
     },
     palette_hexes: ["#0E0E10", "#C9A24B", "#9B1B2E", "#D9D9D9"],
-    one_liner: { en: "you walked in. they noticed.", fr: "tu es entrée. on a vu." },
+    one_liner: { en: "you walked in. they noticed.", fr: "tu entres. on remarque." },
     starter_kit: [
       p({ en: "Statement dress", fr: "Robe statement" }, { en: "The centrepiece", fr: "La pièce maîtresse" }),
       p({ en: "Strappy heels", fr: "Talons à brides" }, { en: "Length and lift", fr: "De la ligne et de la hauteur" }),
@@ -91,7 +91,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Le confort avec de l'attitude — la culture qui se porte.",
     },
     palette_hexes: ["#1A1A1A", "#4A4A4A", "#E0532E", "#5A6650"],
-    one_liner: { en: "the street raised you. it shows.", fr: "la rue t'a élevé. ça se voit." },
+    one_liner: { en: "the street raised you. it shows.", fr: "la rue t'habite. ça se voit." },
     starter_kit: [
       p({ en: "Oversized hoodie", fr: "Hoodie oversize" }, { en: "The comfort base", fr: "La base confort" }),
       p({ en: "Graphic tee", fr: "Tee graphique" }, { en: "Wear your references", fr: "Porter ses références" }),
@@ -127,7 +127,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Doux, tendre, féminin — dentelle, fleurs, flou.",
     },
     palette_hexes: ["#F3D9DD", "#FBF1E6", "#D9C6E0", "#C98BA0"],
-    one_liner: { en: "soft, and not the least bit fragile.", fr: "doux, et pas fragile pour autant." },
+    one_liner: { en: "soft, and not the least bit fragile.", fr: "tout en douceur. rien de fragile." },
     starter_kit: [
       p({ en: "Floral midi dress", fr: "Robe midi fleurie" }, { en: "The heart of it", fr: "Le cœur du style" }),
       p({ en: "Lace or ruffle blouse", fr: "Blouse dentelle / volants" }, { en: "Detail close to the skin", fr: "Le détail près de la peau" }),

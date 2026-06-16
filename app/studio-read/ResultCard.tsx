@@ -3,6 +3,8 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { usePostHog } from "posthog-js/react";
 import { MargotMark } from "@/components/MargotMark";
+import { MargotIcon } from "@/components/MargotIcon";
+import { MargotSVG } from "@/components/MargotSVG";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
 import { MARGOT, onAccent, chipText, pickAccent } from "@/lib/studioRead/brand";
 import type { Locale, StudioReadResult } from "@/lib/studioRead/types";
@@ -27,9 +29,9 @@ export function ResultCard({
   if (result.status === "unreadable" || !result.primary) {
     return (
       <div className="flex min-h-[420px] flex-col items-center justify-center gap-6 px-6 py-12 text-center">
-        <MargotMark size={88} tone="ink" accent={MARGOT.beakRust} />
+        <MargotSVG state="skeptical" size={96} crop="portrait" showLegs={false} />
         <h2 className="font-display opsz-144 mt-1 text-4xl sm:text-[46px] leading-[1.04] tracking-[-0.02em] text-ink">{result.share_card.headline}</h2>
-        <p className="font-display italic text-xl sm:text-[23px] leading-[1.25]" style={{ color: MARGOT.textMuted }}>{result.why ? result.share_card.one_liner || result.why : ""}</p>
+        <p className="font-display italic text-xl sm:text-[23px] leading-[1.25]" style={{ color: MARGOT.textMuted }}>{result.share_card.one_liner}</p>
         <p className="max-w-md text-base leading-relaxed" style={{ color: MARGOT.textBody }}>{result.why}</p>
         <button onClick={onReset} className="mt-1.5 inline-flex h-14 items-center gap-2.5 rounded-[14px] bg-ink px-7 font-sans text-base font-semibold text-surface hover:bg-[#1F2A26] transition-colors">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /></svg>
@@ -150,7 +152,7 @@ function MargotBadge({
       <div className="flex min-h-[372px] flex-col gap-[18px] px-[26px] pb-[30px] pt-6" style={{ background: accent }}>
         <div className="flex items-start justify-between">
           <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: t.soft }}>{eyebrow}</span>
-          <MargotMark size={30} tone={t.markTone} accent={t.sparkle} />
+          <MargotIcon size={34} />
         </div>
         <div className="mt-auto flex flex-col gap-4">
           <h3 className="font-display opsz-144 text-[58px] leading-[0.95] tracking-[-0.02em] text-balance" style={{ color: t.text }}>
@@ -179,7 +181,7 @@ function MargotBadge({
               <span className="whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.14em]" style={{ color: MARGOT.textMuted }}>{leanLabel}</span>
               <span className="text-[15px] font-semibold text-ink">{lean}</span>
             </div>
-            <MargotMark size={22} tone="ink" accent={MARGOT.beakRust} showWordmark wordSize={20} />
+            <MargotMark fontSize={20} />
           </div>
         )}
       </div>
@@ -235,7 +237,7 @@ function BridgeCard({ locale, archetype }: { locale: Locale; archetype: string }
   const ph = usePostHog();
   return (
     <div className="flex flex-col items-start gap-5 rounded-[20px] border p-6 sm:flex-row sm:items-center sm:gap-[22px]" style={{ background: MARGOT.cream, borderColor: MARGOT.hairline }}>
-      <MargotMark size={52} tone="ink" accent={MARGOT.beakRust} />
+      <MargotSVG state="considering" size={56} crop="portrait" showLegs={false} />
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         <p className="font-display italic text-[23px] leading-[1.2] text-ink">{c.bridgeTitle}</p>
         <p className="text-[14.5px] leading-[1.5]" style={{ color: MARGOT.textBody }}>{c.bridgeBody}</p>

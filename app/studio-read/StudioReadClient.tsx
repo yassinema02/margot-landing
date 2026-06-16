@@ -3,7 +3,7 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { usePostHog } from "posthog-js/react";
 import { ResultCard } from "./ResultCard";
-import { MargotMark } from "@/components/MargotMark";
+import { MargotSVG } from "@/components/MargotSVG";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
 import { MARGOT } from "@/lib/studioRead/brand";
 import type { Locale, StudioReadResult } from "@/lib/studioRead/types";
@@ -109,7 +109,7 @@ export function StudioReadClient({ locale }: { locale: Locale }) {
     return (
       <div className="flex min-h-[460px] flex-col items-center justify-center gap-[34px] px-6 py-16 text-center">
         <div className="sr-pulse">
-          <MargotMark size={120} tone="ink" accent={MARGOT.beakRust} />
+          <MargotSVG state="considering" size={120} crop="portrait" showLegs={false} />
         </div>
         <div className="flex flex-col items-center gap-3.5">
           <p className="font-display italic text-[28px] sm:text-[36px] leading-[1.18] tracking-[-0.01em] text-ink">{c.loadingLine}</p>

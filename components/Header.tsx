@@ -18,13 +18,28 @@ export function Header() {
   const current = isFr ? "FR" : "EN";
   const other = isFr ? "EN" : "FR";
 
+  const readHref = isFr ? "/fr/studio-read" : "/studio-read";
+  const navLinks = [
+    { href: readHref, label: isFr ? "Lis ton style" : "Read your style" },
+    { href: "/blog", label: "Blog" },
+  ];
+
   return (
     <header className="sticky top-0 z-50 bg-bg/85 backdrop-blur-md backdrop-saturate-150 border-b border-warm2 px-6 py-3.5 flex justify-between items-center">
-      <Link href={homeHref} className="no-underline">
-        <div className="font-display italic font-normal text-2xl tracking-tight3 text-ink opsz-96">
-          Margot<span className="text-peach not-italic">.</span>
-        </div>
-      </Link>
+      <div className="flex items-center gap-7">
+        <Link href={homeHref} className="no-underline">
+          <div className="font-display italic font-normal text-2xl tracking-tight3 text-ink opsz-96">
+            Margot<span className="text-peach not-italic">.</span>
+          </div>
+        </Link>
+        <nav className="hidden md:flex items-center gap-6">
+          {navLinks.map((l) => (
+            <Link key={l.href} href={l.href} className="font-sans text-sm font-medium text-ink2 no-underline hover:text-ink transition-colors">
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
       <div className="flex items-center gap-2.5">
         <Link
           href={switchHref}

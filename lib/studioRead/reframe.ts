@@ -12,13 +12,13 @@ const NEUTRAL_PALETTE = ["#EFE7D8", "#C8B49A", "#8A7D6B", "#3B3730"];
 
 const COPY = {
   unreadable: {
-    en: { why: "I can't see your outfit clearly yet — show me a full-length fit (a mirror selfie works). Then I'll read your style.", headline: "Show me your fit" },
-    fr: { why: "Je ne vois pas encore ta tenue — montre-moi un plan complet (un mirror selfie marche). Là je lis ton style.", headline: "Montre-moi ta tenue" },
+    en: { why: "I can't see your outfit clearly yet — show me a full-length fit (a mirror selfie works). Then I'll read your style.", headline: "Show me your fit", margot: "i can't read what i can't see." },
+    fr: { why: "Je ne vois pas encore ta tenue — montre-moi un look en pied (un selfie miroir suffit). Ensuite je lis ton style.", headline: "Montre-moi ta tenue", margot: "je ne lis pas ce que je ne vois pas." },
   },
   neutralHeadline: { en: "You read pared-back", fr: "Tu lis épuré" },
   nudge: {
     en: "Upload your wardrobe in Margot to unlock your full archetype.",
-    fr: "Upload ton dressing dans Margot pour débloquer ton archétype complet.",
+    fr: "Charge ta garde-robe dans Margot pour révéler ton archétype complet.",
   },
 };
 
@@ -63,7 +63,7 @@ export function applyReframe(raw: RawArchetypeRead, locale: Locale): StudioReadR
       secondary: null,
       why: COPY.unreadable[locale].why,
       starter_kit: [],
-      share_card: { headline: COPY.unreadable[locale].headline, palette_hexes: NEUTRAL_PALETTE, one_liner: "" },
+      share_card: { headline: COPY.unreadable[locale].headline, palette_hexes: NEUTRAL_PALETTE, one_liner: COPY.unreadable[locale].margot },
       ...base,
     };
   }
@@ -89,7 +89,7 @@ export function applyReframe(raw: RawArchetypeRead, locale: Locale): StudioReadR
       share_card: {
         headline: COPY.neutralHeadline[locale],
         palette_hexes: NEUTRAL_PALETTE,
-        one_liner: locale === "fr" ? "épuré. et discrètement sûr de toi." : "pared-back. and quietly sure of it.",
+        one_liner: locale === "fr" ? "épuré. et c'est assumé." : "pared-back. and quietly sure of it.",
       },
       ...base,
     };

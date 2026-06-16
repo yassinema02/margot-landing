@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getStudioRead } from "@/lib/studioRead/persist";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
 import { MargotMark } from "@/components/MargotMark";
+import { MargotIcon } from "@/components/MargotIcon";
+import { MargotSVG } from "@/components/MargotSVG";
 import { MARGOT, onAccent, pickAccent } from "@/lib/studioRead/brand";
 
 export const runtime = "nodejs";
@@ -33,7 +35,7 @@ export default async function CardPage({ params }: { params: Promise<{ token: st
     <main className="min-h-screen bg-bg">
       <nav className="flex items-center px-6 py-4 sm:px-14" style={{ borderBottom: `1px solid ${MARGOT.hairline}` }}>
         <Link href={locale === "fr" ? "/fr" : "/"} className="no-underline">
-          <MargotMark size={26} tone="ink" accent={MARGOT.beakRust} showWordmark wordSize={24} />
+          <MargotMark fontSize={24} />
         </Link>
       </nav>
 
@@ -43,7 +45,7 @@ export default async function CardPage({ params }: { params: Promise<{ token: st
             <div className="flex min-h-[340px] flex-col justify-between gap-5 px-7 pb-8 pt-6" style={{ background: accent }}>
               <div className="flex items-start justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: t.soft }}>{c.eyebrow}</span>
-                <MargotMark size={30} tone={t.markTone} accent={t.sparkle} />
+                <MargotIcon size={34} />
               </div>
               <div className="flex flex-col gap-4">
                 <h1 className="font-display opsz-144 text-[58px] leading-[0.95] tracking-[-0.02em]" style={{ color: t.text }}>
@@ -66,7 +68,7 @@ export default async function CardPage({ params }: { params: Promise<{ token: st
           </div>
         ) : (
           <div className="flex flex-col items-center gap-5 text-center">
-            <MargotMark size={72} tone="ink" accent={MARGOT.beakRust} />
+            <MargotSVG state="considering" size={88} crop="portrait" showLegs={false} />
             <h1 className="font-display opsz-144 text-4xl tracking-[-0.02em] text-ink">{c.cardCtaTitle}</h1>
           </div>
         )}
