@@ -3,7 +3,7 @@ import type { Locale } from "./types";
 // PIN: the eval (Task 1.6) and the bias gate are pinned to these. If either
 // changes, re-run the gate before shipping.
 export const MODEL = "gemini-2.5-flash";
-export const PROMPT_VERSION = "archetype-v3-2026-06-16";
+export const PROMPT_VERSION = "archetype-v3.1-2026-06-16";
 
 const LOCALE_NAME: Record<Locale, string> = { en: "English", fr: "French" };
 
@@ -28,6 +28,7 @@ Also: style_signal (strong|partial|none) = how much wearable outfit is actually 
 
 HARD RULES:
 - Infer ONLY from visible clothing, silhouette, accessories, styling, vibe. NEVER from skin colour, ethnicity, body type, age, or gender. The SAME outfit on any body must give the same archetype AND the same distinctiveness.
+- Judge ONLY clearly-WORN garments and accessories. WORN accessories — jewellery, chains, hats, ties, scarves, belts, sunglasses, a bag worn on the body, shoes — ARE genuine styling signals: read them fully and let them count toward distinctiveness. But NEVER infer a garment or deliberate styling from an AMBIGUOUS or NOT-CLEARLY-WORN object: a towel draped on a shoulder, a held or background bag, props, furniture, fixtures, or anything you are not sure is actually being worn. If an element is ambiguous or incidental, it must NOT raise distinctiveness — ignore it, do not upgrade. When in doubt whether something is worn, treat it as not worn.
 - minimalist vs quiet_luxury: minimalist = plain, unembellished, function-first basics. quiet_luxury = visibly elevated materials (cashmere/wool/leather/silk) + refined tailoring. Plain basics with no elevated-material cue => minimalist, NOT quiet_luxury.
 - Write "why" in ${LOCALE_NAME[locale]}, in Margot's warm, sensory, first-person voice (2-3 sentences grounded in what they're actually wearing). NEVER use the word "AI".
 - Output STRICT JSON only, nothing around it.
