@@ -3,13 +3,14 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { usePostHog } from "posthog-js/react";
 import { ResultCard } from "./ResultCard";
+import { MargotMark } from "@/components/MargotMark";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
+import { MARGOT } from "@/lib/studioRead/brand";
 import type { Locale, StudioReadResult } from "@/lib/studioRead/types";
 
 type Phase = "idle" | "loading" | "result";
 
-// Downscale client-side to keep the upload small and the photo off any network
-// at full resolution. Canvas → JPEG ≤ maxDim, returns raw base64 (no data: prefix).
+// Downscale client-side: canvas → JPEG ≤ maxDim, raw base64 (no data: prefix).
 async function downscaleToBase64(file: File, maxDim = 1024, quality = 0.85): Promise<string> {
   const dataUrl: string = await new Promise((resolve, reject) => {
     const r = new FileReader();
@@ -47,16 +48,22 @@ export function StudioReadClient({ locale }: { locale: Locale }) {
   const [result, setResult] = useState<StudioReadResult | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
+  const openPicker = () => inputRef.current?.click();
+
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
     setError("");
     setFile(f);
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPreviewUrl(URL.createObjectURL(f));
   };
 
   const onSubmit = async () => {
-    if (!file) return;
+    if (!file) {
+      openPicker();
+      return;
+    }
     setPhase("loading");
     setError("");
     ph?.capture("studio_read_started", { locale });
@@ -95,52 +102,88 @@ export function StudioReadClient({ locale }: { locale: Locale }) {
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  if (phase === "result" && result) {
-    return <ResultCard result={result} token={token} locale={locale} onReset={reset} />;
+  // hidden input shared by every entry point — NO `capture` attr (mirror selfies allowed)
+  const fileInput = <input ref={inputRef} type="file" accept="image/*" onChange={onFileChange} className="hidden" />;
+
+  if (phase === "loading") {
+    return (
+      <div className="flex min-h-[460px] flex-col items-center justify-center gap-[34px] px-6 py-16 text-center">
+        <div className="sr-pulse">
+          <MargotMark size={120} tone="ink" accent={MARGOT.beakRust} />
+        </div>
+        <div className="flex flex-col items-center gap-3.5">
+          <p className="font-display italic text-[28px] sm:text-[36px] leading-[1.18] tracking-[-0.01em] text-ink">{c.loadingLine}</p>
+          <p className="text-[15px]" style={{ color: MARGOT.textMuted }}>{c.loadingSub}</p>
+        </div>
+        <div className="flex gap-2">
+          {[0, 0.2, 0.4].map((d, i) => (
+            <span key={i} className="sr-dot h-2 w-2 rounded-full" style={{ background: MARGOT.sage, animationDelay: `${d}s` }} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
+  if (phase === "result" && result) {
+    return (
+      <>
+        {fileInput}
+        <ResultCard result={result} token={token} locale={locale} onReset={reset} />
+      </>
+    );
+  }
+
+  // ---- IDLE / UPLOAD — two columns on desktop, stacked on mobile ----
   return (
-    <div className="mx-auto max-w-md text-center">
-      <p className="font-sans text-xs font-semibold uppercase tracking-wider2 text-peach">{c.kicker}</p>
-      <h1 className="mt-2 font-display text-4xl sm:text-5xl text-ink tracking-tightest leading-[0.98]">{c.title}</h1>
-      <p className="mt-4 text-ink2 leading-relaxed">{c.nudge}</p>
-
-      {/* NO capture attr — forcing the rear camera would block the mirror selfies we allow. */}
-      <input ref={inputRef} type="file" accept="image/*" onChange={onFileChange} className="hidden" id="studio-read-file" />
-
-      <div className="mt-8">
-        {previewUrl ? (
-          <div className="flex flex-col items-center gap-4">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={previewUrl}
-              alt=""
-              className="max-h-80 w-auto rounded-2xl border border-warm2 object-contain"
-            />
-            <div className="flex flex-col items-center gap-2">
-              <button
-                onClick={onSubmit}
-                disabled={phase === "loading"}
-                className="inline-flex items-center rounded-xl bg-ink px-6 py-3 font-sans text-sm font-semibold text-surface hover:opacity-90 transition-opacity disabled:opacity-60"
-              >
-                {phase === "loading" ? c.loading : c.cta}
-              </button>
-              <label htmlFor="studio-read-file" className="cursor-pointer font-sans text-sm text-ink3 underline hover:text-ink2">
-                {c.changePhoto}
-              </label>
+    <div className="flex w-full flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-16">
+      {fileInput}
+      {/* left — pitch + CTA */}
+      <div className="flex w-full max-w-[480px] flex-col gap-6 lg:flex-1">
+        <span className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: MARGOT.textMuted }}>{c.eyebrow}</span>
+        <h1 className="font-display opsz-144 text-balance text-[44px] leading-[0.98] tracking-[-0.025em] text-ink sm:text-[60px] lg:text-[68px]">
+          {c.post}<span style={{ color: MARGOT.beakRust }}>.</span>
+        </h1>
+        <p className="max-w-[420px] text-[17px] leading-relaxed sm:text-lg" style={{ color: MARGOT.textBody }}>{c.sub}</p>
+        <div className="mt-1 flex items-center gap-4">
+          <button onClick={onSubmit} className="flex h-[58px] items-center justify-center gap-2.5 rounded-[14px] bg-ink px-[30px] font-sans text-[17px] font-semibold text-surface hover:bg-[#1F2A26] transition-colors">
+            {c.readBtn}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></svg>
+          </button>
+        </div>
+        <div className="mt-1.5 flex flex-wrap items-center gap-4">
+          {c.reassure.map((item) => (
+            <div key={item} className="flex items-center gap-1.5">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={MARGOT.sage} strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+              <span className="text-[13.5px] font-medium" style={{ color: "#6B746D" }}>{item}</span>
             </div>
-          </div>
-        ) : (
-          <label
-            htmlFor="studio-read-file"
-            className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-warm2 bg-surface px-6 py-14 hover:border-ink4 transition-colors"
-          >
-            <span className="font-sans text-sm font-semibold text-ink">{c.choosePhoto}</span>
-          </label>
-        )}
+          ))}
+        </div>
+        {error && <p className="text-sm" style={{ color: MARGOT.rust }}>{error}</p>}
       </div>
 
-      {error && <p className="mt-4 text-sm text-rust">{error}</p>}
+      {/* right — drop target */}
+      <div className="flex w-full max-w-[480px] flex-col gap-3.5 lg:flex-1">
+        <button
+          onClick={openPicker}
+          className="relative block w-full rounded-3xl border-[1.5px] border-dashed bg-white p-3.5 text-left transition-colors hover:border-[#B0B5B0]"
+          style={{ borderColor: MARGOT.borderStrong, boxShadow: "0 2px 8px rgba(31,42,38,0.05)" }}
+        >
+          <div className="flex h-[300px] items-center justify-center overflow-hidden rounded-2xl sm:h-[404px]" style={{ background: MARGOT.cream }}>
+            {previewUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={previewUrl} alt="" className="h-full w-full object-contain" />
+            ) : (
+              <span className="px-8 text-center text-[15px] font-medium" style={{ color: MARGOT.textMuted }}>{c.dropHint}</span>
+            )}
+          </div>
+        </button>
+        <div className="flex items-center justify-between px-1">
+          <span className="text-[13px]" style={{ color: MARGOT.textMuted }}>{c.dropFoot}</span>
+          {previewUrl && (
+            <button onClick={openPicker} className="text-[13px] font-medium underline hover:opacity-70" style={{ color: MARGOT.textMuted }}>{c.changePhoto}</button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

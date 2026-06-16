@@ -21,7 +21,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Le luxe qui chuchote — la qualité est dans la coupe, jamais dans le logo.",
     },
     palette_hexes: ["#C8B49A", "#EFE7D8", "#8A7D6B", "#3B3730"],
-    one_liner: { en: "Whispers, never shouts.", fr: "Ça chuchote, ça ne crie jamais." },
+    one_liner: { en: "you don't shout. the cashmere does.", fr: "tu ne cries pas. le cachemire, si." },
     starter_kit: [
       p({ en: "Camel tailored coat", fr: "Manteau camel tailoré" }, { en: "The anchor of the whole look", fr: "L'ancre de toute la silhouette" }),
       p({ en: "Cashmere knit", fr: "Maille cachemire" }, { en: "Quality you feel before you see", fr: "Une qualité qui se sent avant de se voir" }),
@@ -39,7 +39,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Moins, mais mieux — chaque pièce a gagné sa place.",
     },
     palette_hexes: ["#F4F4F2", "#111111", "#BFBFBF", "#6E6E6E"],
-    one_liner: { en: "Nothing to add, nothing to remove.", fr: "Rien à ajouter, rien à enlever." },
+    one_liner: { en: "nothing extra. nothing missing.", fr: "rien en trop. rien qui manque." },
     starter_kit: [
       p({ en: "Crisp white tee", fr: "Tee blanc net" }, { en: "The blank canvas", fr: "La toile vierge" }),
       p({ en: "Straight black trousers", fr: "Pantalon droit noir" }, { en: "Clean vertical line", fr: "Une verticale nette" }),
@@ -56,7 +56,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Habillé·e pour être vu·e — éclat, drame, intention.",
     },
     palette_hexes: ["#0E0E10", "#C9A24B", "#9B1B2E", "#D9D9D9"],
-    one_liner: { en: "You walk in, the room turns.", fr: "Tu entres, la pièce se retourne." },
+    one_liner: { en: "you walked in. they noticed.", fr: "tu es entrée. on a vu." },
     starter_kit: [
       p({ en: "Statement dress", fr: "Robe statement" }, { en: "The centrepiece", fr: "La pièce maîtresse" }),
       p({ en: "Strappy heels", fr: "Talons à brides" }, { en: "Length and lift", fr: "De la ligne et de la hauteur" }),
@@ -73,7 +73,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Terreux, superposé, vagabond — la texture avant le poli.",
     },
     palette_hexes: ["#C08457", "#8B9A6B", "#EFE3CE", "#9A5B3B"],
-    one_liner: { en: "Free spirit, fully styled.", fr: "Esprit libre, entièrement stylé." },
+    one_liner: { en: "you dress like a long afternoon.", fr: "tu t'habilles comme un long après-midi." },
     starter_kit: [
       p({ en: "Flowy maxi dress", fr: "Maxi-robe fluide" }, { en: "Movement is the point", fr: "Le mouvement, c'est le sujet" }),
       p({ en: "Fringed suede jacket", fr: "Veste daim à franges" }, { en: "Texture and warmth", fr: "De la texture et de la chaleur" }),
@@ -91,7 +91,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Le confort avec de l'attitude — la culture qui se porte.",
     },
     palette_hexes: ["#1A1A1A", "#4A4A4A", "#E0532E", "#5A6650"],
-    one_liner: { en: "Easy, but never basic.", fr: "Cool, mais jamais banal." },
+    one_liner: { en: "the street raised you. it shows.", fr: "la rue t'a élevé. ça se voit." },
     starter_kit: [
       p({ en: "Oversized hoodie", fr: "Hoodie oversize" }, { en: "The comfort base", fr: "La base confort" }),
       p({ en: "Graphic tee", fr: "Tee graphique" }, { en: "Wear your references", fr: "Porter ses références" }),
@@ -109,7 +109,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Studieux, sombre, taillé — vieilles bibliothèques et automne.",
     },
     palette_hexes: ["#5E4B3A", "#2F3A2F", "#EAE2CF", "#5A2A2A"],
-    one_liner: { en: "Dressed for the library, ready for the rain.", fr: "Habillé·e pour la bibliothèque, prêt·e pour la pluie." },
+    one_liner: { en: "you read like a closing library.", fr: "tu lis comme une bibliothèque qui ferme." },
     starter_kit: [
       p({ en: "Tweed blazer", fr: "Blazer tweed" }, { en: "The scholarly backbone", fr: "La colonne studieuse" }),
       p({ en: "Knit vest", fr: "Gilet maille" }, { en: "Layered intellect", fr: "L'intellect en couches" }),
@@ -127,7 +127,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Doux, tendre, féminin — dentelle, fleurs, flou.",
     },
     palette_hexes: ["#F3D9DD", "#FBF1E6", "#D9C6E0", "#C98BA0"],
-    one_liner: { en: "Soft is its own kind of strength.", fr: "La douceur est une force." },
+    one_liner: { en: "soft, and not the least bit fragile.", fr: "doux, et pas fragile pour autant." },
     starter_kit: [
       p({ en: "Floral midi dress", fr: "Robe midi fleurie" }, { en: "The heart of it", fr: "Le cœur du style" }),
       p({ en: "Lace or ruffle blouse", fr: "Blouse dentelle / volants" }, { en: "Detail close to the skin", fr: "Le détail près de la peau" }),
@@ -144,7 +144,7 @@ export const ARCHETYPES: Record<ArchetypeId, ArchetypeMeta> = {
       fr: "Tranchant, rebelle, un soupçon de danger — cuir et contraste.",
     },
     palette_hexes: ["#0B0B0B", "#2A2A2E", "#B9B9C0", "#6E1414"],
-    one_liner: { en: "A little danger, fully intentional.", fr: "Un soupçon de danger, totalement assumé." },
+    one_liner: { en: "all black. entirely on purpose.", fr: "tout en noir. complètement exprès." },
     starter_kit: [
       p({ en: "Leather biker jacket", fr: "Perfecto cuir" }, { en: "The armour", fr: "L'armure" }),
       p({ en: "Ripped black denim", fr: "Jean noir déchiré" }, { en: "Worn-in defiance", fr: "Une défiance rodée" }),

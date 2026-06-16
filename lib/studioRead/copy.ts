@@ -1,41 +1,50 @@
 import type { Locale } from "./types";
 
-// UI chrome for the archetype tool. The route is internal-only `/studio-read`;
-// these user-facing strings deliberately NEVER say "Studio Read" (HueAI's term
-// + the dead colour concept) and NEVER say "AI" (brand voice = personal stylist).
-// The result-card content (label / why / starter kit / palette) is already
-// localized by the engine from the taxonomy — this only covers the surrounding
-// chrome.
+// UI chrome for the archetype tool, on the Margot brand. Two registers:
+// Margot's VOICE (lowercase, italic in render, <9 words — loadingLine,
+// bridgeTitle) and quiet UI copy (everything else, sentence/Title case).
+// Never the word "AI"; never "Studio Read" as a visible name.
 
 export type StudioReadCopy = {
   metaTitle: string;
   metaDescription: string;
-  kicker: string;
-  title: string;
-  nudge: string;
-  choosePhoto: string;
+  eyebrow: string;
+  navHow: string;
+  navArchetypes: string;
+  post: string;
+  sub: string;
+  dropHint: string;
+  dropFoot: string;
+  readBtn: string;
+  sample: string;
+  reassure: string[];
   changePhoto: string;
-  cta: string;
-  loading: string;
-  errorGeneric: string;
-  tryAnother: string;
-  closestLean: string;
+  loadingLine: string;
+  loadingSub: string;
+  whyLabel: string;
+  kitLabel: string;
   paletteLabel: string;
-  starterKitLabel: string;
-  bridgeTitle: (label: string) => string;
-  bridgeBody: (count: number) => string;
-  emailHeading: string;
-  emailPlaceholder: string;
-  emailCta: string;
-  emailSending: string;
-  emailConsent: string;
-  privacyHref: string;
-  privacyLinkText: string;
-  emailSuccess: string;
-  share: string;
-  copyLink: string;
+  leanLabel: string;
+  leanLabelNeutral: string;
+  neutralUnlock: string;
+  bridgeTitle: string;
+  bridgeBody: string;
+  bridgeBtn: string;
+  shareBtn: string;
+  copyBtn: string;
   copied: string;
   download: string;
+  emailTitle: string;
+  emailNote: string;
+  emailPh: string;
+  emailBtn: string;
+  emailSending: string;
+  emailSuccess: string;
+  consent: string;
+  privacyHref: string;
+  privacyLinkText: string;
+  retry: string;
+  errorGeneric: string;
   cardCtaTitle: string;
   cardCtaBody: string;
   cardCta: string;
@@ -45,73 +54,91 @@ export const STUDIO_READ_COPY: Record<Locale, StudioReadCopy> = {
   en: {
     metaTitle: "Read your style — Margot",
     metaDescription:
-      "Post your favourite fit and get your style archetype in seconds — your palette, your key pieces, and how to own it. From Margot, your personal stylist.",
-    kicker: "Margot",
-    title: "What's your style, really?",
-    nudge: "Post your most-you outfit — your favourite fit. Mirror selfies welcome.",
-    choosePhoto: "Choose a photo",
+      "Post your most-you fit and Margot reads your style — your aesthetic, your palette, the pieces that make it yours. From Margot, your personal stylist.",
+    eyebrow: "A Margot read",
+    navHow: "How it works",
+    navArchetypes: "Archetypes",
+    post: "Post your most-you fit",
+    sub: "Your stylist reads the vibe — your aesthetic, your palette, the pieces that make it yours. No account, no catch.",
+    dropHint: "Drag a full-length fit here, or click to upload",
+    dropFoot: "A mirror selfie works best · JPG or PNG",
+    readBtn: "Read my style",
+    sample: "or read a sample fit",
+    reassure: ["Free", "30 seconds", "No account"],
     changePhoto: "Change photo",
-    cta: "Read my style",
-    loading: "Reading your fit…",
-    errorGeneric: "Something went off. Try another photo.",
-    tryAnother: "Read another fit",
-    closestLean: "Closest lean",
+    loadingLine: "hold on. i'm reading you.",
+    loadingSub: "The cut, the colour, the intent",
+    whyLabel: "What I'm seeing",
+    kitLabel: "Build the look",
     paletteLabel: "Your palette",
-    starterKitLabel: "Your starter kit",
-    bridgeTitle: (label) => `You're ${label}.`,
-    bridgeBody: (count) =>
-      `Here are your ${count} key pieces. Upload your wardrobe in Margot to see your score + exactly what's missing.`,
-    emailHeading: "Get your card + see it in the app",
-    emailPlaceholder: "you@email.com",
-    emailCta: "Send my card",
-    emailSending: "Sending…",
-    emailConsent:
-      "By entering your email you agree to receive your card and news from Margot.",
-    privacyHref: "/privacy",
-    privacyLinkText: "Privacy",
-    emailSuccess: "Done — check your inbox. Now make it real in the app.",
-    share: "Share",
-    copyLink: "Copy link",
+    leanLabel: "Closest lean",
+    leanLabelNeutral: "Leaning",
+    neutralUnlock: "Upload your wardrobe to unlock your full archetype",
+    bridgeTitle: "this is only the cover.",
+    bridgeBody: "Upload your wardrobe and I read the whole thing — what to wear, what to lose, what's actually worth it.",
+    bridgeBtn: "Get Margot",
+    shareBtn: "Share",
+    copyBtn: "Copy link",
     copied: "Copied",
     download: "Download",
+    emailTitle: "Get your read in your inbox",
+    emailNote: "One email — your card, and an invite to Margot.",
+    emailPh: "your@email.com",
+    emailBtn: "Send it",
+    emailSending: "Sending…",
+    emailSuccess: "Done — check your inbox. Now make it real in the app.",
+    consent: "By entering your email you agree to receive your card and news from Margot.",
+    privacyHref: "/privacy",
+    privacyLinkText: "Privacy",
+    retry: "Try another photo",
+    errorGeneric: "Something went off. Try another photo.",
     cardCtaTitle: "Read your own style",
-    cardCtaBody: "Post your favourite fit and get your archetype in seconds.",
+    cardCtaBody: "Post your most-you fit and Margot reads it in seconds.",
     cardCta: "Read my style",
   },
   fr: {
     metaTitle: "Lis ton style — Margot",
     metaDescription:
-      "Poste ta tenue préférée et obtiens ton archétype de style en quelques secondes — ta palette, tes pièces clés, et comment l'assumer. Par Margot, ton styliste perso.",
-    kicker: "Margot",
-    title: "C'est quoi ton style, vraiment ?",
-    nudge: "Poste ta tenue la plus toi — ta préférée. Les mirror selfies sont les bienvenus.",
-    choosePhoto: "Choisir une photo",
+      "Poste ton look le plus toi et Margot lit ton style — ton esthétique, ta palette, les pièces qui te ressemblent. Par Margot, ta styliste perso.",
+    eyebrow: "Un portrait Margot",
+    navHow: "Comment ça marche",
+    navArchetypes: "Archétypes",
+    post: "Poste ton look le plus toi",
+    sub: "Ta styliste lit le vibe — ton esthétique, ta palette, les pièces qui te ressemblent. Sans compte, sans piège.",
+    dropHint: "Glisse un look en pied ici, ou clique pour charger",
+    dropFoot: "Un selfie miroir, c'est l'idéal · JPG ou PNG",
+    readBtn: "Lis mon style",
+    sample: "ou lis un look exemple",
+    reassure: ["Gratuit", "30 secondes", "Sans compte"],
     changePhoto: "Changer de photo",
-    cta: "Lis mon style",
-    loading: "Lecture de ta tenue…",
-    errorGeneric: "Un souci est survenu. Essaie une autre photo.",
-    tryAnother: "Lire une autre tenue",
-    closestLean: "Tendance la plus proche",
+    loadingLine: "attends. je te lis.",
+    loadingSub: "La coupe, la couleur, l'intention",
+    whyLabel: "Ce que je vois",
+    kitLabel: "Compose le look",
     paletteLabel: "Ta palette",
-    starterKitLabel: "Ton kit de départ",
-    bridgeTitle: (label) => `Tu es ${label}.`,
-    bridgeBody: (count) =>
-      `Voilà tes ${count} pièces clés. Upload ton dressing dans Margot pour voir ton score + ce qui te manque exactement.`,
-    emailHeading: "Reçois ta carte + vois-la dans l'app",
-    emailPlaceholder: "toi@email.com",
-    emailCta: "Envoyer ma carte",
-    emailSending: "Envoi…",
-    emailConsent:
-      "En entrant ton email, tu acceptes de recevoir ta carte et des nouvelles de Margot.",
-    privacyHref: "/privacy",
-    privacyLinkText: "Confidentialité",
-    emailSuccess: "C'est fait — regarde ta boîte mail. Maintenant, concrétise dans l'app.",
-    share: "Partager",
-    copyLink: "Copier le lien",
+    leanLabel: "Tendance proche",
+    leanLabelNeutral: "Tendance",
+    neutralUnlock: "Charge ta garde-robe pour révéler ton archétype complet",
+    bridgeTitle: "ça, c'est juste la couverture.",
+    bridgeBody: "Charge ta garde-robe et je lis tout — quoi porter, quoi lâcher, ce qui vaut vraiment le coup.",
+    bridgeBtn: "Obtenir Margot",
+    shareBtn: "Partager",
+    copyBtn: "Copier le lien",
     copied: "Copié",
     download: "Télécharger",
+    emailTitle: "Reçois ton portrait par mail",
+    emailNote: "Un seul mail — ta carte, et une invitation à Margot.",
+    emailPh: "ton@email.com",
+    emailBtn: "Envoyer",
+    emailSending: "Envoi…",
+    emailSuccess: "C'est fait — regarde ta boîte mail. Maintenant, concrétise dans l'app.",
+    consent: "En entrant ton email, tu acceptes de recevoir ta carte et des nouvelles de Margot.",
+    privacyHref: "/privacy",
+    privacyLinkText: "Confidentialité",
+    retry: "Essaie une autre photo",
+    errorGeneric: "Un souci est survenu. Essaie une autre photo.",
     cardCtaTitle: "Lis ton propre style",
-    cardCtaBody: "Poste ta tenue préférée et obtiens ton archétype en quelques secondes.",
+    cardCtaBody: "Poste ton look le plus toi et Margot le lit en quelques secondes.",
     cardCta: "Lis mon style",
   },
 };

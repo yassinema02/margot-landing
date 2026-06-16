@@ -89,7 +89,7 @@ export function applyReframe(raw: RawArchetypeRead, locale: Locale): StudioReadR
       share_card: {
         headline: COPY.neutralHeadline[locale],
         palette_hexes: NEUTRAL_PALETTE,
-        one_liner: locale === "fr" ? `Épuré, tendance ${leanLabel}.` : `Pared-back, leaning ${leanLabel}.`,
+        one_liner: locale === "fr" ? "épuré. et discrètement sûr de toi." : "pared-back. and quietly sure of it.",
       },
       ...base,
     };

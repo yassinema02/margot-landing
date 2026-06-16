@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getStudioRead } from "@/lib/studioRead/persist";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
+import { MargotMark } from "@/components/MargotMark";
+import { MARGOT, onAccent, pickAccent } from "@/lib/studioRead/brand";
 
 export const runtime = "nodejs";
 
-// Landing page a shared card link resolves to. The colocated opengraph-image
-// supplies the unfurl; this page closes the viral loop with a "read your own" CTA.
 export async function generateMetadata({ params }: { params: Promise<{ token: string }> }): Promise<Metadata> {
   const { token } = await params;
   const data = await getStudioRead(token);
@@ -25,35 +25,59 @@ export default async function CardPage({ params }: { params: Promise<{ token: st
   const locale = data?.locale ?? "en";
   const c = STUDIO_READ_COPY[locale];
   const sc = data?.result.share_card;
-  const palette = sc?.palette_hexes?.length ? sc.palette_hexes : ["#EFE7D8", "#C8B49A", "#8A7D6B", "#3B3730"];
+  const palette = sc?.palette_hexes?.length ? sc.palette_hexes.slice(0, 4) : ["#EFE7D8", "#C8B49A", "#8A7D6B", "#3B3730"];
+  const accent = pickAccent(palette);
+  const t = onAccent(accent);
 
   return (
-    <main className="min-h-screen bg-bg px-5 py-16 sm:py-24">
-      <div className="mx-auto max-w-md text-center">
-        <Link href={locale === "fr" ? "/fr" : "/"} className="font-display italic text-xl text-ink no-underline">
-          Margot<span className="text-peach not-italic">.</span>
+    <main className="min-h-screen bg-bg">
+      <nav className="flex items-center px-6 py-4 sm:px-14" style={{ borderBottom: `1px solid ${MARGOT.hairline}` }}>
+        <Link href={locale === "fr" ? "/fr" : "/"} className="no-underline">
+          <MargotMark size={26} tone="ink" accent={MARGOT.beakRust} showWordmark wordSize={24} />
         </Link>
+      </nav>
 
+      <div className="mx-auto max-w-[460px] px-6 py-12 sm:py-16">
         {sc ? (
-          <div className="mt-10">
-            <h1 className="font-display text-5xl text-ink tracking-tightest leading-[0.95]">{sc.headline}</h1>
-            <p className="mt-3 font-display italic text-lg text-ink2">{sc.one_liner}</p>
-            <div className="mt-6 flex gap-2">
-              {palette.slice(0, 4).map((hex, i) => (
-                <span key={i} className="h-10 flex-1 rounded-md border border-black/5" style={{ backgroundColor: hex }} />
-              ))}
+          <div className="overflow-hidden rounded-[28px] bg-surface" style={{ boxShadow: "0 14px 40px rgba(31,42,38,0.16)" }}>
+            <div className="flex min-h-[340px] flex-col justify-between gap-5 px-7 pb-8 pt-6" style={{ background: accent }}>
+              <div className="flex items-start justify-between">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: t.soft }}>{c.eyebrow}</span>
+                <MargotMark size={30} tone={t.markTone} accent={t.sparkle} />
+              </div>
+              <div className="flex flex-col gap-4">
+                <h1 className="font-display opsz-144 text-[58px] leading-[0.95] tracking-[-0.02em]" style={{ color: t.text }}>
+                  {sc.headline}<span style={{ color: t.soft }}>.</span>
+                </h1>
+                <p className="font-display italic text-[23px] leading-[1.22]" style={{ color: t.text }}>{sc.one_liner}</p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2.5 px-7 pb-7 pt-[22px]">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: MARGOT.textMuted }}>{c.paletteLabel}</span>
+              <div className="flex gap-1.5">
+                {palette.map((hex, i) => (
+                  <div key={i} className="flex flex-1 flex-col gap-1.5">
+                    <div className="h-[62px] rounded-[10px]" style={{ background: hex, boxShadow: "inset 0 0 0 1px rgba(31,42,38,0.06)" }} />
+                    <span className="text-center text-[9px] font-medium tracking-[0.04em]" style={{ color: "#A7ACA6" }}>{hex}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
-          <h1 className="mt-10 font-display text-4xl text-ink tracking-tightest">{c.cardCtaTitle}</h1>
+          <div className="flex flex-col items-center gap-5 text-center">
+            <MargotMark size={72} tone="ink" accent={MARGOT.beakRust} />
+            <h1 className="font-display opsz-144 text-4xl tracking-[-0.02em] text-ink">{c.cardCtaTitle}</h1>
+          </div>
         )}
 
-        <div className="mt-12 rounded-2xl border border-warm2 bg-surface p-6">
-          <h2 className="font-display text-2xl text-ink tracking-tighter2">{c.cardCtaTitle}</h2>
-          <p className="mt-2 text-ink2 leading-relaxed">{c.cardCtaBody}</p>
+        {/* close the viral loop */}
+        <div className="mt-8 flex flex-col items-center gap-3 rounded-[20px] border p-6 text-center" style={{ background: MARGOT.cream, borderColor: MARGOT.hairline }}>
+          <p className="font-display italic text-[22px] leading-[1.2] text-ink">{c.cardCtaTitle}</p>
+          <p className="text-[14.5px] leading-[1.5]" style={{ color: MARGOT.textBody }}>{c.cardCtaBody}</p>
           <Link
             href={locale === "fr" ? "/fr/studio-read" : "/studio-read"}
-            className="mt-5 inline-flex items-center rounded-xl bg-ink px-6 py-3 font-sans text-sm font-semibold text-surface no-underline hover:opacity-90 transition-opacity"
+            className="mt-2 inline-flex h-[52px] items-center justify-center rounded-xl bg-ink px-7 font-sans text-[15.5px] font-semibold text-surface no-underline transition-colors hover:bg-[#1F2A26]"
           >
             {c.cardCta}
           </Link>
