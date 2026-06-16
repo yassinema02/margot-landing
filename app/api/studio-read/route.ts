@@ -44,7 +44,7 @@ export async function POST(req: Request) {
   // 5) Persist the DERIVED result anonymously, keyed by token. Best-effort:
   //    the photo (`img`) is only in this scope and is never written anywhere.
   const token = randomUUID();
-  await saveStudioReadAnon(token, result);
+  await saveStudioReadAnon(token, result, locale);
 
   return NextResponse.json({ token, result });
 }
