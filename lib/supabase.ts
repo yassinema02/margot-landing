@@ -8,7 +8,11 @@ let client: SupabaseClient | null | undefined;
 
 export function getSupabase(): SupabaseClient | null {
   if (client !== undefined) return client;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  // SUPABASE_URL is a RUNTIME server var (read on every request). We accept the
+  // legacy NEXT_PUBLIC_SUPABASE_URL as a fallback, but prefer SUPABASE_URL:
+  // NEXT_PUBLIC_* is inlined at BUILD time, so a value set after the build
+  // bakes in as `undefined` and a cache-reusing redeploy never picks it up.
+  const url = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_ANON_KEY;
   client = url && key ? createClient(url, key, { auth: { persistSession: false } }) : null;
   return client;
