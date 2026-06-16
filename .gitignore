@@ -6,3 +6,7 @@ out
 .DS_Store
 next-env.d.ts
 .gstack/
+.vercel
+# internal-only, never push to the public landing repo
+STUDIO_READ_DESIGN_BRIEF.md
+_eval_studio_read.mts
