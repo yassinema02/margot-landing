@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, type FormEvent } from "react";
 import { usePostHog } from "posthog-js/react";
 import { MargotMark } from "@/components/MargotMark";
 import { MargotIcon } from "@/components/MargotIcon";
 import { MargotSVG } from "@/components/MargotSVG";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
-import { MARGOT, onAccent, chipText, pickAccent } from "@/lib/studioRead/brand";
+import { MARGOT, onAccent, pickAccent } from "@/lib/studioRead/brand";
+import { APP_STORE_URL } from "@/lib/launch";
 import type { Locale, StudioReadResult } from "@/lib/studioRead/types";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,7 +26,7 @@ export function ResultCard({
   const c = STUDIO_READ_COPY[locale];
   const archetype = result.primary?.id ?? "unreadable";
 
-  // ---- Unreadable: Margot gives guidance, no verdict. ----
+  // ---- Unreadable: Margot gives guidance, no verdict, no funnel. ----
   if (result.status === "unreadable" || !result.primary) {
     return (
       <div className="flex min-h-[420px] flex-col items-center justify-center gap-6 px-6 py-12 text-center">
@@ -42,82 +43,43 @@ export function ResultCard({
   }
 
   const isNeutral = result.status === "neutral";
-  const accent = isNeutral ? pickAccent(result.share_card.palette_hexes) : pickAccent(result.share_card.palette_hexes);
+  const accent = pickAccent(result.share_card.palette_hexes);
   const label = isNeutral ? result.share_card.headline : result.primary.label;
   const margotLine = result.share_card.one_liner;
   const lean = isNeutral ? result.primary.label : result.secondary?.label ?? null;
   const leanLabel = isNeutral ? c.leanLabelNeutral : c.leanLabel;
 
+  // Centered funnel: the shareable hook (free) → the locked dossier → one CTA.
   return (
-    <div className="flex w-full flex-col items-start gap-10 lg:flex-row lg:gap-14">
-      {/* LEFT — the collectible artifact + share */}
-      <div className="mx-auto flex w-full max-w-[380px] flex-col gap-[18px] lg:mx-0 lg:w-[360px] lg:flex-none lg:sticky lg:top-8">
-        <MargotBadge
-          eyebrow={c.eyebrow}
-          label={label}
-          margotLine={margotLine}
-          palette={result.share_card.palette_hexes}
-          accent={accent}
-          paletteLabel={c.paletteLabel}
-          leanLabel={leanLabel}
-          lean={lean}
-        />
-        {token && <ShareRow token={token} archetype={archetype} locale={locale} />}
-      </div>
+    <div className="mx-auto flex w-full max-w-[440px] flex-col items-stretch gap-5">
+      <MargotBadge
+        eyebrow={c.eyebrow}
+        label={label}
+        margotLine={margotLine}
+        palette={result.share_card.palette_hexes}
+        accent={accent}
+        paletteLabel={c.paletteLabel}
+        leanLabel={leanLabel}
+        lean={lean}
+      />
+      {token && <ShareRow token={token} archetype={archetype} locale={locale} />}
 
-      {/* RIGHT — the read */}
-      <div className="flex w-full min-w-0 flex-1 flex-col gap-[18px]">
-        <div className="flex flex-col gap-1.5">
-          <h2 className="font-display opsz-144 text-[34px] sm:text-[42px] leading-[1.0] tracking-[-0.02em] text-ink">
-            {label}<span style={{ color: MARGOT.beakRust }}>.</span>
-          </h2>
-          <p className="font-display italic text-xl sm:text-[23px] leading-[1.2]" style={{ color: MARGOT.sage }}>{margotLine}</p>
-        </div>
+      {/* the read itself — free, the substance that makes it shareable */}
+      <p className="px-1 text-[15px] leading-[1.6]" style={{ color: MARGOT.textBody }}>{result.why}</p>
 
-        {/* What I'm seeing */}
-        <section className="flex flex-col gap-2.5 rounded-2xl border bg-white p-[22px]" style={{ borderColor: MARGOT.hairline }}>
-          <Eyebrow>{c.whyLabel}</Eyebrow>
-          <p className="text-base leading-[1.6]" style={{ color: MARGOT.textBody }}>{result.why}</p>
-        </section>
+      {/* THE LOCKED DOSSIER — the app-only personalized layer (the install driver) */}
+      <LockedDossier result={result} archetype={archetype} accent={accent} locale={locale} />
 
-        {/* Neutral unlock */}
-        {isNeutral && (
-          <div className="flex items-center gap-3.5 rounded-2xl px-5 py-[18px]" style={{ background: MARGOT.sageTint }}>
-            <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full" style={{ background: MARGOT.sage }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={MARGOT.cream} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></svg>
-            </span>
-            <span className="text-sm font-medium leading-snug" style={{ color: "#3C4A42" }}>{c.neutralUnlock}</span>
-          </div>
-        )}
+      <EmailCard token={token} archetype={archetype} locale={locale} />
 
-        {/* Build the look */}
-        {result.starter_kit.length > 0 && (
-          <section className="flex flex-col gap-4 rounded-2xl border bg-white p-[22px]" style={{ borderColor: MARGOT.hairline }}>
-            <Eyebrow>{c.kitLabel}</Eyebrow>
-            <div className="grid grid-cols-1 items-start gap-x-10 gap-y-3.5 sm:grid-cols-2">
-              {result.starter_kit.map((k, i) => (
-                <div key={i} className="flex items-baseline gap-2.5">
-                  <span className="h-[7px] w-[7px] flex-none -translate-y-0.5 rounded-full" style={{ background: accent }} />
-                  <span className="whitespace-nowrap text-[15px] font-semibold text-ink">{k.piece}</span>
-                  <span className="min-w-[10px] flex-1 -translate-y-1 border-b border-dotted" style={{ borderColor: MARGOT.borderStrong }} />
-                  <span className="whitespace-nowrap text-[13.5px]" style={{ color: MARGOT.textMuted }}>{k.why}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Bridge C */}
-        <BridgeCard locale={locale} archetype={archetype} />
-
-        {/* Email capture */}
-        <EmailCard token={token} archetype={archetype} locale={locale} />
-      </div>
+      <button onClick={onReset} className="mx-auto mt-1 font-sans text-sm underline hover:opacity-70" style={{ color: MARGOT.textMuted }}>
+        {c.retry}
+      </button>
     </div>
   );
 }
 
-function Eyebrow({ children }: { children: ReactNode }) {
+function Eyebrow({ children }: { children: string }) {
   return (
     <span className="text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: MARGOT.textMuted }}>
       {children}
@@ -125,7 +87,107 @@ function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-/** BadgeB "The Spread" — the screenshot-worthy identity badge. */
+function LockIcon({ size = 14, color = MARGOT.textMuted }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "0 0 auto" }}>
+      <rect x="4" y="11" width="16" height="9" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </svg>
+  );
+}
+
+/** A redacted line — looks like real content you can't quite read. */
+function BlurredBars({ widths }: { widths: string[] }) {
+  return (
+    <div className="flex flex-col gap-1.5" style={{ filter: "blur(3.5px)", opacity: 0.65 }} aria-hidden="true">
+      {widths.map((w, i) => (
+        <span key={i} className="h-2.5 rounded-full" style={{ width: w, background: MARGOT.borderStrong }} />
+      ))}
+    </div>
+  );
+}
+
+/** The conversion engine: 2 key pieces free, the rest + the personalized
+ *  wardrobe layer locked behind the app — with a single strong CTA. */
+function LockedDossier({ result, archetype, accent, locale }: { result: StudioReadResult; archetype: string; accent: string; locale: Locale }) {
+  const c = STUDIO_READ_COPY[locale];
+  const ph = usePostHog();
+  const kit = result.starter_kit;
+  const free = kit.slice(0, 2);
+  const lockedCount = Math.max(0, kit.length - 2);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="px-1 font-display italic text-lg" style={{ color: MARGOT.sage }}>{c.dossierLead}</p>
+
+      <section className="overflow-hidden rounded-2xl border" style={{ borderColor: MARGOT.hairline, background: MARGOT.cream }}>
+        {/* header */}
+        <div className="flex items-start gap-3 px-5 py-4" style={{ borderBottom: `1px solid ${MARGOT.hairline}` }}>
+          <span className="mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-full" style={{ background: MARGOT.warm }}>
+            <LockIcon size={15} color={MARGOT.moss} />
+          </span>
+          <div className="flex flex-col gap-0.5">
+            <p className="font-display text-[19px] leading-tight text-ink">{c.dossierTitle}</p>
+            <p className="text-[13px] leading-snug" style={{ color: MARGOT.textMuted }}>{c.dossierSub}</p>
+          </div>
+        </div>
+
+        {/* key pieces — 2 shown, rest locked */}
+        <div className="flex flex-col gap-3 px-5 py-4" style={{ borderBottom: `1px solid ${MARGOT.hairline}` }}>
+          <div className="flex items-baseline justify-between gap-3">
+            <Eyebrow>{c.keyPiecesTitle}</Eyebrow>
+            <span className="text-[11px]" style={{ color: MARGOT.textMuted }}>
+              {free.length} {c.shownWord} · {lockedCount} {c.inAppWord}
+            </span>
+          </div>
+          {free.map((p, i) => (
+            <div key={i} className="flex items-baseline gap-2.5">
+              <span className="h-[7px] w-[7px] flex-none -translate-y-0.5 rounded-full" style={{ background: accent }} />
+              <span className="text-[15px] font-semibold text-ink">{p.piece}</span>
+              <span className="min-w-[10px] flex-1 -translate-y-1 border-b border-dotted" style={{ borderColor: MARGOT.borderStrong }} />
+              <span className="text-[13px]" style={{ color: MARGOT.textMuted }}>{p.why}</span>
+            </div>
+          ))}
+          {lockedCount > 0 &&
+            Array.from({ length: Math.min(lockedCount, 3) }).map((_, i) => (
+              <div key={i} className="flex items-center gap-2.5">
+                <span className="h-[7px] w-[7px] flex-none rounded-full" style={{ background: MARGOT.borderStrong }} />
+                <span className="h-3 flex-1 rounded-full" style={{ background: MARGOT.borderStrong, filter: "blur(3px)", opacity: 0.6, maxWidth: `${70 - i * 12}%` }} />
+                <LockIcon size={13} />
+              </div>
+            ))}
+        </div>
+
+        {/* the personalized layer — app only, the real reason to install */}
+        {c.lockedRows.map((row, i) => (
+          <div key={i} className="flex items-center gap-3 px-5 py-3.5" style={{ borderBottom: `1px solid ${MARGOT.hairline}` }}>
+            <LockIcon size={14} />
+            <span className="flex-1 text-[14px] font-medium" style={{ color: MARGOT.textBody }}>{row}</span>
+            <div className="w-16 flex-none">
+              <BlurredBars widths={["100%", "62%"]} />
+            </div>
+          </div>
+        ))}
+
+        {/* the one CTA */}
+        <div className="p-5">
+          <a
+            href={APP_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cta="app-store"
+            onClick={() => ph?.capture("studio_read_bridge_clicked", { archetype })}
+            className="flex h-[56px] w-full items-center justify-center gap-2.5 rounded-xl bg-ink font-sans text-base font-semibold text-surface no-underline transition-colors hover:bg-[#1F2A26]"
+          >
+            {c.installCta}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></svg>
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function MargotBadge({
   eyebrow,
   label,
@@ -147,8 +209,7 @@ function MargotBadge({
 }) {
   const t = onAccent(accent);
   return (
-    <div className="flex flex-col overflow-hidden rounded-[28px] bg-surface" style={{ boxShadow: MARGOT.cream && "0 14px 40px rgba(31,42,38,0.16)" }}>
-      {/* ACCENT FIELD */}
+    <div className="mx-auto flex w-full max-w-[360px] flex-col overflow-hidden rounded-[28px] bg-surface" style={{ boxShadow: "0 14px 40px rgba(31,42,38,0.16)" }}>
       <div className="flex min-h-[372px] flex-col gap-[18px] px-[26px] pb-[30px] pt-6" style={{ background: accent }}>
         <div className="flex items-start justify-between">
           <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: t.soft }}>{eyebrow}</span>
@@ -161,8 +222,6 @@ function MargotBadge({
           <p className="font-display italic text-[23px] leading-[1.22] max-w-[280px]" style={{ color: t.text }}>{margotLine}</p>
         </div>
       </div>
-
-      {/* THE COLOUR STORY */}
       <div className="flex flex-col gap-[18px] px-[26px] pb-6 pt-[22px]">
         <div className="flex flex-col gap-2.5">
           <span className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: MARGOT.textMuted }}>{paletteLabel}</span>
@@ -219,7 +278,7 @@ function ShareRow({ token, archetype, locale }: { token: string; archetype: stri
   };
 
   return (
-    <div className="flex gap-2.5">
+    <div className="mx-auto flex w-full max-w-[360px] gap-2.5">
       <button onClick={onShare} className="flex h-[50px] flex-1 items-center justify-center gap-2 rounded-xl bg-ink font-sans text-[14.5px] font-semibold text-surface hover:bg-[#1F2A26] transition-colors">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" /><path d="M12 16V3" /><path d="M7 8l5-5 5 5" /></svg>
         {c.shareBtn}
@@ -228,28 +287,6 @@ function ShareRow({ token, archetype, locale }: { token: string; archetype: stri
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" /><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" /></svg>
         {copied ? c.copied : c.copyBtn}
       </button>
-    </div>
-  );
-}
-
-function BridgeCard({ locale, archetype }: { locale: Locale; archetype: string }) {
-  const c = STUDIO_READ_COPY[locale];
-  const ph = usePostHog();
-  return (
-    <div className="flex flex-col items-start gap-5 rounded-[20px] border p-6 sm:flex-row sm:items-center sm:gap-[22px]" style={{ background: MARGOT.cream, borderColor: MARGOT.hairline }}>
-      <MargotSVG state="considering" size={56} crop="portrait" showLegs={false} />
-      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-        <p className="font-display italic text-[23px] leading-[1.2] text-ink">{c.bridgeTitle}</p>
-        <p className="text-[14.5px] leading-[1.5]" style={{ color: MARGOT.textBody }}>{c.bridgeBody}</p>
-      </div>
-      <a
-        href="/"
-        onClick={() => ph?.capture("studio_read_bridge_clicked", { archetype })}
-        className="flex h-[52px] flex-none items-center justify-center rounded-xl px-[26px] font-sans text-[15.5px] font-semibold text-white no-underline transition-colors"
-        style={{ background: MARGOT.beakRust }}
-      >
-        {c.bridgeBtn}
-      </a>
     </div>
   );
 }
@@ -264,7 +301,7 @@ function EmailCard({ token, archetype, locale }: { token: string | null; archety
 
   if (done) {
     return (
-      <div className="rounded-2xl border bg-white p-[22px]" style={{ borderColor: MARGOT.hairline }}>
+      <div className="rounded-2xl border bg-white p-[18px]" style={{ borderColor: MARGOT.hairline }}>
         <p className="text-[15px] font-medium" style={{ color: MARGOT.sage }}>{c.emailSuccess}</p>
       </div>
     );
@@ -295,10 +332,10 @@ function EmailCard({ token, archetype, locale }: { token: string | null; archety
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded-2xl border bg-white p-[22px]" style={{ borderColor: MARGOT.hairline }}>
+    <form onSubmit={onSubmit} className="flex flex-col gap-3 rounded-2xl border bg-white p-[18px]" style={{ borderColor: MARGOT.hairline }}>
       <div className="flex flex-col gap-1">
-        <span className="text-base font-semibold text-ink">{c.emailTitle}</span>
-        <span className="text-[13px] leading-snug" style={{ color: MARGOT.textMuted }}>{c.emailNote}</span>
+        <span className="text-[15px] font-semibold text-ink">{c.carryTitle}</span>
+        <span className="text-[13px] leading-snug" style={{ color: MARGOT.textMuted }}>{c.carryNote}</span>
       </div>
       <div className="flex gap-2">
         <input
@@ -308,10 +345,10 @@ function EmailCard({ token, archetype, locale }: { token: string | null; archety
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={c.emailPh}
-          className="h-[50px] min-w-0 flex-1 rounded-xl border bg-white px-4 font-sans text-[14.5px] text-ink outline-none focus:border-ink"
+          className="h-12 min-w-0 flex-1 rounded-xl border bg-white px-4 font-sans text-[14.5px] text-ink outline-none focus:border-ink"
           style={{ borderColor: MARGOT.borderStrong }}
         />
-        <button type="submit" disabled={pending} className="h-[50px] flex-none rounded-xl bg-ink px-5 font-sans text-[14.5px] font-semibold text-surface hover:bg-[#1F2A26] transition-colors disabled:opacity-60">
+        <button type="submit" disabled={pending} className="h-12 flex-none rounded-xl bg-ink px-5 font-sans text-[14.5px] font-semibold text-surface hover:bg-[#1F2A26] transition-colors disabled:opacity-60">
           {pending ? c.emailSending : c.emailBtn}
         </button>
       </div>
