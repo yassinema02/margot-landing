@@ -48,6 +48,17 @@ export type StudioReadCopy = {
   cardCtaTitle: string;
   cardCtaBody: string;
   cardCta: string;
+  // locked dossier (the conversion engine — the app-only personalized layer)
+  dossierLead: string;
+  dossierTitle: string;
+  dossierSub: string;
+  keyPiecesTitle: string;
+  shownWord: string;
+  inAppWord: string;
+  lockedRows: string[];
+  installCta: string;
+  carryTitle: string;
+  carryNote: string;
 };
 
 export const STUDIO_READ_COPY: Record<Locale, StudioReadCopy> = {
@@ -95,6 +106,16 @@ export const STUDIO_READ_COPY: Record<Locale, StudioReadCopy> = {
     cardCtaTitle: "Read your own style",
     cardCtaBody: "Post your most-you fit and Margot reads it in seconds.",
     cardCta: "Read my style",
+    dossierLead: "this is just the cover.",
+    dossierTitle: "In the app, Margot reads your closet",
+    dossierSub: "Your archetype, but on your real wardrobe — not a template.",
+    keyPiecesTitle: "Your key pieces",
+    shownWord: "shown",
+    inAppWord: "in the app",
+    lockedRows: ["What you already own that works", "What you're missing", "What to buy next"],
+    installCta: "Unlock in Margot",
+    carryTitle: "Send your read to the app",
+    carryNote: "Drop your email — your read is waiting when you open Margot.",
   },
   fr: {
     metaTitle: "Lis ton style — Margot",
@@ -140,5 +161,15 @@ export const STUDIO_READ_COPY: Record<Locale, StudioReadCopy> = {
     cardCtaTitle: "Lis ton propre style",
     cardCtaBody: "Poste ton look le plus toi et Margot le lit en quelques secondes.",
     cardCta: "Lis mon style",
+    dossierLead: "ça, c'est juste la couverture.",
+    dossierTitle: "Dans l'app, Margot lit ton dressing",
+    dossierSub: "Ton archétype, mais sur ta vraie garde-robe — pas un modèle générique.",
+    keyPiecesTitle: "Tes pièces clés",
+    shownWord: "affichées",
+    inAppWord: "dans l'app",
+    lockedRows: ["Ce que tu as déjà qui matche", "Ce qui te manque", "Quoi acheter ensuite"],
+    installCta: "Débloquer dans Margot",
+    carryTitle: "Envoie ton read dans l'app",
+    carryNote: "Laisse ton email — ton read t'attend quand tu ouvres Margot.",
   },
 };
