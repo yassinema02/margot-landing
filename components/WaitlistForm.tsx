@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { usePostHog } from "posthog-js/react";
 import type { LangContent } from "@/lib/content";
+import { trackGA } from "@/lib/analytics";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -43,6 +45,7 @@ export function WaitlistForm({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const ph = usePostHog();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,6 +65,8 @@ export function WaitlistForm({
       const data = (await res.json()) as { ok?: boolean; refCode?: string; position?: number };
       if (data.refCode) setRefCode(data.refCode);
       if (typeof data.position === "number") setPosition(data.position);
+      ph?.capture("waitlist_signup", { lang });
+      trackGA("waitlist_signup", { lang });
       setSubmitted(true);
     } catch {
       setError(t.hero.placeholder);

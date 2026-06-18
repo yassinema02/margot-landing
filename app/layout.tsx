@@ -3,11 +3,18 @@ import { Fraunces, Inter_Tight } from "next/font/google";
 import { headers } from "next/headers";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { StructuredData } from "@/components/StructuredData";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { ConsentProvider } from "@/components/analytics/ConsentProvider";
+import { ConsentBanner } from "@/components/analytics/ConsentBanner";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
+import { ConversionTracker } from "@/components/analytics/ConversionTracker";
 import "./globals.css";
 
-const META_PIXEL_ID = "2371377616601057";
+// GA4 (Google Ads conversions + Search Console). Public Measurement ID, set in
+// Vercel env. Dormant when unset. Consent-gated via Consent Mode v2 (below).
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -94,30 +101,29 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={lang} className={`${fraunces.variable} ${interTight.variable}`}>
       <body className="font-sans bg-bg text-ink">
-        <Script id="meta-pixel" strategy="afterInteractive">
-          {`!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '${META_PIXEL_ID}');
-fbq('track', 'PageView');`}
-        </Script>
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
-            alt=""
-          />
-        </noscript>
-        <PostHogProvider>{children}</PostHogProvider>
+        {/* Consent Mode v2 — deny everything BEFORE gtag.js loads, so GA4 boots
+            cookieless (modeled pings) until the visitor accepts. The banner then
+            calls gtag('consent','update', ...granted). Must be beforeInteractive
+            and live in the root layout. */}
+        {GA_ID && (
+          <Script id="ga-consent-default" strategy="beforeInteractive">
+            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});`}
+          </Script>
+        )}
+
+        <ConsentProvider>
+          <PostHogProvider>
+            <ConversionTracker />
+            {children}
+          </PostHogProvider>
+          {/* Meta Pixel only loads once consent is granted. */}
+          <MetaPixel />
+          <ConsentBanner lang={lang === "fr" ? "fr" : "en"} />
+        </ConsentProvider>
+
         <StructuredData />
         <Analytics />
+        {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { usePostHog } from "posthog-js/react";
+import { trackGA } from "@/lib/analytics";
 import { MargotMark } from "@/components/MargotMark";
 import { MargotIcon } from "@/components/MargotIcon";
 import { MargotSVG } from "@/components/MargotSVG";
@@ -323,6 +324,7 @@ function EmailCard({ token, archetype, locale }: { token: string | null; archety
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       ph?.capture("studio_read_email_captured", { archetype });
+      trackGA("studio_read_email_captured", { archetype });
       setDone(true);
     } catch {
       setError(c.errorGeneric);
