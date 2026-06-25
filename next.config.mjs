@@ -29,7 +29,10 @@ const nextConfig = {
             // 'unsafe-inline' on script-src remains for Next.js's inline
             // bootstrap script; prefer a nonce-based fallback when a CSP
             // refactor lands.
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://eu-assets.i.posthog.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://api.beehiiv.com https://eu.i.posthog.com https://eu-assets.i.posthog.com https://www.facebook.com; frame-ancestors 'none';",
+            // GA4 (gtag.js + collect beacons) and Google Ads conversion signals
+            // need googletagmanager.com / google-analytics.com / google.com /
+            // doubleclick whitelisted, or Consent Mode + GA4 are silently blocked.
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://eu-assets.i.posthog.com https://connect.facebook.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://api.beehiiv.com https://eu.i.posthog.com https://eu-assets.i.posthog.com https://www.facebook.com https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://www.google.com https://googleads.g.doubleclick.net; frame-ancestors 'none';",
           },
         ],
       },
