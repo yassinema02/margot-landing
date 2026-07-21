@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "31 May 2026";
+const LAST_UPDATED = "21 July 2026";
 
 export default function PrivacyPage() {
   return (
@@ -113,7 +113,8 @@ export default function PrivacyPage() {
             <Ul>
               <Li>
                 <Strong>Usage analytics:</Strong> anonymised events (screen views, feature
-                interactions, session length) to improve the App.
+                interactions, session length) to improve the App. You can opt out at any time
+                in the App under <em>Settings → Privacy &amp; data</em>.
               </Li>
               <Li>
                 <Strong>Crash reports:</Strong> technical diagnostic information sent
@@ -220,6 +221,10 @@ export default function PrivacyPage() {
               <Strong>Subscription receipts:</Strong> retained as required by Apple's IAP records
               (typically 7 years for tax/legal purposes).
             </Li>
+            <Li>
+              <Strong>Transient import files</Strong> (temporary photos used during wardrobe
+              import or onboarding): automatically purged after 7 days.
+            </Li>
           </Ul>
           <P>
             You can delete your account at any time from the App's Settings screen. This removes
@@ -254,7 +259,8 @@ export default function PrivacyPage() {
               Settings.
             </Li>
             <Li>
-              <Strong>Lodge a complaint</Strong> with your local data protection authority.
+              <Strong>Lodge a complaint</Strong> with your local data protection authority
+              (in France: the CNIL, cnil.fr).
             </Li>
           </Ul>
           <P>
