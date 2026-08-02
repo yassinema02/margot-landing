@@ -102,6 +102,12 @@ export interface LangContent {
     eyebrow: string;
     items: Testimonial[];
   };
+  stats: {
+    eyebrow: string;
+    headline: string;
+    items: { value: string; label: string }[];
+    note: string;
+  };
   faqHeading: string;
   faq: FaqEntry[];
   footer: {
@@ -238,15 +244,15 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           usd: "$9.99",
         },
         annual: {
-          gbp: "£39.99",
-          eur: "€39.99",
-          usd: "$39.99",
+          gbp: "£59.99",
+          eur: "€59.99",
+          usd: "$59.99",
         },
-        annualBadge: "Save 67%",
+        annualBadge: "Save 50%",
         annualMonthly: {
-          gbp: "£3.33 / mo",
-          eur: "€3.33 / mo",
-          usd: "$3.33 / mo",
+          gbp: "£5.00 / mo",
+          eur: "€5.00 / mo",
+          usd: "$5.00 / mo",
         },
         cadenceMonth: "/ month",
         cadenceYear: "/ year",
@@ -287,6 +293,17 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           role: "Architect · Lyon",
         },
       ],
+    },
+    stats: {
+      eyebrow: "Margot in numbers",
+      headline: "Wardrobes are already opening.",
+      items: [
+        { value: "5,800+", label: "garments catalogued" },
+        { value: "20,000+", label: "AI style analyses" },
+        { value: "1,800+", label: "App Store downloads" },
+        { value: "650+", label: "outfits styled" },
+      ],
+      note: "Live figures from the app — updated as the closet grows.",
     },
     faqHeading: "Questions, briefly.",
     faq: [
@@ -440,15 +457,15 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           usd: "9,99 $",
         },
         annual: {
-          gbp: "39,99 £",
-          eur: "39,99 €",
-          usd: "39,99 $",
+          gbp: "59,99 £",
+          eur: "59,99 €",
+          usd: "59,99 $",
         },
-        annualBadge: "−67 %",
+        annualBadge: "−50 %",
         annualMonthly: {
-          gbp: "3,33 £ / mois",
-          eur: "3,33 € / mois",
-          usd: "3,33 $ / mois",
+          gbp: "5,00 £ / mois",
+          eur: "5,00 € / mois",
+          usd: "5,00 $ / mois",
         },
         cadenceMonth: "/ mois",
         cadenceYear: "/ an",
@@ -489,6 +506,17 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
           role: "Architecte · Lyon",
         },
       ],
+    },
+    stats: {
+      eyebrow: "Margot en chiffres",
+      headline: "Les garde-robes s'ouvrent déjà.",
+      items: [
+        { value: "5 800+", label: "vêtements catalogués" },
+        { value: "20 000+", label: "analyses de style par l'IA" },
+        { value: "1 800+", label: "téléchargements App Store" },
+        { value: "650+", label: "tenues composées" },
+      ],
+      note: "Chiffres réels de l'app — mis à jour à mesure que le vestiaire grandit.",
     },
     faqHeading: "Questions, en bref.",
     faq: [

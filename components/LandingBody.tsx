@@ -11,6 +11,7 @@ import { WhyMargot } from "@/components/WhyMargot";
 import { MeetMargot } from "@/components/MeetMargot";
 import { Pricing } from "@/components/Pricing";
 import { SocialProof } from "@/components/SocialProof";
+import { Stats } from "@/components/Stats";
 import { SecondCapture } from "@/components/SecondCapture";
 import { Faq } from "@/components/Faq";
 import { Footer } from "@/components/Footer";
@@ -50,6 +51,9 @@ export function LandingBody({ lang }: { lang: "en" | "fr" }) {
         </FadeIn>
         <FadeIn>
           <SocialProof t={t} />
+        </FadeIn>
+        <FadeIn>
+          <Stats t={t} />
         </FadeIn>
         <FadeIn>
           <SecondCapture t={t} />

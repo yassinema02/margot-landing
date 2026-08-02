@@ -34,7 +34,7 @@ export default function PrivacyPage() {
         <Section>
           <P>
             This Privacy Policy describes how <Strong>Margot</Strong> ("we", "us", "our"),
-            operated by BRAMS Technologies LLC, collects, uses, and protects your personal information
+            operated by YAVREN, collects, uses, and protects your personal information
             when you use the Margot mobile application (the "App").
           </P>
           <P>
@@ -49,7 +49,7 @@ export default function PrivacyPage() {
           <P>
             Margot is a mobile application that helps you digitise your wardrobe, get outfit
             suggestions, and decide whether new clothing items fit your existing closet. The App is
-            developed and operated by BRAMS Technologies LLC.
+            developed and operated by YAVREN.
           </P>
           <P>
             <Strong>Contact email:</Strong>{" "}
@@ -325,7 +325,7 @@ export default function PrivacyPage() {
             contact:
           </P>
           <P>
-            <Strong>BRAMS Technologies LLC</Strong>
+            <Strong>YAVREN</Strong>
             <br />
             Email:{" "}
             <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">

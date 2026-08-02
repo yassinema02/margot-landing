@@ -34,7 +34,7 @@ export default function TermsPage() {
         <Section>
           <P>
             These Terms of Service ("Terms") govern your use of <Strong>Margot</Strong>, a
-            mobile application operated by BRAMS Technologies LLC ("we", "us", "our"). By
+            mobile application operated by YAVREN ("we", "us", "our"). By
             creating an account, downloading, or otherwise using Margot (the "App"), you agree to
             be bound by these Terms. If you do not agree, do not use the App.
           </P>
@@ -309,7 +309,7 @@ export default function TermsPage() {
             .
           </P>
           <P>
-            <Strong>BRAMS Technologies LLC</Strong>
+            <Strong>YAVREN</Strong>
           </P>
         </Section>
 

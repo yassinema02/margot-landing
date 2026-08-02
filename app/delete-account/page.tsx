@@ -34,7 +34,7 @@ export default function DeleteAccountPage() {
         <Section>
           <P>
             This page explains how to delete your <Strong>Margot</Strong> account and the personal
-            data associated with it. Margot is operated by <Strong>BRAMS Technologies LLC</Strong>.
+            data associated with it. Margot is operated by <Strong>YAVREN</Strong>.
           </P>
           <P>
             You can request deletion at any time — directly inside the app, or by email if you have
@@ -147,7 +147,7 @@ export default function DeleteAccountPage() {
             For any question about deleting your account or your data, contact:
           </P>
           <P>
-            <Strong>BRAMS Technologies LLC</Strong>
+            <Strong>YAVREN</Strong>
             <br />
             Email:{" "}
             <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
