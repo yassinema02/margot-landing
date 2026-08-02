@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "31 May 2026";
+const LAST_UPDATED = "21 July 2026";
 
 export default function PrivacyPage() {
   return (
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
         <Section>
           <P>
             This Privacy Policy describes how <Strong>Margot</Strong> ("we", "us", "our"),
-            operated by BRAMS Technologies LLC, collects, uses, and protects your personal information
+            operated by YAVREN, collects, uses, and protects your personal information
             when you use the Margot mobile application (the "App").
           </P>
           <P>
@@ -49,7 +49,7 @@ export default function PrivacyPage() {
           <P>
             Margot is a mobile application that helps you digitise your wardrobe, get outfit
             suggestions, and decide whether new clothing items fit your existing closet. The App is
-            developed and operated by BRAMS Technologies LLC.
+            developed and operated by YAVREN.
           </P>
           <P>
             <Strong>Contact email:</Strong>{" "}
@@ -113,7 +113,8 @@ export default function PrivacyPage() {
             <Ul>
               <Li>
                 <Strong>Usage analytics:</Strong> anonymised events (screen views, feature
-                interactions, session length) to improve the App.
+                interactions, session length) to improve the App. You can opt out at any time
+                in the App under <em>Settings → Privacy &amp; data</em>.
               </Li>
               <Li>
                 <Strong>Crash reports:</Strong> technical diagnostic information sent
@@ -220,6 +221,10 @@ export default function PrivacyPage() {
               <Strong>Subscription receipts:</Strong> retained as required by Apple's IAP records
               (typically 7 years for tax/legal purposes).
             </Li>
+            <Li>
+              <Strong>Transient import files</Strong> (temporary photos used during wardrobe
+              import or onboarding): automatically purged after 7 days.
+            </Li>
           </Ul>
           <P>
             You can delete your account at any time from the App's Settings screen. This removes
@@ -254,7 +259,8 @@ export default function PrivacyPage() {
               Settings.
             </Li>
             <Li>
-              <Strong>Lodge a complaint</Strong> with your local data protection authority.
+              <Strong>Lodge a complaint</Strong> with your local data protection authority
+              (in France: the CNIL, cnil.fr).
             </Li>
           </Ul>
           <P>
@@ -319,7 +325,7 @@ export default function PrivacyPage() {
             contact:
           </P>
           <P>
-            <Strong>BRAMS Technologies LLC</Strong>
+            <Strong>YAVREN</Strong>
             <br />
             Email:{" "}
             <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">

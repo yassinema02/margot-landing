@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "31 May 2026";
+const LAST_UPDATED = "21 July 2026";
 
 export default function TermsPage() {
   return (
@@ -34,7 +34,7 @@ export default function TermsPage() {
         <Section>
           <P>
             These Terms of Service ("Terms") govern your use of <Strong>Margot</Strong>, a
-            mobile application operated by BRAMS Technologies LLC ("we", "us", "our"). By
+            mobile application operated by YAVREN ("we", "us", "our"). By
             creating an account, downloading, or otherwise using Margot (the "App"), you agree to
             be bound by these Terms. If you do not agree, do not use the App.
           </P>
@@ -93,11 +93,10 @@ export default function TermsPage() {
         <Section title="3. Subscriptions and billing">
           <Sub title="3.1 Margot Premium">
             <P>
-            Margot offers a paid subscription called <Strong>Margot Premium</Strong>, available as
-            a monthly plan at $9.99 per month and an annual plan at $39.99 per year, with local
-            equivalents shown by Apple before purchase. Margot Premium supports{" "}
-            <em>Apple Family Sharing</em>. Pricing and billing period are shown inside the App
-            before you confirm purchase.
+            Margot offers a paid subscription called <Strong>Margot Premium</Strong>. The
+            available plans, their prices, and their billing periods are shown inside the App
+            before you confirm purchase, in your local currency as presented by Apple. Margot
+            Premium supports <em>Apple Family Sharing</em>.
             </P>
           </Sub>
 
@@ -310,7 +309,7 @@ export default function TermsPage() {
             .
           </P>
           <P>
-            <Strong>BRAMS Technologies LLC</Strong>
+            <Strong>YAVREN</Strong>
           </P>
         </Section>
 
