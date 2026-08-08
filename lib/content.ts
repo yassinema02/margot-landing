@@ -116,6 +116,7 @@ export interface LangContent {
     newsletterLabel: string;
     newsletterButton: string;
     links: FooterLink[];
+    manageCookies: string;
     legal: string;
   };
 }
@@ -325,13 +326,16 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         { label: "Notes", href: "/blog" },
         { label: "Press", href: "/press" },
         { label: "Privacy Policy", href: "/privacy" },
+        { label: "Terms", href: "/terms" },
+        { label: "Legal Notice", href: "/mentions-legales" },
         { label: "Contact", href: "mailto:margot@margotwardrobe.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
         { label: "TikTok", href: "https://tiktok.com/@margotwardrobe" },
         { label: "X", href: "https://x.com/margotwardrobe" },
         { label: "llms.txt", href: "/llms.txt" },
       ],
-      legal: "© 2026 Margot",
+      manageCookies: "Manage cookies",
+      legal: "© 2026 Margot · YAVREN",
     },
   },
   fr: {
@@ -537,14 +541,17 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       links: [
         { label: "Notes", href: "/blog" },
         { label: "Presse", href: "/press" },
-        { label: "Confidentialité", href: "/privacy" },
+        { label: "Confidentialité", href: "/fr/confidentialite" },
+        { label: "CGU", href: "/fr/conditions" },
+        { label: "Mentions légales", href: "/mentions-legales" },
         { label: "Contact", href: "mailto:margot@margotwardrobe.com" },
         { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
         { label: "TikTok", href: "https://tiktok.com/@margotwardrobe" },
         { label: "X", href: "https://x.com/margotwardrobe" },
         { label: "llms.txt", href: "/llms.txt" },
       ],
-      legal: "© 2026 Margot",
+      manageCookies: "Gérer les cookies",
+      legal: "© 2026 Margot · YAVREN",
     },
   },
 };

@@ -3,8 +3,10 @@
 import type { LangContent } from "@/lib/content";
 import { MargotSVG } from "./MargotSVG";
 import { AppStoreBadge } from "./AppStoreBadge";
+import { useConsent } from "./analytics/ConsentProvider";
 
 export function Footer({ t }: { t: LangContent }) {
+  const { reset } = useConsent();
   return (
     <footer className="bg-surface border-t border-warm2 px-6 py-14">
       <div className="max-w-[1280px] mx-auto flex flex-col gap-10">
@@ -33,6 +35,13 @@ export function Footer({ t }: { t: LangContent }) {
               {link.label}
             </a>
           ))}
+          <button
+            type="button"
+            onClick={reset}
+            className="font-sans text-[13px] font-medium text-ink2 tracking-tight7 pb-0.5 border-0 border-b border-transparent bg-transparent p-0 hover:border-peach hover:text-ink transition-colors cursor-pointer"
+          >
+            {t.footer.manageCookies}
+          </button>
         </nav>
 
         <div className="pt-6 border-t border-warm2 flex justify-between items-center gap-4 flex-wrap">

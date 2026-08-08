@@ -13,6 +13,8 @@ type ConsentContextValue = {
   hydrated: boolean;
   accept: () => void;
   decline: () => void;
+  /** Clears the stored choice and reopens the banner ("Manage cookies" in the footer). */
+  reset: () => void;
 };
 
 const ConsentContext = createContext<ConsentContextValue>({
@@ -20,6 +22,7 @@ const ConsentContext = createContext<ConsentContextValue>({
   hydrated: false,
   accept: () => {},
   decline: () => {},
+  reset: () => {},
 });
 
 export const useConsent = () => useContext(ConsentContext);
@@ -73,8 +76,21 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
   const accept = useCallback(() => persist("granted"), [persist]);
   const decline = useCallback(() => persist("denied"), [persist]);
 
+  const reset = useCallback(() => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* storage blocked */
+    }
+    // Withdrawing must take effect immediately: flip gtag back to denied and
+    // reload so already-booted trackers (Meta Pixel) stop for this session too.
+    gtagConsentUpdate(false);
+    setConsent(null);
+    window.location.reload();
+  }, []);
+
   return (
-    <ConsentContext.Provider value={{ consent, hydrated, accept, decline }}>
+    <ConsentContext.Provider value={{ consent, hydrated, accept, decline, reset }}>
       {children}
     </ConsentContext.Provider>
   );

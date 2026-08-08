@@ -41,8 +41,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogEntries,
     { url: `${BASE}/vs/whering`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/press`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    // TODO: /fr/privacy, /fr/terms, /fr/press, /fr/blog, /fr/vs/whering when those translate
+    {
+      url: `${BASE}/privacy`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: { en: `${BASE}/privacy`, fr: `${BASE}/fr/confidentialite` },
+      },
+    },
+    {
+      url: `${BASE}/fr/confidentialite`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: { en: `${BASE}/privacy`, fr: `${BASE}/fr/confidentialite` },
+      },
+    },
+    {
+      url: `${BASE}/terms`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: { en: `${BASE}/terms`, fr: `${BASE}/fr/conditions` },
+      },
+    },
+    {
+      url: `${BASE}/fr/conditions`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: { en: `${BASE}/terms`, fr: `${BASE}/fr/conditions` },
+      },
+    },
+    { url: `${BASE}/mentions-legales`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    // TODO: /fr/press, /fr/blog, /fr/vs/whering when those translate
   ];
 }

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "21 July 2026";
+const LAST_UPDATED = "8 August 2026";
 
 export default function TermsPage() {
   return (
@@ -266,7 +266,9 @@ export default function TermsPage() {
             Where liability cannot be excluded as a matter of law, our total aggregate
             liability for any claim arising out of or relating to the App is limited to
             the greater of (a) the amount you paid us for the App in the twelve months
-            preceding the event giving rise to the claim, or (b) £20.
+            preceding the event giving rise to the claim, or (b) €20. Nothing in these Terms
+            excludes or limits liability that cannot be excluded under French law, including
+            for gross negligence, wilful misconduct, or death or personal injury.
           </P>
         </Section>
 
@@ -298,6 +300,21 @@ export default function TermsPage() {
             applicable mandatory consumer-protection laws give you the right to bring a
             claim in your country of residence.
           </P>
+          <P>
+            In accordance with Articles L.616-1 and R.616-1 of the French Consumer Code, you
+            may use a consumer mediator free of charge to seek an amicable resolution of a
+            dispute. EU consumers may also use the European Online Dispute Resolution
+            platform:{" "}
+            <a
+              href="https://ec.europa.eu/consumers/odr"
+              className="underline hover:text-peach"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ec.europa.eu/consumers/odr
+            </a>
+            .
+          </P>
         </Section>
 
         <Section title="14. Contact">
@@ -309,7 +326,9 @@ export default function TermsPage() {
             .
           </P>
           <P>
-            <Strong>YAVREN</Strong>
+            <Strong>YAVREN</Strong>, a French simplified joint-stock company (SAS) with a share
+            capital of €5,000 — 78 avenue des Champs-Élysées, Bureau 326, 75008 Paris, France —
+            RCS Paris 108 367 863.
           </P>
         </Section>
 

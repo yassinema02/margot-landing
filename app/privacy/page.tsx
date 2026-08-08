@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "21 July 2026";
+const LAST_UPDATED = "8 August 2026";
 
 export default function PrivacyPage() {
   return (
@@ -48,8 +48,15 @@ export default function PrivacyPage() {
         <Section title="1. Who we are">
           <P>
             Margot is a mobile application that helps you digitise your wardrobe, get outfit
-            suggestions, and decide whether new clothing items fit your existing closet. The App is
-            developed and operated by YAVREN.
+            suggestions, and decide whether new clothing items fit your existing closet.
+          </P>
+          <P>
+            The data controller is <Strong>YAVREN</Strong>, a French simplified joint-stock
+            company (SAS) with a share capital of €5,000, registered with the Paris Trade and
+            Companies Register (RCS) under no. 108 367 863, whose registered office is at
+            78 avenue des Champs-Élysées, Bureau 326, 75008 Paris, France. YAVREN has not
+            designated a Data Protection Officer; privacy requests are handled directly at the
+            address below.
           </P>
           <P>
             <Strong>Contact email:</Strong>{" "}
@@ -155,6 +162,31 @@ export default function PrivacyPage() {
             We do <Strong>not</Strong> sell your app data, share wardrobe contents with data
             brokers, or use your wardrobe data for advertising.
           </P>
+
+          <Sub title="Legal bases (GDPR Art. 6)">
+            <Ul>
+              <Li>
+                <Strong>Performance of a contract:</Strong> wardrobe storage, outfit
+                suggestions, purchase checks, subscription management — everything needed to
+                provide the App you signed up for.
+              </Li>
+              <Li>
+                <Strong>Consent:</Strong> calendar, location, camera and photo-library access
+                (via iOS permissions, revocable at any time in iOS Settings), and any marketing
+                communications. Withdrawing consent does not affect the lawfulness of prior
+                processing.
+              </Li>
+              <Li>
+                <Strong>Legitimate interest:</Strong> in-app usage analytics (opt-out available
+                in <em>Settings → Privacy &amp; data</em>), crash diagnostics, and abuse
+                prevention.
+              </Li>
+              <Li>
+                <Strong>Legal obligation:</Strong> retention of subscription and billing records
+                for tax and accounting purposes.
+              </Li>
+            </Ul>
+          </Sub>
         </Section>
 
         <Section title="4. Automated styling and image processing">
@@ -283,7 +315,9 @@ export default function PrivacyPage() {
           </Ul>
           <P>
             If we become aware of a data breach affecting your personal information, we will
-            notify you within 72 hours, in accordance with GDPR Article 33.
+            notify the competent supervisory authority (in France, the CNIL) within 72 hours
+            where required by GDPR Article 33, and inform you without undue delay whenever the
+            breach is likely to result in a high risk to your rights (GDPR Article 34).
           </P>
         </Section>
 
@@ -298,12 +332,19 @@ export default function PrivacyPage() {
             and we will delete it promptly.
           </P>
           <P>
-            In the European Economic Area and the United Kingdom, the minimum age for using the
-            App is 16 unless a parent or guardian consents.
+            In France, users under 15 need the consent of a parent or guardian (Article 45 of
+            the French Data Protection Act). Elsewhere in the European Economic Area and the
+            United Kingdom, the applicable age of digital consent (13 to 16 depending on the
+            country) applies.
           </P>
         </Section>
 
         <Section title="10. International data transfers">
+          <P>
+            Your wardrobe and account data is hosted by Supabase on infrastructure located in
+            London, United Kingdom. The UK benefits from a European Commission adequacy
+            decision, so this transfer requires no additional safeguards.
+          </P>
           <P>
             Some of our service providers are located outside the European Economic Area, including
             Google, RevenueCat, and other infrastructure providers in the United States. Where data is transferred internationally,
@@ -312,20 +353,52 @@ export default function PrivacyPage() {
           </P>
         </Section>
 
-        <Section title="11. Changes to this policy">
+        <Section title="11. Website, cookies and analytics">
+          <P>
+            This section covers the margotwardrobe.com website (hosted by Vercel Inc., USA).
+            On your first visit, a consent banner lets you accept or decline cookies — both
+            choices are equally easy, and declining keeps only cookie-free, anonymous
+            statistics. No advertising or analytics cookie is set before you consent.
+          </P>
+          <div className="overflow-x-auto my-6">
+            <table className="w-full border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-warm2">
+                  <Th>Service</Th>
+                  <Th>Purpose</Th>
+                  <Th>Basis · lifetime</Th>
+                </tr>
+              </thead>
+              <tbody>
+                <Tr provider="Google Analytics 4" purpose="Audience measurement (visits, pages, sources)" data="Consent · up to 13 months" />
+                <Tr provider="Meta Pixel" purpose="Advertising measurement and campaign attribution" data="Consent · up to 13 months" />
+                <Tr provider="PostHog (EU)" purpose="Cookie-free product analytics (aggregated)" data="Legitimate interest · no cookie without consent" />
+                <Tr provider="Consent storage" purpose="Remembering your cookie choice (local storage)" data="Exempt technical storage · 6 months" />
+              </tbody>
+            </table>
+          </div>
+          <P>
+            You can withdraw or change your choice at any time via the{" "}
+            <Strong>“Manage cookies”</Strong> link in the site footer, which reopens the consent
+            banner. Withdrawing is as easy as consenting, in line with CNIL guidelines.
+          </P>
+        </Section>
+
+        <Section title="12. Changes to this policy">
           <P>
             We may update this Privacy Policy from time to time. When we make material changes, we
             will notify you in the App and update the "Last updated" date at the top.
           </P>
         </Section>
 
-        <Section title="12. Contact">
+        <Section title="13. Contact">
           <P>
             If you have any questions about this Privacy Policy or how we handle your data, please
             contact:
           </P>
           <P>
-            <Strong>YAVREN</Strong>
+            <Strong>YAVREN</Strong> (SAS) — 78 avenue des Champs-Élysées, Bureau 326, 75008
+            Paris, France
             <br />
             Email:{" "}
             <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
