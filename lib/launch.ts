@@ -3,6 +3,10 @@
 export const APP_STORE_URL =
   "https://apps.apple.com/app/margot-wardrobe-made-easy/id6766047882";
 
+// Live Play Store listing (published 2026-08, build 1.6.4).
+export const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.vestiaire.app";
+
 // App Store rating. Set to null until there are real reviews — the trust strip
 // then shows honest signals (free / no ads / private) instead of empty stars.
 // Once reviews land, fill this in (check https://itunes.apple.com/lookup?id=6766047882)
