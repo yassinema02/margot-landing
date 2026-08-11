@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "8 August 2026";
+const LAST_UPDATED = "12 August 2026";
 
 export default function TermsPage() {
   return (
@@ -164,7 +164,9 @@ export default function TermsPage() {
             You retain ownership of the photos, descriptions, and other content you add to
             Margot (collectively, "Your Content"). By using the App, you grant us a
             limited, worldwide, royalty-free licence to host, process, and display Your
-            Content solely for the purpose of operating and improving the App for you.
+            Content for the purpose of operating and improving the App, which may include
+            using the clothing photos you upload to train and improve our models, as
+            described in our Privacy Policy.
             This licence ends when you delete the content or your account.
           </P>
           <P>

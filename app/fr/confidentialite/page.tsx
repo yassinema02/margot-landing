@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "8 août 2026";
+const LAST_UPDATED = "12 août 2026";
 
 export default function ConfidentialitePage() {
   return (
@@ -185,6 +185,17 @@ export default function ConfidentialitePage() {
             Diagnostiquer les problèmes techniques, surveiller la stabilité de
             l&apos;Application et améliorer ses fonctionnalités.
           </Li>
+          <Li>
+            <Strong>Entraîner et améliorer nos modèles :</Strong> les photos de vêtements que
+            vous téléversez peuvent être utilisées pour entraîner et améliorer les modèles qui
+            alimentent les fonctionnalités de Margot (par exemple la reconnaissance de
+            vêtements et les suggestions de tenues). Vous pouvez vous y opposer à tout moment
+            en écrivant à{" "}
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
+            </a>
+            .
+          </Li>
           <Li>Communiquer avec vous au sujet de votre compte ou de votre abonnement.</Li>
         </Ul>
         <P>
@@ -211,8 +222,10 @@ export default function ConfidentialitePage() {
             <Li>
               <Strong>Intérêt légitime :</Strong> statistiques d&apos;utilisation dans
               l&apos;Application (opposition possible sous{" "}
-              <em>Réglages → Confidentialité &amp; données</em>), diagnostics de plantage et
-              prévention des abus.
+              <em>Réglages → Confidentialité &amp; données</em>), diagnostics de plantage,
+              prévention des abus, ainsi que l&apos;entraînement et l&apos;amélioration de nos
+              modèles à partir des photos de vêtements téléversées (opposition possible à tout
+              moment — voir la section 7).
             </Li>
             <Li>
               <Strong>Obligation légale :</Strong> conservation des reçus d&apos;abonnement

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "8 August 2026";
+const LAST_UPDATED = "12 August 2026";
 
 export default function PrivacyPage() {
   return (
@@ -156,6 +156,16 @@ export default function PrivacyPage() {
               Process and validate subscription payments via Apple's IAP system and RevenueCat.
             </Li>
             <Li>Diagnose technical issues, monitor App stability, and improve features.</Li>
+            <Li>
+              <Strong>Train and improve our models:</Strong> the clothing photos you upload may
+              be used to train and improve the models that power Margot's features (for example
+              clothing recognition and outfit suggestions). You can object at any time by
+              emailing{" "}
+              <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+                margot@margotwardrobe.com
+              </a>
+              .
+            </Li>
             <Li>Communicate with you about account or subscription matters.</Li>
           </Ul>
           <P>
@@ -178,8 +188,9 @@ export default function PrivacyPage() {
               </Li>
               <Li>
                 <Strong>Legitimate interest:</Strong> in-app usage analytics (opt-out available
-                in <em>Settings → Privacy &amp; data</em>), crash diagnostics, and abuse
-                prevention.
+                in <em>Settings → Privacy &amp; data</em>), crash diagnostics, abuse
+                prevention, and training and improving our models on uploaded clothing photos
+                (you can object at any time — see Section 7).
               </Li>
               <Li>
                 <Strong>Legal obligation:</Strong> retention of subscription and billing records

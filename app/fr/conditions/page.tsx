@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "8 août 2026";
+const LAST_UPDATED = "12 août 2026";
 
 export default function ConditionsPage() {
   return (
@@ -174,8 +174,10 @@ export default function ConditionsPage() {
           Vous restez propriétaire des photos, descriptions et autres contenus que vous ajoutez à
           Margot (collectivement, « vos Contenus »). En utilisant l&apos;Application, vous nous
           accordez une licence limitée, mondiale et gratuite pour héberger, traiter et afficher
-          vos Contenus dans le seul but de faire fonctionner et d&apos;améliorer l&apos;Application
-          pour vous. Cette licence prend fin lorsque vous supprimez le contenu ou votre compte.
+          vos Contenus afin de faire fonctionner et d&apos;améliorer l&apos;Application, ce qui
+          peut inclure l&apos;utilisation des photos de vêtements que vous téléversez pour
+          entraîner et améliorer nos modèles, dans les conditions décrites dans notre Politique
+          de confidentialité. Cette licence prend fin lorsque vous supprimez le contenu ou votre compte.
         </P>
         <P>
           Vous êtes responsable de disposer des droits nécessaires sur les contenus que vous
