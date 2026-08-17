@@ -35,6 +35,9 @@ export function LandingBody({ lang }: { lang: "en" | "fr" }) {
           <Screenshots lang={t.lang} />
         </FadeIn>
         <FadeIn>
+          <Stats t={t} />
+        </FadeIn>
+        <FadeIn>
           <HowItWorks t={t} />
         </FadeIn>
         <FadeIn>
@@ -51,9 +54,6 @@ export function LandingBody({ lang }: { lang: "en" | "fr" }) {
         </FadeIn>
         <FadeIn>
           <SocialProof t={t} />
-        </FadeIn>
-        <FadeIn>
-          <Stats t={t} />
         </FadeIn>
         <FadeIn>
           <SecondCapture t={t} />
