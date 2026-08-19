@@ -74,9 +74,33 @@ export default async function DownloadPage({ searchParams }: { searchParams: Sea
         ],
       };
 
-  // One obvious button for the detected platform; desktop gets both.
-  const showAppStore = isIos || !isAndroid;
-  const showPlayStore = isAndroid || (!isIos && !isAndroid);
+  // Both stores are always visible; the detected platform's button comes
+  // first with the filled style so there is still one obvious tap.
+  const primaryClass =
+    "rounded-full bg-[#2B2620] px-6 py-4 text-base font-medium text-[#F5F0E8]";
+  const secondaryClass =
+    "rounded-full border border-[#2B2620]/30 px-6 py-4 text-base font-medium text-[#2B2620]";
+
+  const appStoreButton = (
+    <a
+      href={APP_STORE_URL}
+      className={isAndroid ? secondaryClass : primaryClass}
+      data-ph-capture-attribute-download-store="app_store"
+      data-ph-capture-attribute-download-campaign={campaign}
+    >
+      {t.appStore}
+    </a>
+  );
+  const playStoreButton = (
+    <a
+      href={playUrl}
+      className={isAndroid ? primaryClass : secondaryClass}
+      data-ph-capture-attribute-download-store="play_store"
+      data-ph-capture-attribute-download-campaign={campaign}
+    >
+      {t.playStore}
+    </a>
+  );
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#F5F0E8] px-6 text-center">
@@ -93,29 +117,16 @@ export default async function DownloadPage({ searchParams }: { searchParams: Sea
       <p className="mt-2 max-w-xs text-sm text-[#6F6459]">{t.subtitle}</p>
 
       <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
-        {showAppStore && (
-          <a
-            href={APP_STORE_URL}
-            className="rounded-full bg-[#2B2620] px-6 py-4 text-base font-medium text-[#F5F0E8]"
-            data-ph-capture-attribute-download-store="app_store"
-            data-ph-capture-attribute-download-campaign={campaign}
-          >
-            {t.appStore}
-          </a>
-        )}
-        {showPlayStore && (
-          <a
-            href={playUrl}
-            className={
-              showAppStore
-                ? "rounded-full border border-[#2B2620]/30 px-6 py-4 text-base font-medium text-[#2B2620]"
-                : "rounded-full bg-[#2B2620] px-6 py-4 text-base font-medium text-[#F5F0E8]"
-            }
-            data-ph-capture-attribute-download-store="play_store"
-            data-ph-capture-attribute-download-campaign={campaign}
-          >
-            {t.playStore}
-          </a>
+        {isAndroid ? (
+          <>
+            {playStoreButton}
+            {appStoreButton}
+          </>
+        ) : (
+          <>
+            {appStoreButton}
+            {playStoreButton}
+          </>
         )}
       </div>
 
