@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LandingBody } from "@/components/LandingBody";
+import { getLandingStats } from "@/lib/stats";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
@@ -44,6 +45,10 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function FrPage() {
-  return <LandingBody lang="fr" />;
+// Mêmes chiffres vivants que "/" — ISR 1 h via landing_stats().
+export const revalidate = 3600;
+
+export default async function FrPage() {
+  const liveStats = await getLandingStats();
+  return <LandingBody lang="fr" liveStats={liveStats} />;
 }

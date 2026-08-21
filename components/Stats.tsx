@@ -1,6 +1,12 @@
 import type { LangContent } from "@/lib/content";
+import { formatStat, type LiveStats } from "@/lib/stats";
 
-export function Stats({ t }: { t: LangContent }) {
+export function Stats({ t, live }: { t: LangContent; live?: LiveStats | null }) {
+  // Same order as t.stats.items; falls back to the static copy when the
+  // live fetch failed (env missing, RPC down) so the section never breaks.
+  const liveValues = live
+    ? [live.garments, live.analyses, live.wardrobes, live.outfits]
+    : null;
   return (
     <section className="max-w-[1040px] mx-auto px-6 py-[clamp(64px,8vw,112px)]">
       <div className="mb-[clamp(28px,3.5vw,48px)] text-center">
@@ -19,7 +25,7 @@ export function Stats({ t }: { t: LangContent }) {
             className="rounded-3xl border border-warm2 bg-surface px-[clamp(16px,2.4vw,32px)] py-[clamp(24px,3.2vw,36px)] text-center flex flex-col gap-2 shadow-[0_18px_50px_-30px_rgba(45,58,51,0.22)]"
           >
             <div className="font-display font-normal text-ink opsz-144 text-[clamp(32px,4vw,48px)] leading-none tracking-tightest">
-              {s.value}
+              {liveValues?.[i] != null ? formatStat(liveValues[i], t.lang === "FR" ? "fr" : "en") : s.value}
             </div>
             <div className="font-sans text-[13px] text-ink3 tracking-tight7 [text-wrap:balance]">
               {s.label}

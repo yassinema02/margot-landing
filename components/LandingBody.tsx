@@ -1,6 +1,7 @@
 "use client";
 
 import { LANDING_CONTENT } from "@/lib/content";
+import type { LiveStats } from "@/lib/stats";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Screenshots } from "@/components/Screenshots";
@@ -23,7 +24,7 @@ import { FadeIn } from "@/components/FadeIn";
 // Email capture was removed at public launch — the hero, closing section and
 // footer now drive straight to the App Store (see <AppStoreBadge>).
 
-export function LandingBody({ lang }: { lang: "en" | "fr" }) {
+export function LandingBody({ lang, liveStats }: { lang: "en" | "fr"; liveStats?: LiveStats | null }) {
   const t = LANDING_CONTENT[lang];
 
   return (
@@ -35,7 +36,7 @@ export function LandingBody({ lang }: { lang: "en" | "fr" }) {
           <Screenshots lang={t.lang} />
         </FadeIn>
         <FadeIn>
-          <Stats t={t} />
+          <Stats t={t} live={liveStats} />
         </FadeIn>
         <FadeIn>
           <HowItWorks t={t} />
