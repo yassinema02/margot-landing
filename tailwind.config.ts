@@ -21,7 +21,7 @@ const config: Config = {
       },
       fontFamily: {
         display: ["var(--font-fraunces)", "serif"],
-        sans: ["var(--font-inter-tight)", "system-ui", "sans-serif"],
+        sans: ["var(--font-montserrat)", "system-ui", "sans-serif"],
       },
       letterSpacing: {
         tightest: "-0.045em",

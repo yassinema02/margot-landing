@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter_Tight } from "next/font/google";
+import { Fraunces, Montserrat } from "next/font/google";
 import { headers } from "next/headers";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
@@ -27,12 +27,15 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
 });
 
-const interTight = Inter_Tight({
+// Montserrat remplace Inter Tight (fondateur 2026-08-24). Géométrique et plus
+// large qu'Inter Tight — les tokens tracking-tight* de tailwind.config.ts
+// compensent déjà, mais garder un œil sur les boutons étroits en mobile.
+const montserrat = Montserrat({
   subsets: ["latin"],
   style: ["normal", "italic"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-inter-tight",
+  variable: "--font-montserrat",
 });
 
 const SITE_URL = "https://www.margotwardrobe.com";
@@ -99,7 +102,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const lang = h.get("x-locale") ?? "en";
 
   return (
-    <html lang={lang} className={`${fraunces.variable} ${interTight.variable}`}>
+    <html lang={lang} className={`${fraunces.variable} ${montserrat.variable}`}>
       <body className="font-sans bg-bg text-ink">
         {/* Consent Mode v2 — deny everything BEFORE gtag.js loads, so GA4 boots
             cookieless (modeled pings) until the visitor accepts. The banner then
