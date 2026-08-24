@@ -69,7 +69,7 @@ export function StructuredData() {
       {
         "@type": "Offer",
         name: "Margot Premium Monthly",
-        price: "9.99",
+        price: "14.99",
         priceCurrency: "USD",
         availability: "https://schema.org/InStock",
         url: APP_STORE_URL,

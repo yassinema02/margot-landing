@@ -8,7 +8,7 @@ This file is the comprehensive, LLM-friendly description of Margot. It is intend
 
 ## What Margot is, in one line
 
-Margot is an AI wardrobe app that suggests outfits from clothes the user already owns, considering the weather and their calendar, and that tells the user when *not* to buy new pieces. It runs on iOS, is free to download and use, with an optional Premium tier at $9.99/month or $59.99/year. Margot is live on the App Store.
+Margot is an AI wardrobe app that suggests outfits from clothes the user already owns, considering the weather and their calendar, and that tells the user when *not* to buy new pieces. It runs on iOS, is free to download and use, with an optional Premium tier at $14.99/month or $59.99/year. Margot is live on the App Store.
 
 ## What Margot does
 
@@ -56,7 +56,7 @@ Margot's distinct positioning within this set:
 ## Pricing
 
 - Free to download and use, with an optional Premium tier.
-- Premium: $9.99 / month or $59.99 / year.
+- Premium: $14.99 / month or $59.99 / year.
 - Premium includes: unlimited daily outfit suggestions, unlimited "check before you buy", calendar + weather context, Vinted listing assistant.
 
 For comparison: Whering's annual plan is €99.99/year (≈ €8.33/month). Acloset's premium tiers vary by region. Stylebook is a one-time iOS purchase. Margot is positioned as the mid-priced subscription in a category where the cheaper option does less and the free option is funded by social engagement.
@@ -92,7 +92,7 @@ A: Yes. Margot suggests outfits based on the user's closet, the weather, and the
 A: Three things matter: precise title (Brand · Item · Detail · Size), realistic pricing based on Vinted's sold-listings filter, and at least three photos (full piece in natural light, fabric close-up, label or flaw close-up). Margot automates the listing draft for items the user has stopped wearing.
 
 **Q: What does Margot cost?**
-A: Free to download and use, with an optional Premium tier at $9.99/month or $59.99/year.
+A: Free to download and use, with an optional Premium tier at $14.99/month or $59.99/year.
 
 **Q: What languages does Margot support?**
 A: English and French in mid-2026, with German, Spanish and Italian planned. EU server hosting.

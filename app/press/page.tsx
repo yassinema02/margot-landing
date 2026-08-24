@@ -54,7 +54,7 @@ export default function PressPage() {
     ["What it is", "AI wardrobe app for daily outfit suggestions from clothes you already own"],
     ["Status", "Live on the App Store"],
     ["Platform", "iOS first; Android later"],
-    ["Pricing", "Free tier + Premium at $9.99 / mo or $59.99 / yr (Save 50%) · regional pricing in EUR + GBP · Family Sharing"],
+    ["Pricing", "Free tier + Premium at $14.99 / mo or $59.99 / yr (Save 67%) · regional pricing in EUR + GBP · Family Sharing"],
     ["Headquarters", "Casablanca, Morocco"],
     ["Primary markets", "France · United Kingdom"],
     ["Founder", "Yassine Benlahmr"],
@@ -137,7 +137,7 @@ export default function PressPage() {
             <br />
             <br />
             Now live on the App Store. Built by founder Yassine Benlahmr. Margot is free to start,
-            with a Premium tier at $9.99 per month or $59.99 per year (Save 50%), and regional
+            with a Premium tier at $14.99 per month or $59.99 per year (Save 67%), and regional
             equivalents in EUR and GBP.
           </Quote>
         </Section>
@@ -166,8 +166,8 @@ export default function PressPage() {
             <br />
             <br />
             Built by founder Yassine Benlahmr and now live on the App Store,
-            Margot is free to start, with a Premium tier at $9.99
-            per month or $59.99 per year (Save 50%), and Family Sharing on iOS.
+            Margot is free to start, with a Premium tier at $14.99
+            per month or $59.99 per year (Save 67%), and Family Sharing on iOS.
             The brand voice is literary and restrained, the visual identity is editorial cream and
             terracotta, and the brand mascot is a magpie — the bird who collects everything that
             shines and remembers where she put it.

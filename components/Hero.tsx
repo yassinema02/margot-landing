@@ -1,7 +1,7 @@
 "use client";
 
 import type { LangContent } from "@/lib/content";
-import { MargotSVG } from "./MargotSVG";
+import Image from "next/image";
 import { AppStoreBadge } from "./AppStoreBadge";
 import { TrustStrip } from "./TrustStrip";
 import { APP_STORE_URL } from "@/lib/launch";
@@ -17,7 +17,13 @@ export function Hero({ t }: { t: LangContent }) {
         aria-hidden="true"
         className="absolute top-[clamp(20px,3vw,40px)] right-[clamp(20px,3vw,48px)] opacity-70 pointer-events-none"
       >
-        <MargotSVG state="considering" size={56} showLegs={false} crop="face" />
+        <Image
+          src="/mascot/mascot-thinking.png"
+          alt=""
+          width={72}
+          height={72}
+          priority={false}
+        />
       </div>
 
       <a

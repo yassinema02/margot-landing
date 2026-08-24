@@ -1,5 +1,5 @@
 import type { LangContent } from "@/lib/content";
-import { MargotSVG } from "./MargotSVG";
+import Image from "next/image";
 
 export function MeetMargot({ t }: { t: LangContent }) {
   const headlineParts = t.meet.headline.split(" ");
@@ -11,7 +11,14 @@ export function MeetMargot({ t }: { t: LangContent }) {
         <div className="meet-grid grid items-center gap-[clamp(40px,6vw,96px)] grid-cols-1 md:[grid-template-columns:minmax(0,1fr)_minmax(0,1.2fr)]">
           <div className="flex justify-center order-1">
             <div className="w-[60%] max-w-[220px]">
-              <MargotSVG state="considering" size={240} showLegs />
+              <Image
+                src="/mascot/mascot-welcome.png"
+                alt="Margot, la pie styliste"
+                width={440}
+                height={440}
+                sizes="(max-width: 768px) 60vw, 220px"
+                className="w-full h-auto"
+              />
             </div>
           </div>
           <div className="order-2">

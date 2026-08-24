@@ -240,16 +240,16 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         label: "Margot Premium",
         tagline: "Everything Margot can do, unlocked.",
         monthly: {
-          gbp: "£9.99",
-          eur: "€9.99",
-          usd: "$9.99",
+          gbp: "£14.99",
+          eur: "€14.99",
+          usd: "$14.99",
         },
         annual: {
           gbp: "£59.99",
           eur: "€59.99",
           usd: "$59.99",
         },
-        annualBadge: "Save 50%",
+        annualBadge: "Save 67%",
         annualMonthly: {
           gbp: "£5.00 / mo",
           eur: "€5.00 / mo",
@@ -456,16 +456,16 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
         label: "Margot Premium",
         tagline: "Tout ce que Margot sait faire, débloqué.",
         monthly: {
-          gbp: "9,99 £",
-          eur: "9,99 €",
-          usd: "9,99 $",
+          gbp: "14,99 £",
+          eur: "14,99 €",
+          usd: "14,99 $",
         },
         annual: {
           gbp: "59,99 £",
           eur: "59,99 €",
           usd: "59,99 $",
         },
-        annualBadge: "−50 %",
+        annualBadge: "−67 %",
         annualMonthly: {
           gbp: "5,00 £ / mois",
           eur: "5,00 € / mois",

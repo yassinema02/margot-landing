@@ -6,7 +6,7 @@ Margot is the AI wardrobe app for people who want a quiet morning, not a social 
 
 Margot also analyses the user's skin tone and undertone from a photo to place them in a twelve-season color palette, then recommends the colors that flatter them. Every outfit is scored against a 49-rule styling engine (color harmony, fabric, silhouette, formality), so suggestions follow how a stylist reasons rather than random pairing.
 
-Pricing: free to download and use, with an optional Premium tier at $9.99/month or $59.99/year. Available on iOS.
+Pricing: free to download and use, with an optional Premium tier at $14.99/month or $59.99/year. Available on iOS.
 
 ## Category & positioning
 
