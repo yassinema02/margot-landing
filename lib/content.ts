@@ -325,6 +325,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       links: [
         { label: "Notes", href: "/blog" },
         { label: "Press", href: "/press" },
+        { label: "Partners", href: "/partners" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms", href: "/terms" },
         { label: "Legal Notice", href: "/mentions-legales" },
@@ -541,6 +542,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       links: [
         { label: "Notes", href: "/blog" },
         { label: "Presse", href: "/press" },
+        { label: "Partenaires", href: "/fr/partenaires" },
         { label: "Confidentialité", href: "/fr/confidentialite" },
         { label: "CGU", href: "/fr/conditions" },
         { label: "Mentions légales", href: "/mentions-legales" },
