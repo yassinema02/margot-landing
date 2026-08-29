@@ -55,8 +55,8 @@ export default function PressPage() {
     ["Status", "Live on the App Store and Google Play"],
     ["Platform", "iOS and Android — both live, same version (1.7.2)"],
     ["Pricing", "Free tier + Premium at $14.99 / mo or $59.99 / yr (Save 67%) · regional pricing in EUR + GBP · Family Sharing"],
-    ["Headquarters", "Casablanca, Morocco"],
-    ["Primary markets", "France · United Kingdom"],
+    ["Headquarters", "Paris, France"],
+    ["Primary markets", "France, then Belgium, Switzerland and Morocco — over 90% French-speaking"],
     ["Founder", "Yassine Benlahmr"],
     ["Site", "margotwardrobe.com"],
     ["Socials", "@margotwardrobe on Instagram, TikTok, X"],
@@ -332,8 +332,8 @@ export default function PressPage() {
             <Strong>Time zone</Strong> — Casablanca (WET/WEST). Most replies within a working day.
           </P>
           <P>
-            <Strong>For everything else</Strong> — the waitlist, the blog, the comparison pages
-            and the privacy policy live at{" "}
+            <Strong>For everything else</Strong> — the blog, the comparison pages, the partner
+            page and the privacy policy live at{" "}
             <Link href="/" className="text-ink underline decoration-peach underline-offset-4">
               margotwardrobe.com
             </Link>
