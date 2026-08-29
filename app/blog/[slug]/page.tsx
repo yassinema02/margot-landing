@@ -20,11 +20,11 @@ const FAQ_BY_SLUG: Record<string, { q: string; a: string }[]> = {
   "ai-outfit-planner-does-it-work": [
     { q: "Does AI outfit planning actually work in 2026?", a: "For getting dressed faster from clothes you already own, yes. For replacing a human stylist who reads your body and personality in a room, no. The realistic win is a quicker morning and fewer impulse purchases, not a personal-shopper replacement." },
     { q: "What can an AI stylist app actually do?", a: "It can catalogue your wardrobe from photos, suggest outfits that match the weather and your calendar, and flag when a potential purchase duplicates what you already own. It cannot judge fit in person or replace a stylist's eye." },
-    { q: "Is there a free AI outfit planner?", a: "Yes. Margot is free to download on the App Store, with daily outfit suggestions from your own wardrobe. A Premium tier ($9.99/month or $59.99/year) unlocks unlimited suggestions plus the shopping and resale features." },
+    { q: "Is there a free AI outfit planner?", a: "Yes. Margot is free to download on the App Store and Google Play, with daily outfit suggestions from your own wardrobe. A Premium tier ($14.99/month or $59.99/year) unlocks unlimited suggestions plus the shopping and resale features." },
   ],
   "alternative-to-whering": [
     { q: "What is a good alternative to Whering?", a: "Margot is the closest restraint-first alternative: the same category (AI wardrobe with outfit suggestions) but built around one quiet daily outfit and no social feed. Choose Whering for a wardrobe community; choose Margot to have the morning decision answered privately." },
-    { q: "Is Margot free like Whering?", a: "Both have a free tier. Margot is free to download on the App Store, with an optional Premium tier at $9.99/month or $59.99/year." },
+    { q: "Is Margot free like Whering?", a: "Both have a free tier. Margot is free to download on the App Store and Google Play, with an optional Premium tier at $14.99/month or $59.99/year." },
     { q: "Can I switch from Whering to Margot?", a: "There is no direct import yet. The simplest path is to photograph items as you wear them over a couple of weeks; Margot starts working with as few as five pieces." },
   ],
   "how-to-sell-on-vinted": [

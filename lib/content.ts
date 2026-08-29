@@ -126,7 +126,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     lang: "EN",
     toggle: "FR",
     hero: {
-      eyebrow: "Now live on the App Store.",
+      eyebrow: "Now on the App Store and Google Play.",
       headline: ["Your wardrobe,", "observed."],
       subline:
         "So apparently we all have ‘nothing to wear’… with full wardrobes. Makes total sense. Anyway, Margot just fixes that little illusion for you.",
@@ -308,7 +308,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     },
     faqHeading: "Questions, briefly.",
     faq: [
-      { q: "When can I actually use Margot?", a: "Right now. Margot is live on the App Store — download her tonight and you're dressed before coffee tomorrow." },
+      { q: "When can I actually use Margot?", a: "Right now. Margot is live on the App Store and Google Play — download her tonight and you're dressed before coffee tomorrow." },
       { q: "Do I need to upload every single piece of clothing?", a: "No. Margot starts working with five items. She learns the rest of your wardrobe as you log what you wear each day." },
       { q: "Does Margot know which colours suit me?", a: "Yes. From a single photo, Margot reads your skin tone and undertone and places you in a twelve-season colour palette, then recommends the colours that flatter you and steers your daily outfits toward them. The photo is used for analysis only and is never stored." },
       { q: "How does Margot decide an outfit actually works?", a: "Every suggestion is scored against a 49-rule styling engine — colour harmony, fabric and season, silhouette and proportion, and formality — combined with your personal colour palette. It reasons like a stylist rather than pairing clothes at random." },
@@ -343,7 +343,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     lang: "FR",
     toggle: "EN",
     hero: {
-      eyebrow: "Disponible sur l'App Store.",
+      eyebrow: "Disponible sur l'App Store et Google Play.",
       headline: ["Votre garde-robe,", "observée."],
       subline:
         "Apparemment, on a toutes « rien à se mettre »… avec un dressing plein. Logique. Bref, Margot règle cette petite illusion pour vous.",
@@ -525,7 +525,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
     },
     faqHeading: "Questions, en bref.",
     faq: [
-      { q: "Quand est-ce que je pourrai utiliser Margot ?", a: "Maintenant. Margot est disponible sur l'App Store — téléchargez-la ce soir et vous êtes habillé(e) avant le café demain matin." },
+      { q: "Quand est-ce que je pourrai utiliser Margot ?", a: "Maintenant. Margot est disponible sur l'App Store et Google Play — téléchargez-la ce soir et vous êtes habillé(e) avant le café demain matin." },
       { q: "Dois-je photographier toute ma garde-robe d'un coup ?", a: "Non. Margot démarre avec cinq pièces. Elle apprend le reste au fur et à mesure que vous notez ce que vous portez." },
       { q: "Margot sait-elle quelles couleurs me vont ?", a: "Oui. À partir d'une simple photo, Margot analyse votre carnation et votre sous-ton, vous place dans une palette de douze saisons colorimétriques, puis recommande les couleurs qui vous mettent en valeur et oriente vos tenues en conséquence. La photo sert uniquement à l'analyse et n'est jamais conservée." },
       { q: "Comment Margot décide qu'une tenue fonctionne vraiment ?", a: "Chaque suggestion est évaluée selon un moteur de stylisme de 49 règles — harmonie des couleurs, matières et saison, silhouette et proportions, formalité — combiné à votre palette de couleurs personnelle. Elle raisonne comme une styliste plutôt que d'assembler les vêtements au hasard." },

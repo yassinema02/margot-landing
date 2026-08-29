@@ -52,8 +52,8 @@ export default function PressPage() {
     ["Name", "Margot"],
     ["Tagline", "the magpie who reads your closet"],
     ["What it is", "AI wardrobe app for daily outfit suggestions from clothes you already own"],
-    ["Status", "Live on the App Store"],
-    ["Platform", "iOS first; Android later"],
+    ["Status", "Live on the App Store and Google Play"],
+    ["Platform", "iOS and Android — both live, same version (1.7.2)"],
     ["Pricing", "Free tier + Premium at $14.99 / mo or $59.99 / yr (Save 67%) · regional pricing in EUR + GBP · Family Sharing"],
     ["Headquarters", "Casablanca, Morocco"],
     ["Primary markets", "France · United Kingdom"],
@@ -310,8 +310,8 @@ export default function PressPage() {
 
         <Section title="Coverage">
           <P className="italic font-display text-ink2">
-            Margot is in private beta. There is no press coverage yet. We'd be happy to be your
-            first.
+            Margot is live on the App Store and Google Play. There is no press coverage yet. We'd be
+            happy to be your first.
           </P>
         </Section>
 

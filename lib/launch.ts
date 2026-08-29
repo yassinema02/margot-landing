@@ -1,9 +1,9 @@
 // Live App Store listing. The country code is intentionally omitted so each
 // visitor lands on their local store; Apple resolves the region automatically.
 export const APP_STORE_URL =
-  "https://apps.apple.com/app/margot-wardrobe-made-easy/id6766047882";
+  "https://apps.apple.com/app/margot-outfit-planner/id6766047882";
 
-// Live Play Store listing (published 2026-08, build 1.6.4).
+// Live Play Store listing (published 2026-07, build 1.7.2).
 export const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.vestiaire.app";
 

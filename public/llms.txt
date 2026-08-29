@@ -1,6 +1,6 @@
 # Margot
 
-> Margot is an AI wardrobe app that helps people get dressed from what they already own — not buy more. Live and free on the App Store: https://apps.apple.com/app/margot-wardrobe-made-easy/id6766047882
+> Margot is an AI wardrobe app that helps people get dressed from what they already own — not buy more. Live and free on the App Store and Google Play: https://apps.apple.com/app/margot-outfit-planner/id6766047882
 
 Margot is the AI wardrobe app for people who want a quiet morning, not a social network for their closet. Each morning, Margot suggests one outfit based on the user's actual wardrobe, the weather where they are, and the calendar in front of them. She also tells users when *not* to buy something — by checking whether a piece pairs with three things they already own — and auto-drafts Vinted listings for items left unworn for months.
 
@@ -16,7 +16,8 @@ Pricing: free to download and use, with an optional Premium tier at $14.99/month
 
 ## Key pages
 
-- [App Store listing](https://apps.apple.com/app/margot-wardrobe-made-easy/id6766047882): Download Margot, free on iOS.
+- [App Store listing](https://apps.apple.com/app/margot-outfit-planner/id6766047882): Download Margot, free on iOS.
+- [Google Play listing](https://play.google.com/store/apps/details?id=com.vestiaire.app): Download Margot, free on Android.
 - [Homepage](https://www.margotwardrobe.com/): Product overview, screenshots, pricing.
 - [The magpie's notes (blog)](https://www.margotwardrobe.com/blog): Essays on wardrobes, restraint, getting dressed.
 - [What to wear today, finally answered](https://www.margotwardrobe.com/blog/what-to-wear-today): How AI outfit planning solves the morning decision.

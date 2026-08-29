@@ -114,7 +114,7 @@ export default function VsWheringPage() {
     { feature: "Vinted listing auto-draft", margot: "Yes — for unworn pieces", whering: "Not as a feature" },
     { feature: "Social wardrobe feed", margot: "No — by design", whering: "Yes — core experience" },
     { feature: "Cost-per-wear analytics", margot: "Yes", whering: "Yes" },
-    { feature: "Platform", margot: "Live on the App Store — iOS (Android later)", whering: "iOS + Android" },
+    { feature: "Platform", margot: "Live on the App Store and Google Play — iOS + Android", whering: "iOS + Android" },
     { feature: "Free tier", margot: "Free + Premium $14.99/mo or $59.99/yr", whering: "Free + paid tier" },
     { feature: "Established userbase", margot: "New — launched 2026", whering: "≈ 7 million users" },
   ];
@@ -148,7 +148,7 @@ export default function VsWheringPage() {
             <Strong>Whering</Strong> is a community-first social wardrobe with about seven million users. You photograph your clothes, get outfit suggestions, and follow friends to see what they wore. It is the broader, busier product. <a href="https://whering.co.uk" target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-peach underline-offset-4">whering.co.uk</a>.
           </P>
           <P>
-            <Strong>Margot</Strong> is a single-purpose styling app. One outfit a morning, picked from the closet you already own, with weather and calendar context, plus a small set of restraint features (check before you buy, auto-drafted Vinted listings for unworn pieces). No social feed. No game mechanics. Live and free on the App Store.
+            <Strong>Margot</Strong> is a single-purpose styling app. One outfit a morning, picked from the closet you already own, with weather and calendar context, plus a small set of restraint features (check before you buy, auto-drafted Vinted listings for unworn pieces). No social feed. No game mechanics. Live and free on the App Store and Google Play.
           </P>
           <P>
             <Strong>Bottom line:</Strong> choose Whering if you want a social wardrobe community and one app for everything; choose Margot if you want the morning decision finished by the time the kettle whistles and would rather your wardrobe stay private.
@@ -238,7 +238,7 @@ export default function VsWheringPage() {
             Try Margot
           </div>
           <p className="font-display italic text-ink opsz-96 text-[clamp(18px,2vw,22px)] leading-[1.4] tracking-tight5 max-w-[460px] mx-auto m-0 mb-5 [text-wrap:pretty]">
-            Margot is live and free on the App Store. One outfit, every morning.
+            Margot is live and free on the App Store and Google Play. One outfit, every morning.
           </p>
           <AppStoreBadge lang="EN" size="lg" />
         </aside>

@@ -22,7 +22,7 @@ const COPY = {
       "Margot is a personal stylist app. She reads someone's real wardrobe, dresses them from it, and points to a product only when something is genuinely missing. This page shows exactly where that product shows up.",
     s1: {
       title: "What Margot is",
-      p1: "Margot is an iOS app, live on the App Store, published by Yavren (Paris). Users photograph the clothes they already own. Margot categorises each piece, builds outfits from them every morning, and learns their taste from what they wear and save.",
+      p1: "Margot is an iOS and Android app, live on the App Store and Google Play, published by Yavren (Paris). Users photograph the clothes they already own. Margot categorises each piece, builds outfits from them every morning, and learns their taste from what they wear and save.",
       p2: "The audience is over 90% French-speaking: France first, then Belgium, Switzerland and Morocco. Margot carries no display advertising. Product recommendations are editorial, personalised, and disclosed as affiliate links.",
     },
     s2: {
@@ -87,7 +87,7 @@ const COPY = {
       "Margot est une application de styliste personnel. Elle lit la vraie garde-robe de quelqu'un, l'habille avec, et ne montre un produit que lorsqu'il manque réellement quelque chose. Cette page montre exactement où ce produit apparaît.",
     s1: {
       title: "Ce qu'est Margot",
-      p1: "Margot est une application iOS, disponible sur l'App Store, éditée par Yavren (Paris). Les utilisatrices photographient les vêtements qu'elles possèdent déjà. Margot catégorise chaque pièce, compose des tenues chaque matin, et apprend leur goût à partir de ce qu'elles portent et sauvegardent.",
+      p1: "Margot est une application iOS et Android, disponible sur l'App Store et Google Play, éditée par Yavren (Paris). Les utilisatrices photographient les vêtements qu'elles possèdent déjà. Margot catégorise chaque pièce, compose des tenues chaque matin, et apprend leur goût à partir de ce qu'elles portent et sauvegardent.",
       p2: "L'audience est francophone à plus de 90% : la France d'abord, puis la Belgique, la Suisse et le Maroc. Margot ne diffuse aucune publicité display. Les recommandations produit sont éditoriales, personnalisées, et signalées comme liens d'affiliation.",
     },
     s2: {

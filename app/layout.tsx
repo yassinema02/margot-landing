@@ -40,7 +40,7 @@ const montserrat = Montserrat({
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store.";
+  "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store and Google Play.";
 
 // EN metadata only — /fr ships its own metadata override via app/fr/layout.tsx.
 // alternates.languages adds the hreflang annotations that point Google at the
