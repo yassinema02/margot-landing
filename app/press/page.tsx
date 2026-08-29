@@ -179,7 +179,7 @@ export default function PressPage() {
         <Section title="The founder">
           <P>
             <Strong>Yassine Benlahmr</Strong> is the solo founder and operator of Margot. He builds
-            from Casablanca, with a focus on quiet products that respect a user's morning. Margot
+            from Paris, with a focus on quiet products that respect a user's morning. Margot
             started from his own frustration with wardrobe apps that turned getting dressed into a
             social performance — and from the observation that nobody actually needs more clothes,
             they just need to remember the ones they have.
@@ -329,7 +329,7 @@ export default function PressPage() {
             </a>
           </P>
           <P>
-            <Strong>Time zone</Strong> — Casablanca (WET/WEST). Most replies within a working day.
+            <Strong>Time zone</Strong> — Paris (CET/CEST). Most replies within a working day.
           </P>
           <P>
             <Strong>For everything else</Strong> — the blog, the comparison pages, the partner
