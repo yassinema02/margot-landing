@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { StudioReadClient } from "../../studio-read/StudioReadClient";
+import { StudioReadClient } from "@/app/(en)/studio-read/StudioReadClient";
 import { MargotMark } from "@/components/MargotMark";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
 

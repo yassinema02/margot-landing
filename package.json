@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seo:check": "node scripts/seo/check.mjs",
+    "seo:check:psi": "node scripts/seo/check.mjs --psi"
   },
   "dependencies": {
     "@next/third-parties": "^15.5.18",
