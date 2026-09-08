@@ -11,8 +11,8 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/fr/partenaires", languages: { en: "/partners" } },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: URL, type: "website", locale: "fr_FR" },
+  alternates: { canonical: "/fr/partenaires", languages: { en: "/partners", fr: "/fr/partenaires", "x-default": "/partners" } },
+  openGraph: { images: ["https://www.margotwardrobe.com/opengraph-image"], title: TITLE, description: DESCRIPTION, url: URL, type: "website", locale: "fr_FR" },
   twitter: { card: "summary_large_image", site: "@margotwardrobe", title: TITLE, description: DESCRIPTION },
   robots: { index: true, follow: true },
 };

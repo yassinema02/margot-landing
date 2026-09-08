@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Terms of Service · Margot",
   description:
     "Terms governing your use of Margot — account terms, subscription billing, acceptable use, content ownership, and limitations of liability.",
-  alternates: { canonical: "/terms" },
+  alternates: { canonical: "/terms", languages: { en: "/terms", fr: "/fr/conditions", "x-default": "/terms" } },
   robots: { index: true, follow: true },
 };
 

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   alternates: { canonical: "/press" },
   openGraph: {
+    images: ["https://www.margotwardrobe.com/opengraph-image"],
     title: TITLE,
     description: DESCRIPTION,
     url: URL,

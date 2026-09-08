@@ -38,8 +38,12 @@ export function extractSignals(html, url) {
   const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map((m) =>
     decode(m[1].replace(/<[^>]+>/g, "")),
   );
-  const links = tags(head, "link");
+  // Next 15 may stream metadata into <body> for non-bot user agents; we
+  // read the whole document but remember whether it sat inside <head>.
+  const links = tags(html, "link");
+  const headLinks = tags(head, "link");
   const canonical = links.map((t) => (attr(t, "rel") === "canonical" ? attr(t, "href") : null)).find(Boolean) ?? null;
+  const canonicalInHead = headLinks.some((t) => attr(t, "rel") === "canonical");
   const hreflang = links
     .filter((t) => (attr(t, "rel") || "").toLowerCase() === "alternate" && attr(t, "hreflang"))
     .map((t) => ({ lang: attr(t, "hreflang"), href: attr(t, "href") }));
@@ -77,6 +81,7 @@ export function extractSignals(html, url) {
     description: metaContent(html, "name", "description"),
     robots: metaContent(html, "name", "robots"),
     canonical,
+    canonicalInHead,
     lang: attr(htmlTag, "lang"),
     hreflang,
     h1s,
@@ -100,7 +105,7 @@ export function evaluate(sig, { status, finalUrl, expectIndexable = true } = {})
       return "";
     }
   })();
-  const isFr = path === "/fr" || path.startsWith("/fr/");
+  const isFr = path === "/fr" || path.startsWith("/fr/") || path === "/mentions-legales";
 
   if (status !== 200) push("status", "error", `HTTP ${status}`);
   if (finalUrl && finalUrl !== sig.url) push("redirect", "warn", `→ ${finalUrl}`);
@@ -114,6 +119,7 @@ export function evaluate(sig, { status, finalUrl, expectIndexable = true } = {})
   if (sig.h1s.length !== 1) push("h1", sig.h1s.length === 0 ? "error" : "warn", `${sig.h1s.length} h1`);
   if (!sig.canonical) push("canonical", "error", "missing");
   else if (sig.canonical.replace(/\/$/, "") !== sig.url.replace(/\/$/, "")) push("canonical", "warn", sig.canonical);
+  else if (!sig.canonicalInHead) push("canonical", "warn", "streamed into <body> (page is dynamic)");
   if (sig.robots && /noindex/i.test(sig.robots)) push("robots", "error", sig.robots);
   if (!sig.lang) push("lang", "error", "missing");
   else if (isFr && !sig.lang.toLowerCase().startsWith("fr")) push("lang", "error", `${sig.lang} on FR path`);

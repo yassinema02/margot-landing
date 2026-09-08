@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     "ai outfit planner uk",
   ],
   openGraph: {
+    images: ["https://www.margotwardrobe.com/opengraph-image"],
     title: "Margot vs Whering — an honest comparison",
     description: DESCRIPTION,
     url: URL,
@@ -60,7 +61,7 @@ export default function VsWheringPage() {
     },
     primaryImageOfPage: { "@type": "ImageObject", url: `${SITE_URL}/opengraph-image` },
     about: [
-      { "@type": "SoftwareApplication", name: "Margot", url: SITE_URL, downloadUrl: APP_STORE_URL, applicationCategory: "LifestyleApplication", operatingSystem: "iOS" },
+      { "@type": "SoftwareApplication", name: "Margot", url: SITE_URL, downloadUrl: APP_STORE_URL, applicationCategory: "LifestyleApplication", operatingSystem: "iOS, Android" },
       { "@type": "SoftwareApplication", name: "Whering" },
     ],
   };
@@ -92,7 +93,7 @@ export default function VsWheringPage() {
         name: "Which is cheaper, Margot or Whering?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Both Margot and Whering offer a free tier with paid upgrades. Margot Premium is $14.99 a month or $59.99 a year (Save 67%), with Family Sharing on iOS. Whering's Plus tier is priced separately. If you want a focused product with no upsell surface, Margot is the cleaner fit.",
+          text: "Both Margot and Whering offer a free tier with paid upgrades. Margot Premium is 14.99 a month or 59.99 a year in USD, EUR or GBP (Save 67%), with Family Sharing on iOS. Whering's Plus tier is priced separately. If you want a focused product with no upsell surface, Margot is the cleaner fit.",
         },
       },
       {
@@ -115,7 +116,7 @@ export default function VsWheringPage() {
     { feature: "Social wardrobe feed", margot: "No — by design", whering: "Yes — core experience" },
     { feature: "Cost-per-wear analytics", margot: "Yes", whering: "Yes" },
     { feature: "Platform", margot: "Live on the App Store and Google Play — iOS + Android", whering: "iOS + Android" },
-    { feature: "Free tier", margot: "Free + Premium $14.99/mo or $59.99/yr", whering: "Free + paid tier" },
+    { feature: "Free tier", margot: "Free + Premium 14.99/mo or 59.99/yr (USD, EUR or GBP)", whering: "Free + paid tier" },
     { feature: "Established userbase", margot: "New — launched 2026", whering: "≈ 7 million users" },
   ];
 

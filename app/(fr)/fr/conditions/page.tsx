@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Conditions d'utilisation · Margot",
   description:
     "Conditions régissant votre utilisation de Margot — compte, abonnement et facturation, utilisation acceptable, propriété des contenus et limitation de responsabilité.",
-  alternates: { canonical: "/fr/conditions" },
+  alternates: { canonical: "/fr/conditions", languages: { en: "/terms", fr: "/fr/conditions", "x-default": "/terms" } },
   robots: { index: true, follow: true },
 };
 

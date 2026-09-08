@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { LandingBody } from "@/components/LandingBody";
+import { LandingFaqStructuredData } from "@/components/StructuredData";
 import { getLandingStats } from "@/lib/stats";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot, l'application garde-robe IA : tenues quotidiennes, avis avant achat, valise de voyage et suivi de ce que vous possédez déjà. Disponible sur l'App Store.";
+  "Margot, l'application garde-robe IA : une tenue chaque matin depuis ce que tu possèdes déjà, un avis avant d'acheter, ta valise prête. Gratuit sur iOS et Android.";
 
 export const metadata: Metadata = {
-  title: "Margot · Application garde-robe — tenues quotidiennes",
+  title: "Margot · Application garde-robe digitale — ta tenue du jour",
   description: DESCRIPTION,
   // Mot-clé invisible "application garde-robe IA" pour le SEO, sans l'afficher.
   keywords: [
@@ -27,7 +28,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Margot · Application garde-robe — tenues quotidiennes",
+    images: ["https://www.margotwardrobe.com/opengraph-image"],
+    title: "Margot · Application garde-robe digitale — ta tenue du jour",
     description: DESCRIPTION,
     url: `${SITE_URL}/fr`,
     siteName: "Margot",
@@ -39,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@margotwardrobe",
     creator: "@margotwardrobe",
-    title: "Margot · Application garde-robe — tenues quotidiennes",
+    title: "Margot · Application garde-robe digitale — ta tenue du jour",
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },
@@ -50,5 +52,10 @@ export const revalidate = 3600;
 
 export default async function FrPage() {
   const liveStats = await getLandingStats();
-  return <LandingBody lang="fr" liveStats={liveStats} />;
+  return (
+    <>
+      <LandingFaqStructuredData lang="fr" />
+      <LandingBody lang="fr" liveStats={liveStats} />
+    </>
+  );
 }

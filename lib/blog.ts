@@ -8,6 +8,10 @@ export type PostFrontmatter = {
   title: string;
   slug: string;
   date: string;
+  /** Last substantive edit (ISO date). Drives dateModified + sitemap lastmod. Optional: defaults to `date`. */
+  updated?: string;
+  /** Path of the French equivalent, when one exists (drives hreflang). */
+  alternateFr?: string;
   locale: string;
   excerpt: string;
   metaTitle: string;

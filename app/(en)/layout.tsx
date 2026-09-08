@@ -3,7 +3,7 @@ import { RootShell } from "@/components/RootShell";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const DESCRIPTION =
-  "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store and Google Play.";
+  "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Free on iOS and Android.";
 
 // EN metadata only — /fr ships its own metadata via app/(fr)/layout.tsx + app/(fr)/fr/page.tsx.
 // alternates.languages adds the hreflang annotations that point Google at the

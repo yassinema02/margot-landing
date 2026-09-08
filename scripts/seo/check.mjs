@@ -22,12 +22,11 @@ const UA = "Mozilla/5.0 (compatible; MargotSEOCheck/1.0; +https://www.margotward
 // Routes that are public but intentionally kept out of the sitemap, or that
 // must NOT be indexable. `indexable:false` only checks status + noindex.
 const EXTRA = [
-  { path: "/premium", indexable: true },
-  { path: "/download", indexable: true },
-  { path: "/partners", indexable: true },
-  { path: "/fr/partenaires", indexable: true },
-  { path: "/privacy", indexable: false },
-  { path: "/terms", indexable: false },
+  { path: "/premium", indexable: false }, // deep-link landing, noindex by design
+  { path: "/download", indexable: false }, // idem
+  { path: "/fr/garde-robe-digitale", indexable: true },
+  { path: "/fr/vs/whering", indexable: true },
+  { path: "/fr/quoi-porter-aujourdhui", indexable: true },
   { path: "/this-page-does-not-exist-404", expectStatus: 404 },
 ];
 const PSI_PAGES = ["/", "/fr", "/blog", "/vs/whering"];
@@ -66,7 +65,12 @@ async function psi(url) {
 
 const main = async () => {
   const smRes = await fetch(`${BASE}/sitemap.xml`, { headers: { "user-agent": UA } });
-  const sitemapUrls = smRes.ok ? parseSitemap(await smRes.text()) : [];
+  // The sitemap always emits production URLs; when checking a preview or a
+  // local build, rewrite them onto --base so we crawl what we built.
+  const PROD = "https://www.margotwardrobe.com";
+  const sitemapUrls = (smRes.ok ? parseSitemap(await smRes.text()) : []).map((u) =>
+    BASE !== PROD && u.startsWith(PROD) ? BASE + u.slice(PROD.length) : u,
+  );
   const robots = await fetch(`${BASE}/robots.txt`, { headers: { "user-agent": UA } }).then((r) => (r.ok ? r.text() : ""));
   const llms = await fetch(`${BASE}/llms.txt`, { headers: { "user-agent": UA } }).then((r) => r.status);
 
@@ -91,7 +95,7 @@ const main = async () => {
       } else {
         issues = evaluate(sig, { status: r.status, finalUrl: r.finalUrl, expectIndexable: t.indexable !== false });
         if (t.indexable === false && !(sig.robots && /noindex/i.test(sig.robots)))
-          issues.push({ rule: "robots", level: "warn", detail: "legal page indexable (consider noindex)" });
+          issues.push({ rule: "robots", level: "warn", detail: "expected noindex" });
       }
       pages.push({ ...t, status: r.status, ttfbMs: r.ttfbMs, signals: sig, issues });
     } catch (e) {

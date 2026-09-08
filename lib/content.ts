@@ -324,6 +324,7 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       newsletterButton: "Subscribe",
       links: [
         { label: "Notes", href: "/blog" },
+        { label: "Margot vs Whering", href: "/vs/whering" },
         { label: "Press", href: "/press" },
         { label: "Partners", href: "/partners" },
         { label: "Privacy Policy", href: "/privacy" },
@@ -540,7 +541,10 @@ export const LANDING_CONTENT: Record<"en" | "fr", LangContent> = {
       newsletterLabel: "Recevez les carnets de la pie",
       newsletterButton: "S'inscrire",
       links: [
-        { label: "Notes", href: "/blog" },
+        { label: "Garde-robe digitale", href: "/fr/garde-robe-digitale" },
+        { label: "Quoi porter aujourd'hui", href: "/fr/quoi-porter-aujourdhui" },
+        { label: "Margot ou Whering", href: "/fr/vs/whering" },
+        { label: "Notes (EN)", href: "/blog" },
         { label: "Presse", href: "/press" },
         { label: "Partenaires", href: "/fr/partenaires" },
         { label: "Confidentialité", href: "/fr/confidentialite" },

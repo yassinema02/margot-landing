@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Politique de confidentialité · Margot",
   description:
     "Comment Margot collecte, utilise et protège vos données personnelles — données conservées, usage par les fonctionnalités de style, ce qui n'est jamais vendu, et comment demander la suppression.",
-  alternates: { canonical: "/fr/confidentialite" },
+  alternates: { canonical: "/fr/confidentialite", languages: { en: "/privacy", fr: "/fr/confidentialite", "x-default": "/privacy" } },
   robots: { index: true, follow: true },
 };
 

@@ -1,4 +1,5 @@
 import { LandingBody } from "@/components/LandingBody";
+import { LandingFaqStructuredData } from "@/components/StructuredData";
 import { getLandingStats } from "@/lib/stats";
 
 // Server component. metadata for "/" is owned by app/(en)/layout.tsx (which already
@@ -12,5 +13,10 @@ export const revalidate = 3600;
 
 export default async function Page() {
   const liveStats = await getLandingStats();
-  return <LandingBody lang="en" liveStats={liveStats} />;
+  return (
+    <>
+      <LandingFaqStructuredData lang="en" />
+      <LandingBody lang="en" liveStats={liveStats} />
+    </>
+  );
 }

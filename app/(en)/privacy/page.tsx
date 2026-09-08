@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy · Margot",
   description:
     "How Margot collects, uses, and protects your personal information — data we hold, how styling features use it, what's never sold, and how to request deletion.",
-  alternates: { canonical: "/privacy" },
+  alternates: { canonical: "/privacy", languages: { en: "/privacy", fr: "/fr/confidentialite", "x-default": "/privacy" } },
   robots: { index: true, follow: true },
 };
 

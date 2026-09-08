@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     languages: { en: "/studio-read", fr: "/fr/studio-read", "x-default": "/studio-read" },
   },
   openGraph: {
+    images: ["https://www.margotwardrobe.com/opengraph-image"],
     title: t.metaTitle,
     description: t.metaDescription,
     url: `${SITE_URL}/fr/studio-read`,

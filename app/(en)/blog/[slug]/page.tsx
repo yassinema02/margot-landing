@@ -20,11 +20,11 @@ const FAQ_BY_SLUG: Record<string, { q: string; a: string }[]> = {
   "ai-outfit-planner-does-it-work": [
     { q: "Does AI outfit planning actually work in 2026?", a: "For getting dressed faster from clothes you already own, yes. For replacing a human stylist who reads your body and personality in a room, no. The realistic win is a quicker morning and fewer impulse purchases, not a personal-shopper replacement." },
     { q: "What can an AI stylist app actually do?", a: "It can catalogue your wardrobe from photos, suggest outfits that match the weather and your calendar, and flag when a potential purchase duplicates what you already own. It cannot judge fit in person or replace a stylist's eye." },
-    { q: "Is there a free AI outfit planner?", a: "Yes. Margot is free to download on the App Store and Google Play, with daily outfit suggestions from your own wardrobe. A Premium tier ($14.99/month or $59.99/year) unlocks unlimited suggestions plus the shopping and resale features." },
+    { q: "Is there a free AI outfit planner?", a: "Yes. Margot is free to download on the App Store and Google Play, with daily outfit suggestions from your own wardrobe. A Premium tier (14.99/month or 59.99/year in USD, EUR or GBP) unlocks unlimited suggestions plus the shopping and resale features." },
   ],
   "alternative-to-whering": [
     { q: "What is a good alternative to Whering?", a: "Margot is the closest restraint-first alternative: the same category (AI wardrobe with outfit suggestions) but built around one quiet daily outfit and no social feed. Choose Whering for a wardrobe community; choose Margot to have the morning decision answered privately." },
-    { q: "Is Margot free like Whering?", a: "Both have a free tier. Margot is free to download on the App Store and Google Play, with an optional Premium tier at $14.99/month or $59.99/year." },
+    { q: "Is Margot free like Whering?", a: "Both have a free tier. Margot is free to download on the App Store and Google Play, with an optional Premium tier at 14.99/month or 59.99/year in USD, EUR or GBP." },
     { q: "Can I switch from Whering to Margot?", a: "There is no direct import yet. The simplest path is to photograph items as you wear them over a couple of weeks; Margot starts working with as few as five pieces." },
   ],
   "how-to-sell-on-vinted": [
@@ -60,13 +60,19 @@ export async function generateMetadata({
     title: f.metaTitle,
     description: f.metaDescription,
     keywords: f.keywords,
-    alternates: { canonical: `/blog/${f.slug}` },
+    alternates: {
+      canonical: `/blog/${f.slug}`,
+      ...(f.alternateFr
+        ? { languages: { en: `/blog/${f.slug}`, fr: f.alternateFr, "x-default": `/blog/${f.slug}` } }
+        : {}),
+    },
     openGraph: {
       title: f.metaTitle,
       description: f.metaDescription,
       url,
       type: "article",
       publishedTime: f.date,
+      modifiedTime: f.updated ?? f.date,
     },
     twitter: {
       card: "summary_large_image",
@@ -114,7 +120,7 @@ export default async function BlogPostPage({
       logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
     },
     datePublished: f.date,
-    dateModified: f.date,
+    dateModified: f.updated ?? f.date,
     image: `${SITE_URL}/blog/${f.slug}/opengraph-image`,
     mainEntityOfPage: `${SITE_URL}/blog/${f.slug}`,
   };
@@ -202,7 +208,19 @@ export default async function BlogPostPage({
             {f.excerpt}
           </p>
           <div className="mt-5 font-sans text-[12px] tracking-wider2 uppercase text-ink3">
-            {formatPostDate(f.date)} <span aria-hidden="true">·</span> {f.readingTime} min read
+            By{" "}
+            <Link href="/press" className="text-ink no-underline border-b border-peach/60 hover:border-peach">
+              Yassine Benlahmr
+            </Link>
+            , founder of Margot <span aria-hidden="true">·</span>{" "}
+            <time dateTime={f.date}>{formatPostDate(f.date)}</time>
+            {f.updated && f.updated !== f.date && (
+              <>
+                {" "}
+                <span aria-hidden="true">·</span> Updated <time dateTime={f.updated}>{formatPostDate(f.updated)}</time>
+              </>
+            )}{" "}
+            <span aria-hidden="true">·</span> {f.readingTime} min read
           </div>
         </header>
 

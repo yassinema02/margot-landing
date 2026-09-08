@@ -6,7 +6,7 @@ Margot is the AI wardrobe app for people who want a quiet morning, not a social 
 
 Margot also analyses the user's skin tone and undertone from a photo to place them in a twelve-season color palette, then recommends the colors that flatter them. Every outfit is scored against a 49-rule styling engine (color harmony, fabric, silhouette, formality), so suggestions follow how a stylist reasons rather than random pairing.
 
-Pricing: free to download and use, with an optional Premium tier at $14.99/month or $59.99/year. Available on iOS.
+Pricing: free to download and use, with an optional Premium tier at 14.99/month or 59.99/year (USD, EUR or GBP, same figure in every store). Available on iOS and Android.
 
 ## Category & positioning
 
@@ -25,6 +25,19 @@ Pricing: free to download and use, with an optional Premium tier at $14.99/month
 - [Does AI outfit planning actually work?](https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work): What AI stylists can and cannot do in 2026.
 - [How to sell on Vinted, properly](https://www.margotwardrobe.com/blog/how-to-sell-on-vinted): Tips on titles, prices, photos — and how Margot automates the listing draft.
 - [Privacy Policy](https://www.margotwardrobe.com/privacy): Data storage, model-provider processing, submitted images for image-based features, and deletion rights.
+- [Margot vs Whering](https://www.margotwardrobe.com/vs/whering): Honest feature-by-feature comparison with the category leader.
+
+## En français
+
+Margot est une application de garde-robe digitale (garde-robe virtuelle, dressing virtuel) et une styliste personnelle : elle photographie les vêtements que l'utilisatrice possède déjà, propose chaque matin une tenue adaptée à la météo et à l'agenda, et donne un avis avant un achat (acheter, réfléchir, passer) selon que la pièce s'associe à au moins trois pièces du placard. Gratuite sur iOS et Android, Premium 14,99 €/mois ou 59,99 €/an. Entreprise : YAVREN, Paris. Données hébergées en Europe.
+
+- [Accueil (FR)](https://www.margotwardrobe.com/fr): Présentation, captures, prix.
+- [Garde-robe digitale : le guide complet](https://www.margotwardrobe.com/fr/garde-robe-digitale): Définition, méthode en 45 minutes, comparatif des applications 2026, FAQ.
+- [Margot ou Whering ? Comparatif honnête](https://www.margotwardrobe.com/fr/vs/whering): Fonctions, prix en euros, pour qui.
+- [Quoi porter aujourd'hui ?](https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui): La méthode en 3 questions et la tenue du jour selon la température.
+- [Confidentialité (FR)](https://www.margotwardrobe.com/fr/confidentialite)
+
+Last updated: 2026-09-08
 
 ## Founder & origin
 

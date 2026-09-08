@@ -1,6 +1,6 @@
 import { LANDING_CONTENT } from "@/lib/content";
 import { safeJson } from "@/lib/jsonld";
-import { APP_STORE_URL } from "@/lib/launch";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/launch";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 
@@ -12,6 +12,28 @@ function LdScript({ payload }: { payload: unknown }) {
   );
 }
 
+/**
+ * FAQPage for the landing pages only. Google's guidelines require the FAQ
+ * markup to describe FAQ content visible on *that* page, so this is emitted
+ * by app/(en)/page.tsx and app/(fr)/fr/page.tsx — not by the root layout —
+ * and in the page's language. Sourced from the same dictionary that renders
+ * the FAQ section so the two never drift.
+ */
+export function LandingFaqStructuredData({ lang }: { lang: "en" | "fr" }) {
+  const faqPage = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    inLanguage: lang === "fr" ? "fr-FR" : "en",
+    mainEntity: LANDING_CONTENT[lang].faq.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+  return <LdScript payload={faqPage} />;
+}
+
+/** Site-wide entity graph (Organization, WebSite, SoftwareApplication). Rendered by RootShell on every page. */
 export function StructuredData() {
   const organization = {
     "@context": "https://schema.org",
@@ -44,7 +66,7 @@ export function StructuredData() {
     name: "Margot",
     applicationCategory: "LifestyleApplication",
     applicationSubCategory: "FashionApplication",
-    operatingSystem: "iOS",
+    operatingSystem: "iOS, Android",
     // "AI" lives here (and in meta keywords + llms.txt) for the search/LLM
     // signal on "AI wardrobe app" WITHOUT showing in the visible title/snippet.
     description:
@@ -53,8 +75,8 @@ export function StructuredData() {
       "AI wardrobe app, AI stylist, outfit planner, wardrobe app, daily outfits, what to wear, capsule wardrobe",
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/opengraph-image`,
-    downloadUrl: APP_STORE_URL,
-    installUrl: APP_STORE_URL,
+    downloadUrl: [APP_STORE_URL, PLAY_STORE_URL],
+    installUrl: [APP_STORE_URL, PLAY_STORE_URL],
     featureList: [
       "Daily outfit suggestions from your existing wardrobe",
       "Personal color analysis — reads your skin tone and undertone from a photo, places you in a 12-season color palette, and recommends colors that flatter you",
@@ -69,8 +91,9 @@ export function StructuredData() {
       {
         "@type": "Offer",
         name: "Margot Premium Monthly",
+        // Prices match what the site renders for EU visitors (lib/content.ts).
         price: "14.99",
-        priceCurrency: "USD",
+        priceCurrency: "EUR",
         availability: "https://schema.org/InStock",
         url: APP_STORE_URL,
       },
@@ -78,7 +101,7 @@ export function StructuredData() {
         "@type": "Offer",
         name: "Margot Premium Annual",
         price: "59.99",
-        priceCurrency: "USD",
+        priceCurrency: "EUR",
         availability: "https://schema.org/InStock",
         url: APP_STORE_URL,
       },
@@ -103,7 +126,6 @@ export function StructuredData() {
       <LdScript payload={organization} />
       <LdScript payload={website} />
       <LdScript payload={softwareApplication} />
-      <LdScript payload={faqPage} />
     </>
   );
 }
