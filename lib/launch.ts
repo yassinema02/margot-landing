@@ -3,7 +3,8 @@
 export const APP_STORE_URL =
   "https://apps.apple.com/app/margot-outfit-planner/id6766047882";
 
-// Live Play Store listing (published 2026-07, build 1.7.2).
+// Live Play Store listing (published 2026-07). Kept in version parity with
+// the App Store build; don't hardcode the version anywhere user-facing.
 export const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.vestiaire.app";
 

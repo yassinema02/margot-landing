@@ -117,4 +117,4 @@ A: For wardrobe categorisation (color, fabric, category), the current vision pip
 - X: https://x.com/margotwardrobe
 - Contact: margot@margotwardrobe.com
 
-Last updated: 2026-05-31.
+Last updated: 2026-09-08.

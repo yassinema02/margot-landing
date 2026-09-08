@@ -53,7 +53,7 @@ export default function PressPage() {
     ["Tagline", "the magpie who reads your closet"],
     ["What it is", "AI wardrobe app for daily outfit suggestions from clothes you already own"],
     ["Status", "Live on the App Store and Google Play"],
-    ["Platform", "iOS and Android — both live, same version (1.7.2)"],
+    ["Platform", "iOS and Android — both live, in feature parity"],
     ["Pricing", "Free tier + Premium at $14.99 / mo or $59.99 / yr (Save 67%) · regional pricing in EUR + GBP · Family Sharing"],
     ["Headquarters", "Paris, France"],
     ["Primary markets", "France, then Belgium, Switzerland and Morocco — over 90% French-speaking"],
