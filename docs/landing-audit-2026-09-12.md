@@ -157,4 +157,10 @@ Validation du suivi :
 - `npm test` : **44 tests réussis**. Build de production avec vérification TypeScript : réussi ; First Load JS des accueils désormais **120 Ko**. Les avertissements Next préexistants restent ceux décrits plus haut.
 - Crawl final après ajout du comparateur : **25 routes, 0 erreur, 2 avertissements** sur les seules pages `studio-read`, comme avant. Aucun problème détecté sur les accueils FR/EN.
 
-La prévisualisation locale reste disponible sur `/fr` et `/`. Aucun déploiement public effectué pour cet ajustement.
+La prévisualisation locale reste disponible sur `/fr` et `/`. À l'issue de cet ajustement, la version attendait la validation de publication.
+
+## Remplacement de l'ancienne landing — 13 septembre 2026
+
+L'utilisateur a validé la nouvelle landing et demandé son remplacement en production. La livraison retire les 18 composants propres à l'ancienne landing, son ancien dictionnaire de textes, les six prototypes `_legacy/` et la photographie initiale de la femme seule. La mascotte partagée conserve son type localement ; les guides, pages juridiques et Studio Read conservent leurs composants utilisés. Le README décrit désormais la structure actuelle.
+
+Le nettoyage passe le build de production, la vérification TypeScript, les 44 tests et `git diff --check`. La publication utilise le projet Vercel existant `margot-landing`, lié à `master`. Aucun projet d'hébergement supplémentaire ni changement de domaine. La version de production précédente correspond au commit `1a3efb859e3d7cde3e3d3f427fd635e05e85685e` ; elle reste disponible dans l'historique pour retour arrière.
