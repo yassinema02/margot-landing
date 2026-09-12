@@ -4,9 +4,9 @@ import { safeJson } from "@/lib/jsonld";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/fr/partenaires`;
-const TITLE = "Partenaires · Margot";
+const TITLE = "Partenariats marques et affiliation · Margot";
 const DESCRIPTION =
-  "Pour les marques et les réseaux d'affiliation : comment Margot recommande des produits, où la fiche produit apparaît dans l'application, et notre façon de travailler avec les annonceurs. Éditeur Awin Yavren, ID 3048471.";
+  "Marques et réseaux d’affiliation : découvrez les recommandations de produits dans Margot, les emplacements, notre approche des partenariats et les contacts.";
 
 export const metadata: Metadata = {
   title: TITLE,

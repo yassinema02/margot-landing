@@ -11,7 +11,7 @@
  * No dependencies: Node 20+ fetch only. Reads server HTML (what crawlers see).
  */
 import { writeFileSync } from "node:fs";
-import { extractSignals, evaluate, parseSitemap } from "./lib.mjs";
+import { extractSignals, evaluate, parseSitemap, publicPageUrl } from "./lib.mjs";
 
 const args = process.argv.slice(2);
 const flag = (n) => args.includes(n);
@@ -65,12 +65,15 @@ async function psi(url) {
 
 const main = async () => {
   const smRes = await fetch(`${BASE}/sitemap.xml`, { headers: { "user-agent": UA } });
+  if (!smRes.ok) throw new Error(`Sitemap unavailable: HTTP ${smRes.status}`);
   // The sitemap always emits production URLs; when checking a preview or a
   // local build, rewrite them onto --base so we crawl what we built.
   const PROD = "https://www.margotwardrobe.com";
+  const publicUrl = (url) => publicPageUrl(url, BASE, PROD);
   const sitemapUrls = (smRes.ok ? parseSitemap(await smRes.text()) : []).map((u) =>
     BASE !== PROD && u.startsWith(PROD) ? BASE + u.slice(PROD.length) : u,
   );
+  if (!sitemapUrls.length) throw new Error("Sitemap contains no URLs");
   const robots = await fetch(`${BASE}/robots.txt`, { headers: { "user-agent": UA } }).then((r) => (r.ok ? r.text() : ""));
   const llms = await fetch(`${BASE}/llms.txt`, { headers: { "user-agent": UA } }).then((r) => r.status);
 
@@ -88,12 +91,14 @@ const main = async () => {
   for (const t of targets) {
     try {
       const r = await get(t.url);
-      const sig = extractSignals(r.html, t.url);
+      // A preview must keep production canonicals. Compare its public identity,
+      // while retaining the crawled URL in the report and validating redirects.
+      const sig = extractSignals(r.html, publicUrl(t.url));
       let issues;
       if (t.expectStatus) {
         issues = r.status === t.expectStatus ? [] : [{ rule: "status", level: "error", detail: `expected ${t.expectStatus}, got ${r.status}` }];
       } else {
-        issues = evaluate(sig, { status: r.status, finalUrl: r.finalUrl, expectIndexable: t.indexable !== false });
+        issues = evaluate(sig, { status: r.status, finalUrl: publicUrl(r.finalUrl), expectIndexable: t.indexable !== false });
         if (t.indexable === false && !(sig.robots && /noindex/i.test(sig.robots)))
           issues.push({ rule: "robots", level: "warn", detail: "expected noindex" });
       }
@@ -106,16 +111,17 @@ const main = async () => {
   // Cross-page checks: duplicate titles/descriptions, hreflang reciprocity, sitemap ⊆ indexable.
   const global = [];
   const byTitle = new Map();
-  for (const p of pages) {
+  const indexablePages = pages.filter((p) => p.indexable !== false && p.status === 200);
+  for (const p of indexablePages) {
     const t = p.signals?.title;
     if (t) byTitle.set(t, [...(byTitle.get(t) ?? []), p.url]);
   }
   for (const [t, urls] of byTitle) if (urls.length > 1) global.push({ rule: "duplicate-title", level: "warn", detail: `"${t}" on ${urls.join(", ")}` });
-  const hrefIndex = new Map(pages.map((p) => [p.url.replace(/\/$/, ""), p]));
-  for (const p of pages) {
+  const hrefIndex = new Map(indexablePages.map((p) => [publicUrl(p.url).replace(/\/$/, ""), p]));
+  for (const p of indexablePages) {
     for (const h of p.signals?.hreflang ?? []) {
       const other = hrefIndex.get(h.href.replace(/\/$/, ""));
-      if (other && !(other.signals?.hreflang ?? []).some((x) => x.href.replace(/\/$/, "") === p.url.replace(/\/$/, "")))
+      if (other && !(other.signals?.hreflang ?? []).some((x) => x.href.replace(/\/$/, "") === publicUrl(p.url).replace(/\/$/, "")))
         global.push({ rule: "hreflang-reciprocity", level: "warn", detail: `${p.url} → ${h.href} not reciprocated` });
     }
   }

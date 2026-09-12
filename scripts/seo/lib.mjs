@@ -11,6 +11,8 @@ const decode = (s = "") =>
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&#39;|&apos;/g, "'")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(Math.min(parseInt(hex, 16), 0x10ffff)))
+    .replace(/&#(\d+);/g, (_, decimal) => String.fromCodePoint(Math.min(Number(decimal), 0x10ffff)))
     .replace(/&nbsp;/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -95,6 +97,14 @@ export function extractSignals(html, url) {
 }
 
 /** Rules a public marketing page must satisfy. Returns a list of {rule, level, detail}. */
+export function publicPageUrl(url, crawlBase, publicBase) {
+  const page = new URL(url);
+  const crawl = new URL(crawlBase);
+  return page.origin === crawl.origin
+    ? new URL(`${page.pathname}${page.search}${page.hash}`, publicBase).href
+    : page.href;
+}
+
 export function evaluate(sig, { status, finalUrl, expectIndexable = true } = {}) {
   const issues = [];
   const push = (rule, level, detail) => issues.push({ rule, level, detail });

@@ -4,7 +4,7 @@ import { safeJson } from "@/lib/jsonld";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/press`;
-const TITLE = "Press kit · Margot";
+const TITLE = "Margot press kit — brand assets and media contact";
 const DESCRIPTION =
   "Press kit for Margot, the AI wardrobe app. Boilerplate at three lengths, founder bio, downloadable brand assets, founder soundbites, and contact for journalists.";
 const PRESS_EMAIL = "margot@margotwardrobe.com";

@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { LANDING_CONTENT } from "@/lib/content";
 import { Footer } from "@/components/Footer";
 
 // EN-only for now. /fr/blog ships in the localization PR.
-const t = LANDING_CONTENT.en;
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -27,7 +25,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
 
       {children}
 
-      <Footer t={t} />
+      <Footer lang="en" />
     </>
   );
 }

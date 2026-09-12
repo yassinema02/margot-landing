@@ -1,4 +1,4 @@
-import { LANDING_CONTENT } from "@/lib/content";
+import { HOME } from "@/lib/home";
 import { safeJson } from "@/lib/jsonld";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/launch";
 
@@ -19,21 +19,40 @@ function LdScript({ payload }: { payload: unknown }) {
  * and in the page's language. Sourced from the same dictionary that renders
  * the FAQ section so the two never drift.
  */
-export function LandingFaqStructuredData({ lang }: { lang: "en" | "fr" }) {
+export function LandingStructuredData({ lang }: { lang: "en" | "fr" }) {
   const faqPage = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     inLanguage: lang === "fr" ? "fr-FR" : "en",
-    mainEntity: LANDING_CONTENT[lang].faq.map(({ q, a }) => ({
+    mainEntity: HOME[lang].faq.map(({ q, a }) => ({
       "@type": "Question",
       name: q,
       acceptedAnswer: { "@type": "Answer", text: a },
     })),
   };
-  return <LdScript payload={faqPage} />;
+  const t = HOME[lang];
+  return <>
+    <LdScript payload={faqPage} />
+    <LdScript payload={{
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "@id": `${SITE_URL}/#app`,
+      name: "Margot",
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "iOS, Android",
+      inLanguage: lang,
+      description: t.faq[0].a,
+      url: `${SITE_URL}${lang === "fr" ? "/fr" : "/"}`,
+      image: `${SITE_URL}/opengraph-image`,
+      downloadUrl: [APP_STORE_URL, PLAY_STORE_URL],
+      installUrl: [APP_STORE_URL, PLAY_STORE_URL],
+      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: t.free },
+      author: { "@type": "Organization", name: "Margot", url: SITE_URL },
+    }} />
+  </>;
 }
 
-/** Site-wide entity graph (Organization, WebSite, SoftwareApplication). Rendered by RootShell on every page. */
+/** Site-wide entities (Organization, WebSite). Rendered by RootShell on every page. */
 export function StructuredData() {
   const organization = {
     "@context": "https://schema.org",
@@ -48,8 +67,7 @@ export function StructuredData() {
     ],
   };
 
-  // WebSite schema enables Google's sitelinks search box and gives LLMs a
-  // canonical entity to anchor to when reasoning about the brand.
+  // WebSite identifies the site and its publisher.
   const website = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -60,72 +78,10 @@ export function StructuredData() {
     publisher: { "@type": "Organization", name: "Margot" },
   };
 
-  const softwareApplication = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "Margot",
-    applicationCategory: "LifestyleApplication",
-    applicationSubCategory: "FashionApplication",
-    operatingSystem: "iOS, Android",
-    // "AI" lives here (and in meta keywords + llms.txt) for the search/LLM
-    // signal on "AI wardrobe app" WITHOUT showing in the visible title/snippet.
-    description:
-      "AI wardrobe app that styles you from what you already own — daily outfit suggestions, weather and calendar aware.",
-    keywords:
-      "AI wardrobe app, AI stylist, outfit planner, wardrobe app, daily outfits, what to wear, capsule wardrobe",
-    url: `${SITE_URL}/`,
-    image: `${SITE_URL}/opengraph-image`,
-    downloadUrl: [APP_STORE_URL, PLAY_STORE_URL],
-    installUrl: [APP_STORE_URL, PLAY_STORE_URL],
-    featureList: [
-      "Daily outfit suggestions from your existing wardrobe",
-      "Personal color analysis — reads your skin tone and undertone from a photo, places you in a 12-season color palette, and recommends colors that flatter you",
-      "49-rule styling engine — every outfit scored on color harmony, fabric, silhouette and formality",
-      "Weather-aware styling",
-      "Calendar-aware styling (suits the meeting, the rain, the dinner)",
-      "Check Before You Buy — compatibility scoring against your closet",
-      "Auto-generated Vinted listings for unworn pieces",
-      "Sustainability and cost-per-wear analytics",
-    ],
-    offers: [
-      {
-        "@type": "Offer",
-        name: "Margot Premium Monthly",
-        // Prices match what the site renders for EU visitors (lib/content.ts).
-        price: "14.99",
-        priceCurrency: "EUR",
-        availability: "https://schema.org/InStock",
-        url: APP_STORE_URL,
-      },
-      {
-        "@type": "Offer",
-        name: "Margot Premium Annual",
-        price: "59.99",
-        priceCurrency: "EUR",
-        availability: "https://schema.org/InStock",
-        url: APP_STORE_URL,
-      },
-    ],
-    author: { "@type": "Organization", name: "Margot" },
-  };
-
-  // Source FAQ from the same dictionary that renders the FAQ section so the
-  // two never drift. EN is what the canonical page renders today.
-  const faqPage = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: LANDING_CONTENT.en.faq.map(({ q, a }) => ({
-      "@type": "Question",
-      name: q,
-      acceptedAnswer: { "@type": "Answer", text: a },
-    })),
-  };
-
   return (
     <>
       <LdScript payload={organization} />
       <LdScript payload={website} />
-      <LdScript payload={softwareApplication} />
     </>
   );
 }

@@ -1,65 +1,26 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { APP_STORE_URL } from "@/lib/launch";
-
-// Locale toggle is now URL-based, not in-page state. When on /, link to /fr
-// for the SEO-indexable French route; when on /fr, link back to /. Sub-routes
-// (/privacy, /press, /vs/whering, /blog) don't render this header — they use
-// their own layouts — so we don't have to map every sub-page here.
+import { useState } from "react";
+import styles from "./Landing.module.css";
 
 export function Header() {
-  const pathname = usePathname() ?? "/";
-  const isFr = pathname === "/fr" || pathname.startsWith("/fr/");
-
-  const homeHref = isFr ? "/fr" : "/";
-  const switchHref = isFr ? "/" : "/fr";
-  const current = isFr ? "FR" : "EN";
-  const other = isFr ? "EN" : "FR";
-
-  const readHref = isFr ? "/fr/studio-read" : "/studio-read";
-  const navLinks = [
-    { href: readHref, label: isFr ? "Lis ton style" : "Read your style" },
-    { href: "/blog", label: "Blog" },
+  const fr = usePathname()?.startsWith("/fr") ?? false;
+  const [open, setOpen] = useState(false);
+  const links = [
+    { href: "#comment-ca-marche", label: fr ? "Comment ça marche" : "How it works" },
+    { href: "#dans-lapp", label: fr ? "Dans l’app" : "Inside the app" },
+    { href: "#le-journal", label: fr ? "Le journal" : "The journal" },
   ];
-
-  return (
-    <header className="sticky top-0 z-50 bg-bg/85 backdrop-blur-md backdrop-saturate-150 border-b border-warm2 px-6 py-3.5 flex justify-between items-center">
-      <div className="flex items-center gap-7">
-        <Link href={homeHref} className="no-underline">
-          <div className="font-display italic font-normal text-2xl tracking-tight3 text-ink opsz-96">
-            Margot<span className="text-peach not-italic">.</span>
-          </div>
-        </Link>
-        <nav className="hidden md:flex items-center gap-6">
-          {navLinks.map((l) => (
-            <Link key={l.href} href={l.href} className="font-sans text-sm font-medium text-ink2 no-underline hover:text-ink transition-colors">
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
-      <div className="flex items-center gap-2.5">
-        <Link
-          href={switchHref}
-          className="font-sans text-[11px] font-semibold tracking-wider2 uppercase px-3 py-1.5 rounded-full border border-ink text-ink no-underline cursor-pointer flex items-center gap-1.5 hover:opacity-80 transition-opacity"
-        >
-          {current}
-          <span className="text-ink3">·</span>
-          {other}
-          <span className="sr-only"> — switch language</span>
-        </Link>
-        <a
-          href={APP_STORE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-cta="app-store"
-          className="font-sans text-[11px] font-semibold tracking-wider2 uppercase px-3.5 py-1.5 rounded-full bg-ink text-surface no-underline cursor-pointer hover:opacity-90 transition-opacity whitespace-nowrap"
-        >
-          {isFr ? "Télécharger" : "Download"}
-        </a>
-      </div>
-    </header>
-  );
+  return <header className={styles.header} onKeyDown={(event) => { if (event.key === "Escape") setOpen(false); }}>
+    <a className={styles.skipLink} href="#main-content">{fr ? "Aller au contenu" : "Skip to content"}</a>
+    <Link href={fr ? "/fr" : "/"} className={styles.wordmark} aria-label={fr ? "Margot, accueil" : "Margot, home"}>Margot.</Link>
+    <nav aria-label={fr ? "Navigation principale" : "Main navigation"} className={styles.desktopNav}>{links.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}</nav>
+    <div className={styles.headerActions}>
+      <Link href={fr ? "/" : "/fr"} hrefLang={fr ? "en" : "fr"} lang={fr ? "en" : "fr"} className={styles.languageLink} aria-label={fr ? "View in English" : "Voir en français"}>{fr ? "EN" : "FR"}</Link>
+      <a href="#telecharger" className={styles.headerDownload}>{fr ? "Télécharger" : "Download"}</a>
+      <button type="button" className={styles.menuButton} aria-expanded={open} aria-controls="mobile-navigation" aria-label={fr ? "Menu de navigation" : "Navigation menu"} onClick={() => setOpen(!open)}>{open ? "×" : <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M3 7h18M3 16h18" /></svg>}</button>
+    </div>
+    <nav id="mobile-navigation" aria-label={fr ? "Navigation mobile" : "Mobile navigation"} className={styles.mobileNav} hidden={!open}>{links.map(link => <a key={link.href} href={link.href} onClick={() => setOpen(false)}>{link.label}</a>)}</nav>
+  </header>;
 }

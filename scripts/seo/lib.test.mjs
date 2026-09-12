@@ -1,5 +1,19 @@
 import { describe, it, expect } from "vitest";
-import { extractSignals, evaluate, parseSitemap } from "./lib.mjs";
+import { extractSignals, evaluate, parseSitemap, publicPageUrl } from "./lib.mjs";
+
+describe("preview canonical validation", () => {
+  it("validates production canonicals on a local preview", () => {
+    const url = publicPageUrl("http://localhost:3210/", "http://localhost:3210", "https://www.margotwardrobe.com");
+    expect(evaluate(extractSignals(page(), url), { status: 200 })).toEqual([]);
+  });
+  it("preserves the path so a canonical pointing at the wrong page still fails", () => {
+    const url = publicPageUrl("http://localhost:3210/fr", "http://localhost:3210", "https://www.margotwardrobe.com");
+    expect(evaluate(extractSignals(page(), url), { status: 200 }).some(i => i.rule === "canonical")).toBe(true);
+  });
+  it("does not mask redirects to another origin", () => {
+    expect(publicPageUrl("https://another-site.com/fr", "http://localhost:3210", "https://www.margotwardrobe.com")).toBe("https://another-site.com/fr");
+  });
+});
 
 const page = (over = "") => `<!doctype html><html lang="en"><head>
 <title>Margot — your personal stylist, from your own wardrobe</title>
@@ -14,6 +28,10 @@ ${over}
 </head><body><h1>Your personal stylist</h1><p>${"word ".repeat(300)}</p><a href="/fr">FR</a><a href="https://x.com/margot">x</a><img src="a.png" alt="a"></body></html>`;
 
 describe("extractSignals", () => {
+  it("counts rendered characters, including Next.js numeric HTML entities", () => {
+    const html = page().replace('Margot — your personal stylist, from your own wardrobe', 'Margot&#x27;s wardrobe &#8212; daily outfits');
+    expect(extractSignals(html, 'https://www.margotwardrobe.com/').title).toBe("Margot's wardrobe — daily outfits");
+  });
   it("reads head signals from server HTML", () => {
     const s = extractSignals(page(), "https://www.margotwardrobe.com/");
     expect(s.title).toMatch(/Margot/);

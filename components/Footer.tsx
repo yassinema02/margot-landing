@@ -1,54 +1,45 @@
 "use client";
-
-import type { LangContent } from "@/lib/content";
-import { MargotSVG } from "./MargotSVG";
-import { AppStoreBadge } from "./AppStoreBadge";
+import Link from "next/link";
+import type { HomeLocale } from "@/lib/home";
 import { useConsent } from "./analytics/ConsentProvider";
+import styles from "./Landing.module.css";
 
-export function Footer({ t }: { t: LangContent }) {
+export function Footer({ lang }: { lang: HomeLocale }) {
   const { reset } = useConsent();
-  return (
-    <footer className="bg-surface border-t border-warm2 px-6 py-14">
-      <div className="max-w-[1280px] mx-auto flex flex-col gap-10">
-        <div className="grid gap-8 md:grid-cols-[1fr_auto] items-center">
-          <div className="flex items-center gap-3.5">
-            <MargotSVG state="considering" size={44} showLegs={false} crop="portrait" />
-            <div>
-              <div className="font-display italic font-normal text-[26px] text-ink opsz-96 tracking-tight3 leading-none">
-                Margot<span className="text-peach not-italic">.</span>
-              </div>
-              <div className="font-display italic text-[13px] text-ink3 mt-1">{t.footer.tagline}</div>
-            </div>
-          </div>
-          <AppStoreBadge lang={t.lang} size="sm" />
-        </div>
-
-        <nav className="flex gap-[clamp(14px,2vw,28px)] flex-wrap items-center">
-          {t.footer.links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target={link.href.startsWith("http") ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              className="font-sans text-[13px] font-medium text-ink2 no-underline tracking-tight7 pb-0.5 border-b border-transparent hover:border-peach hover:text-ink transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-          <button
-            type="button"
-            onClick={reset}
-            className="font-sans text-[13px] font-medium text-ink2 tracking-tight7 pb-0.5 border-0 border-b border-transparent bg-transparent p-0 hover:border-peach hover:text-ink transition-colors cursor-pointer"
-          >
-            {t.footer.manageCookies}
-          </button>
-        </nav>
-
-        <div className="pt-6 border-t border-warm2 flex justify-between items-center gap-4 flex-wrap">
-          <div className="font-sans text-xs text-ink3 tracking-[0.04em]">{t.footer.madeIn}</div>
-          <div className="font-sans text-[11px] text-ink3 tracking-[0.06em]">{t.footer.legal}</div>
-        </div>
-      </div>
-    </footer>
-  );
+  const fr = lang === "fr";
+  const home = fr ? "/fr" : "/";
+  const groups = [
+    { title: "Margot", links: [
+      { label: fr ? "L’application" : "The app", href: `${home}#dans-lapp` },
+      { label: fr ? "Gratuit et Premium" : "Free and Premium", href: `${home}#offre` },
+      { label: fr ? "Télécharger" : "Download", href: `${home}#telecharger` },
+      { label: fr ? "Découvrir mon style" : "Discover my style", href: `${fr ? "/fr" : ""}/studio-read` },
+    ] },
+    { title: fr ? "À lire" : "Explore", links: fr ? [
+      { label: "Garde-robe digitale", href: "/fr/garde-robe-digitale" },
+      { label: "Quoi porter aujourd’hui", href: "/fr/quoi-porter-aujourdhui" },
+      { label: "Margot ou Whering", href: "/fr/vs/whering" },
+    ] : [
+      { label: "The journal", href: "/blog" },
+      { label: "What to wear today", href: "/blog/what-to-wear-today" },
+      { label: "Margot vs Whering", href: "/vs/whering" },
+    ] },
+    { title: fr ? "Restons en contact" : "Keep in touch", links: [
+      { label: "Instagram", href: "https://instagram.com/margotwardrobe" },
+      { label: "TikTok", href: "https://tiktok.com/@margotwardrobe" },
+      { label: "Contact", href: "mailto:margot@margotwardrobe.com" },
+      { label: fr ? "Presse" : "Press", href: "/press" },
+      { label: fr ? "Partenaires" : "Partners", href: fr ? "/fr/partenaires" : "/partners" },
+    ] },
+  ];
+  return <footer className={styles.footer}>
+    <div className={styles.footerTop}>
+      <div><Link href={home} className={styles.footerWordmark}>Margot.</Link><p>{fr ? "De nouvelles idées pour tes vêtements." : "New possibilities for your clothes."}</p></div>
+      {groups.map(group => <nav key={group.title} aria-label={group.title}><h2>{group.title}</h2>{group.links.map(link => <a href={link.href} key={link.href}>{link.label}</a>)}</nav>)}
+    </div>
+    <div className={styles.footerBottom}>
+      <span>© {new Date().getFullYear()} Margot · YAVREN</span>
+      <div><Link href={fr ? "/fr/confidentialite" : "/privacy"}>{fr ? "Confidentialité" : "Privacy"}</Link><Link href={fr ? "/fr/conditions" : "/terms"}>{fr ? "Conditions" : "Terms"}</Link><Link href="/mentions-legales">{fr ? "Mentions légales" : "Legal notice"}</Link><button type="button" onClick={reset}>{fr ? "Cookies" : "Cookie settings"}</button></div>
+    </div>
+  </footer>;
 }

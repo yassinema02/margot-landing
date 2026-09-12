@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy · Margot",
+  title: "Privacy policy and personal data · Margot",
   description:
     "How Margot collects, uses, and protects your personal information — data we hold, how styling features use it, what's never sold, and how to request deletion.",
   alternates: { canonical: "/privacy", languages: { en: "/privacy", fr: "/fr/confidentialite", "x-default": "/privacy" } },

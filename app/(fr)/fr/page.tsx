@@ -1,24 +1,15 @@
 import type { Metadata } from "next";
+import { HOME } from "@/lib/home";
 import { LandingBody } from "@/components/LandingBody";
-import { LandingFaqStructuredData } from "@/components/StructuredData";
+import { LandingStructuredData } from "@/components/StructuredData";
 import { getLandingStats } from "@/lib/stats";
 
 const SITE_URL = "https://www.margotwardrobe.com";
-const DESCRIPTION =
-  "Margot, l'application garde-robe IA : une tenue chaque matin depuis ce que tu possèdes déjà, un avis avant d'acheter, ta valise prête. Gratuit sur iOS et Android.";
+const DESCRIPTION = HOME.fr.description;
 
 export const metadata: Metadata = {
-  title: "Margot · Application garde-robe digitale — ta tenue du jour",
+  title: HOME.fr.title,
   description: DESCRIPTION,
-  // Mot-clé invisible "application garde-robe IA" pour le SEO, sans l'afficher.
-  keywords: [
-    "application garde-robe IA",
-    "application garde-robe",
-    "tenues quotidiennes",
-    "quoi porter",
-    "planificateur de tenues",
-    "garde-robe capsule",
-  ],
   alternates: {
     canonical: "/fr",
     languages: {
@@ -28,8 +19,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    images: ["https://www.margotwardrobe.com/opengraph-image"],
-    title: "Margot · Application garde-robe digitale — ta tenue du jour",
+    title: HOME.fr.title,
     description: DESCRIPTION,
     url: `${SITE_URL}/fr`,
     siteName: "Margot",
@@ -41,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@margotwardrobe",
     creator: "@margotwardrobe",
-    title: "Margot · Application garde-robe digitale — ta tenue du jour",
+    title: HOME.fr.title,
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },
@@ -54,7 +44,7 @@ export default async function FrPage() {
   const liveStats = await getLandingStats();
   return (
     <>
-      <LandingFaqStructuredData lang="fr" />
+      <LandingStructuredData lang="fr" />
       <LandingBody lang="fr" liveStats={liveStats} />
     </>
   );

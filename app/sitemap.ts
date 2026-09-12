@@ -16,8 +16,8 @@ type Page = {
 };
 
 const PAGES: Page[] = [
-  { path: "/", updated: "2026-09-08", changeFrequency: "weekly", priority: 1, languages: { en: "/", fr: "/fr" } },
-  { path: "/fr", updated: "2026-09-08", changeFrequency: "weekly", priority: 1, languages: { en: "/", fr: "/fr" } },
+  { path: "/", updated: "2026-09-12", changeFrequency: "weekly", priority: 1, languages: { en: "/", fr: "/fr" } },
+  { path: "/fr", updated: "2026-09-12", changeFrequency: "weekly", priority: 1, languages: { en: "/", fr: "/fr" } },
   { path: "/fr/garde-robe-digitale", updated: "2026-09-08", changeFrequency: "monthly", priority: 0.9, languages: { fr: "/fr/garde-robe-digitale" } },
   { path: "/fr/quoi-porter-aujourdhui", updated: "2026-09-08", changeFrequency: "monthly", priority: 0.8, languages: { en: "/blog/what-to-wear-today", fr: "/fr/quoi-porter-aujourdhui" } },
   { path: "/vs/whering", updated: "2026-09-08", changeFrequency: "monthly", priority: 0.8, languages: { en: "/vs/whering", fr: "/fr/vs/whering" } },

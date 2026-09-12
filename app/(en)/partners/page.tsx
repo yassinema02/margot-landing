@@ -4,9 +4,9 @@ import { safeJson } from "@/lib/jsonld";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/partners`;
-const TITLE = "Partners · Margot";
+const TITLE = "Brand partnerships and affiliation · Margot";
 const DESCRIPTION =
-  "For brands and affiliate networks: how Margot recommends products, where the product card appears in the app, and how we work with advertisers. Awin publisher Yavren, ID 3048471.";
+  "Information for brands and affiliate networks: product recommendations in Margot, placements in the app, partnership approach and contact details.";
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -6,14 +6,14 @@ import { APP_STORE_URL } from "@/lib/launch";
 
 const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/vs/whering`;
-const TITLE = "Margot vs Whering: which AI wardrobe app fits how you actually get dressed";
+const TITLE = "Margot vs Whering: choose your wardrobe app";
 const DESCRIPTION =
-  "Honest comparison of two AI wardrobe apps. Whering is a social wardrobe with 7M users. Margot is built for restraint. Here's how they actually differ.";
+  "Compare Margot and Whering: daily outfit ideas, wardrobe organisation and styling features. Find the wardrobe app that fits the way you get dressed.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/vs/whering" },
+  alternates: { canonical: "/vs/whering", languages: { en: "/vs/whering", fr: "/fr/vs/whering", "x-default": "/vs/whering" } },
   keywords: [
     "whering alternative",
     "margot vs whering",

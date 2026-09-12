@@ -63,7 +63,7 @@ export type StudioReadCopy = {
 
 export const STUDIO_READ_COPY: Record<Locale, StudioReadCopy> = {
   en: {
-    metaTitle: "Read your style — Margot",
+    metaTitle: "Discover your personal style — Margot Studio",
     metaDescription:
       "Post your most-you fit and Margot reads your style — your aesthetic, your palette, the pieces that make it yours. From Margot, your personal stylist.",
     eyebrow: "A Margot read",
@@ -118,7 +118,7 @@ export const STUDIO_READ_COPY: Record<Locale, StudioReadCopy> = {
     carryNote: "Drop your email — your read is waiting when you open Margot.",
   },
   fr: {
-    metaTitle: "Lis ton style — Margot",
+    metaTitle: "Découvre ton style personnel — Studio Margot",
     metaDescription:
       "Poste ton look le plus toi et Margot lit ton style — ton esthétique, ta palette, les pièces qui te ressemblent. Par Margot, ta styliste perso.",
     eyebrow: "Un portrait Margot",
