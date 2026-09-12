@@ -16,7 +16,7 @@ The name Margot refers to the magpie in French folklore. The brand's focus is ma
 
 Some functions and generations have usage limits. Premium offers additional suggestions, bulk uploads and tools for shopping decisions, events and travel packing. Check Before You Buy helps users consider how a prospective piece fits with their wardrobe.
 
-The editorial photograph on the homepage illustrates an everyday outfit. It is not a customer testimonial or proof of a virtual try-on result. App preview images are presented separately.
+The homepage includes an interactive before/after styling scene showing the same fictional woman and man in different outfit combinations. These generated editorial images are labelled as illustrative, not customer testimonials or proof of a virtual try-on result. App preview images are presented separately.
 
 ## Availability and price
 

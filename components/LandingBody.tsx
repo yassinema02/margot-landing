@@ -6,6 +6,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { StoreLinks } from "./StoreLinks";
 import { ProductPreview } from "./ProductPreview";
+import { OutfitComparison } from "./OutfitComparison";
 import styles from "./Landing.module.css";
 
 export function LandingBody({ lang, liveStats }: { lang: HomeLocale; liveStats?: LiveStats | null }) {
@@ -22,10 +23,7 @@ export function LandingBody({ lang, liveStats }: { lang: HomeLocale; liveStats?:
           <p className={styles.micro}>{t.free}</p>
           <a href="#comment-ca-marche" className={styles.explore}>{t.explore}<span aria-hidden="true">↓</span></a>
         </div>
-        <figure className={styles.heroPhoto}>
-          <Image src="/editorial/morning-outfit.png" alt={t.photoAlt} fill priority sizes="(max-width: 760px) 100vw, 50vw" />
-          <figcaption>{t.photoNote}</figcaption>
-        </figure>
+        <OutfitComparison copy={t.comparison} />
       </section>
       <section className={styles.statement} aria-labelledby="statement-title">
         <Image src="/mascot/mascot-thinking.png" alt="" width={66} height={66} sizes="66px" />

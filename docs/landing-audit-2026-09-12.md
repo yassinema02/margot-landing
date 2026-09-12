@@ -110,7 +110,7 @@ Le fichier `llms.txt`, les balises keywords et le schema FAQ ne sont pas un subs
 
 ## Visuel et provenance
 
-Visuel d'ambiance créé avec l'outil intégré imagegen, et copié dans `public/editorial/morning-outfit.png` (1024 × 1536). Les captures de l'application proviennent de `public/screenshots/` et restent présentées comme des aperçus en anglais. La photo d'ambiance n'est ni un témoignage ni une preuve d'essayage virtuel.
+Premier visuel d'ambiance créé avec l'outil intégré imagegen, et copié dans `public/editorial/morning-outfit.png` (1024 × 1536). Il a ensuite été remplacé à la demande de l'utilisateur par le duo interactif décrit ci-dessous. Les captures de l'application proviennent de `public/screenshots/` et restent présentées comme des aperçus en anglais. Les photos d'ambiance ne sont ni des témoignages ni des preuves d'essayage virtuel.
 
 Prompt de génération : « Use case: photorealistic-natural. Asset type: editorial hero photograph for Margot, a personal wardrobe / daily outfit app. Produce ONE vertical photograph, 1024 x 1536, full bleed. Authentic quiet French fashion campaign photography, rich natural texture, understated art direction. A stylish adult woman age around 30, brown softly tousled bob, warm olive skin, wearing a pale powder-blue cotton poplin shirt loosely tucked into deep indigo straight jeans, dark burgundy cardigan draped over her shoulders, burgundy leather loafers. Full body, relaxed standing pose leaning slightly on a pale blue painted doorframe, looking sideways with a natural half smile; one hand in pocket. Real airy Paris apartment dressing area, with a simple clothes rail on the left holding a few everyday garments: a cream knit, burgundy knit and blue shirt on wooden hangers, no clutter. Soft direct September morning sunlight from right, subtle shadows, pale cool grey walls, light oak floor. Subject placed at horizontal center-right, enough space around full body, shoes fully visible. Shot with medium-format fashion camera, restrained film grain, realistic skin and cotton folds, no glamour retouching. Dominant powder blue with deep wine red, off-white, indigo. Mood personal and lived-in, confident, not stock office photo. No text, no graphics, no watermarks, no logos, no phone, no UI, no collages, no borders. »
 
@@ -139,3 +139,22 @@ Les résultats publics initiaux et locaux ne sont pas un avant/après de classem
 Branche : `design/landing-editorial-seo-20260912`, depuis `4ccbcd6`. Prévisualisation locale : `http://127.0.0.1:3210/fr` (français) et `http://127.0.0.1:3210/` (anglais). Cette tâche prépare la refonte ; elle ne modifie pas le déploiement public. La publication doit embarquer les pages SEO déjà présentes dans cette branche, puis être suivie d'un nouveau crawl public.
 
 Aucune migration de données, modification mobile, modification des droits Premium ou nouvelle dépendance. Retour arrière : rétablir le déploiement précédent ou annuler le commit de cette refonte. Les compteurs sont optionnels : en cas d'indisponibilité du service, le reste de la landing reste lisible.
+
+## Ajustement demandé : duo avant / avec Margot
+
+Objectif : remplacer la photo de la femme seule par une comparaison interactive montrant le même homme et la même femme avant et après une proposition de style. Périmètre : visuel hero, curseur et légendes FR/EN. Hors périmètre : produit mobile, backend, publication. Critères : cadrages alignés, deux états entièrement accessibles, glissement et clavier, rendu mobile sans débordement, conservation du contenu et des métadonnées de la landing.
+
+Les deux images `public/editorial/outfit-before.png` et `public/editorial/outfit-after.png` (1254 × 1254 chacune) ont été générées avec l'outil intégré imagegen. La version « avec Margot » a été créée puis recadrée par l'outil ; la version « avant » est une édition de cette référence, avec conservation des personnes et du décor. Les différences portent sur les associations de vêtements, les expressions et l'attitude. La légende indique « Mise en scène illustrative » / « Illustrative styling scene » ; ce ne sont pas des résultats clients. Le texte descriptif de `llms-full.txt` a été adapté.
+
+Le composant `OutfitComparison` conserve deux images de même taille et découpe visuellement celle de gauche, sans étirer les personnes. Le curseur démarre à 50 %. Un champ range natif assure le clavier et la sémantique d'accessibilité ; les événements Pointer permettent le glissement sur toute l'image et la capture hors de la poignée. Un clic permet aussi de déplacer la séparation. `touch-action: pan-y` conserve le défilement vertical. Aucun mouvement automatique, aucune bibliothèque ajoutée.
+
+Validation du suivi :
+
+- Glissement dans les deux sens vérifié dans Chrome : 50 → 93 → 7 % à 1440 px, puis 50 → 12 % à 375 px. Clavier : Home = 0, End = 100, flèche gauche = 99. Les valeurs accessibles changent avec le visuel.
+- Contrôle visuel à 375, 768 et 1440 px : les deux personnes restent visibles de la tête aux chaussures ; absence de débordement horizontal à 375 et 768 px. Le contrôle en largeur mobile utilise Chrome ; aucun test sur un téléphone physique n'est revendiqué.
+- Alt et textes localisés ; les images et le curseur initial sont présents dans le HTML prérendu. Les deux images passent par Next Image avec chargement prioritaire et tailles adaptées au recadrage desktop/tablette.
+- Réponses WebP `w=1080&q=75` : avant **49 370 octets**, après **48 150 octets**, soit **97 520 octets** au total. Cette mesure de transfert remplace celle de la photographie unique citée plus haut ; ce n'est pas une mesure Core Web Vitals.
+- `npm test` : **44 tests réussis**. Build de production avec vérification TypeScript : réussi ; First Load JS des accueils désormais **120 Ko**. Les avertissements Next préexistants restent ceux décrits plus haut.
+- Crawl final après ajout du comparateur : **25 routes, 0 erreur, 2 avertissements** sur les seules pages `studio-read`, comme avant. Aucun problème détecté sur les accueils FR/EN.
+
+La prévisualisation locale reste disponible sur `/fr` et `/`. Aucun déploiement public effectué pour cet ajustement.
