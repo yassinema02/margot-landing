@@ -1,4 +1,4 @@
-import type { MargotState } from "@/lib/content";
+type MargotState = "considering" | "pleased" | "skeptical";
 
 const C = {
   ink: "#2D3A33",

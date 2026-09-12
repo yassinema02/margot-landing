@@ -1,0 +1,1752 @@
+{
+  "date": "2026-09-12T19:16:12.274Z",
+  "base": "https://www.margotwardrobe.com",
+  "errors": 7,
+  "warns": 60,
+  "pages": [
+    {
+      "url": "https://www.margotwardrobe.com/",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 806,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/",
+        "title": "Margot · Wardrobe app — daily outfits from what you own",
+        "description": "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store and Google Play.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com",
+        "canonicalInHead": true,
+        "lang": "en",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com"
+          },
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://www.margotwardrobe.com"
+          }
+        ],
+        "h1s": [
+          "Your wardrobe, observed."
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1026,
+        "imagesMissingAlt": 0,
+        "internalLinks": 11
+      },
+      "issues": [
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "178 chars"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/fr",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 901,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/fr",
+        "title": "Margot · Application garde-robe — tenues quotidiennes",
+        "description": "Margot, l&#x27;application garde-robe IA : tenues quotidiennes, avis avant achat, valise de voyage et suivi de ce que vous possédez déjà. Disponible sur l&#x27;App Store.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/fr",
+        "canonicalInHead": true,
+        "lang": "fr",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com"
+          },
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://www.margotwardrobe.com"
+          }
+        ],
+        "h1s": [
+          "Votre garde-robe, observée."
+        ],
+        "ogTitle": "Margot · Application garde-robe — tenues quotidiennes",
+        "ogImage": null,
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1075,
+        "imagesMissingAlt": 0,
+        "internalLinks": 11
+      },
+      "issues": [
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "170 chars"
+        },
+        {
+          "rule": "og",
+          "level": "warn",
+          "detail": "no og:image"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/blog",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 298,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/blog",
+        "title": "The magpie&#x27;s notes · Margot",
+        "description": "Short essays on wardrobes, restraint, and the small daily problem of getting dressed. From the team building Margot.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/blog",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "The magpie&#x27;s notes."
+        ],
+        "ogTitle": "The magpie&#x27;s notes · Margot",
+        "ogImage": "https://www.margotwardrobe.com/blog/opengraph-image?705a22c089dacd40",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Blog"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 263,
+        "imagesMissingAlt": 0,
+        "internalLinks": 13
+      },
+      "issues": [
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/blog/how-to-sell-on-vinted",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 400,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/blog/how-to-sell-on-vinted",
+        "title": "How to sell on Vinted · Titles, prices and photos that actually move",
+        "description": "A good Vinted listing has a precise title, an honest price and three good photos. Here is how to do all three in five minutes, with examples that work in 2026.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/blog/how-to-sell-on-vinted",
+        "canonicalInHead": true,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "How to sell on Vinted, properly"
+        ],
+        "ogTitle": "How to sell on Vinted · Titles, prices and photos that actually move",
+        "ogImage": "https://www.margotwardrobe.com/blog/how-to-sell-on-vinted/opengraph-image?37e1f6edf188c57b",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Article"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "HowTo"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1296,
+        "imagesMissingAlt": 0,
+        "internalLinks": 13
+      },
+      "issues": [
+        {
+          "rule": "title",
+          "level": "warn",
+          "detail": "68 chars"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 347,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work",
+        "title": "Does AI outfit planning actually work? · A 2026 answer",
+        "description": "AI stylists used to be a punchline. In 2026 they are not. Here is what an AI outfit planner can and cannot do, written by the people who build one.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work",
+        "canonicalInHead": true,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "Does AI outfit planning actually work?"
+        ],
+        "ogTitle": "Does AI outfit planning actually work? · A 2026 answer",
+        "ogImage": "https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work/opengraph-image?37e1f6edf188c57b",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Article"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1221,
+        "imagesMissingAlt": 0,
+        "internalLinks": 13
+      },
+      "issues": []
+    },
+    {
+      "url": "https://www.margotwardrobe.com/blog/alternative-to-whering",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 316,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/blog/alternative-to-whering",
+        "title": "An honest alternative to Whering · Margot",
+        "description": "Whering is excellent and enormous. Margot is the alternative for people who want a quiet AI stylist, not a social network for their closet. Honest comparison.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/blog/alternative-to-whering",
+        "canonicalInHead": true,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "An honest alternative to Whering"
+        ],
+        "ogTitle": "An honest alternative to Whering · Margot",
+        "ogImage": "https://www.margotwardrobe.com/blog/alternative-to-whering/opengraph-image?37e1f6edf188c57b",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Article"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1226,
+        "imagesMissingAlt": 0,
+        "internalLinks": 13
+      },
+      "issues": []
+    },
+    {
+      "url": "https://www.margotwardrobe.com/blog/what-to-wear-today",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 332,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/blog/what-to-wear-today",
+        "title": "What to wear today · How Margot solves the morning outfit question",
+        "description": "Choosing what to wear takes ten minutes you don&#x27;t have. Margot reads your closet, the weather and your calendar, and suggests one outfit before the kettle whistles.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/blog/what-to-wear-today",
+        "canonicalInHead": true,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "What to wear today, finally answered"
+        ],
+        "ogTitle": "What to wear today · How Margot solves the morning outfit question",
+        "ogImage": "https://www.margotwardrobe.com/blog/what-to-wear-today/opengraph-image?37e1f6edf188c57b",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Article"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1101,
+        "imagesMissingAlt": 0,
+        "internalLinks": 13
+      },
+      "issues": [
+        {
+          "rule": "title",
+          "level": "warn",
+          "detail": "66 chars"
+        },
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "169 chars"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/vs/whering",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 313,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/vs/whering",
+        "title": "Margot vs Whering: which AI wardrobe app fits how you actually get dressed",
+        "description": "Honest comparison of two AI wardrobe apps. Whering is a social wardrobe with 7M users. Margot is built for restraint. Here&#x27;s how they actually differ.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/vs/whering",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "Margot vs Whering."
+        ],
+        "ogTitle": "Margot vs Whering — an honest comparison",
+        "ogImage": null,
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "WebPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 685,
+        "imagesMissingAlt": 0,
+        "internalLinks": 2
+      },
+      "issues": [
+        {
+          "rule": "title",
+          "level": "warn",
+          "detail": "74 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        },
+        {
+          "rule": "og",
+          "level": "warn",
+          "detail": "no og:image"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/press",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 490,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/press",
+        "title": "Press kit · Margot",
+        "description": "Press kit for Margot, the AI wardrobe app. Boilerplate at three lengths, founder bio, downloadable brand assets, founder soundbites, and contact for journalists.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/press",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "Press kit."
+        ],
+        "ogTitle": "Press kit · Margot",
+        "ogImage": null,
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "WebPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1068,
+        "imagesMissingAlt": 0,
+        "internalLinks": 7
+      },
+      "issues": [
+        {
+          "rule": "title",
+          "level": "warn",
+          "detail": "18 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        },
+        {
+          "rule": "og",
+          "level": "warn",
+          "detail": "no og:image"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/partners",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 303,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/partners",
+        "title": "Partners · Margot",
+        "description": "For brands and affiliate networks: how Margot recommends products, where the product card appears in the app, and how we work with advertisers. Awin publisher Yavren, ID 3048471.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/partners",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr/partenaires"
+          }
+        ],
+        "h1s": [
+          "Where your products appear."
+        ],
+        "ogTitle": "Partners · Margot",
+        "ogImage": null,
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 679,
+        "imagesMissingAlt": 0,
+        "internalLinks": 1
+      },
+      "issues": [
+        {
+          "rule": "title",
+          "level": "warn",
+          "detail": "17 chars"
+        },
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "178 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        },
+        {
+          "rule": "hreflang",
+          "level": "warn",
+          "detail": "no self-referencing entry"
+        },
+        {
+          "rule": "hreflang",
+          "level": "warn",
+          "detail": "no x-default"
+        },
+        {
+          "rule": "og",
+          "level": "warn",
+          "detail": "no og:image"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/fr/partenaires",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 310,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/fr/partenaires",
+        "title": "Partenaires · Margot",
+        "description": "Pour les marques et les réseaux d&#x27;affiliation : comment Margot recommande des produits, où la fiche produit apparaît dans l&#x27;application, et notre façon de travailler avec les annonceurs. Éditeur Awin Yavren, ID 3048471.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/fr/partenaires",
+        "canonicalInHead": false,
+        "lang": "fr",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com/partners"
+          }
+        ],
+        "h1s": [
+          "Où vos produits apparaissent."
+        ],
+        "ogTitle": "Partenaires · Margot",
+        "ogImage": null,
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "BreadcrumbList"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebPage"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 717,
+        "imagesMissingAlt": 0,
+        "internalLinks": 1
+      },
+      "issues": [
+        {
+          "rule": "title",
+          "level": "warn",
+          "detail": "20 chars"
+        },
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "229 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        },
+        {
+          "rule": "hreflang",
+          "level": "warn",
+          "detail": "no self-referencing entry"
+        },
+        {
+          "rule": "hreflang",
+          "level": "warn",
+          "detail": "no x-default"
+        },
+        {
+          "rule": "og",
+          "level": "warn",
+          "detail": "no og:image"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/privacy",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 336,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/privacy",
+        "title": "Privacy Policy · Margot",
+        "description": "How Margot collects, uses, and protects your personal information — data we hold, how styling features use it, what&#x27;s never sold, and how to request deletion.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/privacy",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "Privacy Policy"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1627,
+        "imagesMissingAlt": 0,
+        "internalLinks": 1
+      },
+      "issues": [
+        {
+          "rule": "title",
+          "level": "warn",
+          "detail": "23 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/fr/confidentialite",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 484,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/fr/confidentialite",
+        "title": "Politique de confidentialité · Margot",
+        "description": "Comment Margot collecte, utilise et protège vos données personnelles — données conservées, usage par les fonctionnalités de style, ce qui n&#x27;est jamais vendu, et comment demander la suppression.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/fr/confidentialite",
+        "canonicalInHead": false,
+        "lang": "fr",
+        "hreflang": [],
+        "h1s": [
+          "Politique de confidentialité"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 2004,
+        "imagesMissingAlt": 0,
+        "internalLinks": 2
+      },
+      "issues": [
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "198 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/terms",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 490,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/terms",
+        "title": "Terms of Service · Margot",
+        "description": "Terms governing your use of Margot — account terms, subscription billing, acceptable use, content ownership, and limitations of liability.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/terms",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "Terms of Service"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1344,
+        "imagesMissingAlt": 0,
+        "internalLinks": 3
+      },
+      "issues": [
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/fr/conditions",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 481,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/fr/conditions",
+        "title": "Conditions d&#x27;utilisation · Margot",
+        "description": "Conditions régissant votre utilisation de Margot — compte, abonnement et facturation, utilisation acceptable, propriété des contenus et limitation de responsabilité.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/fr/conditions",
+        "canonicalInHead": false,
+        "lang": "fr",
+        "hreflang": [],
+        "h1s": [
+          "Conditions d&#x27;utilisation"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 1491,
+        "imagesMissingAlt": 0,
+        "internalLinks": 3
+      },
+      "issues": [
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/mentions-legales",
+      "indexable": true,
+      "inSitemap": true,
+      "status": 200,
+      "ttfbMs": 292,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/mentions-legales",
+        "title": "Mentions légales · Margot",
+        "description": "Mentions légales du site margotwardrobe.com — éditeur, directeur de la publication, hébergement, propriété intellectuelle et droit applicable.",
+        "robots": "index, follow",
+        "canonical": "https://www.margotwardrobe.com/mentions-legales",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "Mentions légales"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 432,
+        "imagesMissingAlt": 0,
+        "internalLinks": 5
+      },
+      "issues": [
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "streamed into <body> (page is dynamic)"
+        },
+        {
+          "rule": "lang",
+          "level": "error",
+          "detail": "en on FR path"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/premium",
+      "path": "/premium",
+      "indexable": false,
+      "inSitemap": false,
+      "status": 200,
+      "ttfbMs": 279,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/premium",
+        "title": "Ouvrir Margot Premium",
+        "description": "Ouvrez Margot Premium dans l&#x27;application.",
+        "robots": "noindex, nofollow",
+        "canonical": "https://www.margotwardrobe.com/premium",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [],
+        "h1s": [
+          "Ouverture de Margot."
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 36,
+        "imagesMissingAlt": 0,
+        "internalLinks": 1
+      },
+      "issues": []
+    },
+    {
+      "url": "https://www.margotwardrobe.com/download",
+      "path": "/download",
+      "indexable": false,
+      "inSitemap": false,
+      "status": 200,
+      "ttfbMs": 299,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/download",
+        "title": "Télécharger Margot",
+        "description": "Ta styliste, chaque matin. Télécharge Margot sur ton téléphone.",
+        "robots": "noindex",
+        "canonical": "https://www.margotwardrobe.com",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com"
+          },
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://www.margotwardrobe.com"
+          }
+        ],
+        "h1s": [
+          "Get Margot"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 22,
+        "imagesMissingAlt": 0,
+        "internalLinks": 0
+      },
+      "issues": []
+    },
+    {
+      "url": "https://www.margotwardrobe.com/fr/garde-robe-digitale",
+      "path": "/fr/garde-robe-digitale",
+      "indexable": true,
+      "inSitemap": false,
+      "status": 404,
+      "ttfbMs": 288,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/fr/garde-robe-digitale",
+        "title": "404: This page could not be found.",
+        "description": "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store and Google Play.",
+        "robots": "noindex",
+        "canonical": "https://www.margotwardrobe.com",
+        "canonicalInHead": false,
+        "lang": "fr",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com"
+          },
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://www.margotwardrobe.com"
+          }
+        ],
+        "h1s": [
+          "404"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 18,
+        "imagesMissingAlt": 0,
+        "internalLinks": 0
+      },
+      "issues": [
+        {
+          "rule": "status",
+          "level": "error",
+          "detail": "HTTP 404"
+        },
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "178 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "https://www.margotwardrobe.com"
+        },
+        {
+          "rule": "robots",
+          "level": "error",
+          "detail": "noindex"
+        },
+        {
+          "rule": "hreflang",
+          "level": "warn",
+          "detail": "no self-referencing entry"
+        },
+        {
+          "rule": "thin",
+          "level": "warn",
+          "detail": "18 words"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/fr/vs/whering",
+      "path": "/fr/vs/whering",
+      "indexable": true,
+      "inSitemap": false,
+      "status": 404,
+      "ttfbMs": 276,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/fr/vs/whering",
+        "title": "404: This page could not be found.",
+        "description": "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store and Google Play.",
+        "robots": "noindex",
+        "canonical": "https://www.margotwardrobe.com",
+        "canonicalInHead": false,
+        "lang": "fr",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com"
+          },
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://www.margotwardrobe.com"
+          }
+        ],
+        "h1s": [
+          "404"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 18,
+        "imagesMissingAlt": 0,
+        "internalLinks": 0
+      },
+      "issues": [
+        {
+          "rule": "status",
+          "level": "error",
+          "detail": "HTTP 404"
+        },
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "178 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "https://www.margotwardrobe.com"
+        },
+        {
+          "rule": "robots",
+          "level": "error",
+          "detail": "noindex"
+        },
+        {
+          "rule": "hreflang",
+          "level": "warn",
+          "detail": "no self-referencing entry"
+        },
+        {
+          "rule": "thin",
+          "level": "warn",
+          "detail": "18 words"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui",
+      "path": "/fr/quoi-porter-aujourdhui",
+      "indexable": true,
+      "inSitemap": false,
+      "status": 404,
+      "ttfbMs": 290,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui",
+        "title": "404: This page could not be found.",
+        "description": "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store and Google Play.",
+        "robots": "noindex",
+        "canonical": "https://www.margotwardrobe.com",
+        "canonicalInHead": false,
+        "lang": "fr",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com"
+          },
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://www.margotwardrobe.com"
+          }
+        ],
+        "h1s": [
+          "404"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 18,
+        "imagesMissingAlt": 0,
+        "internalLinks": 0
+      },
+      "issues": [
+        {
+          "rule": "status",
+          "level": "error",
+          "detail": "HTTP 404"
+        },
+        {
+          "rule": "description",
+          "level": "warn",
+          "detail": "178 chars"
+        },
+        {
+          "rule": "canonical",
+          "level": "warn",
+          "detail": "https://www.margotwardrobe.com"
+        },
+        {
+          "rule": "robots",
+          "level": "error",
+          "detail": "noindex"
+        },
+        {
+          "rule": "hreflang",
+          "level": "warn",
+          "detail": "no self-referencing entry"
+        },
+        {
+          "rule": "thin",
+          "level": "warn",
+          "detail": "18 words"
+        }
+      ]
+    },
+    {
+      "url": "https://www.margotwardrobe.com/this-page-does-not-exist-404",
+      "path": "/this-page-does-not-exist-404",
+      "expectStatus": 404,
+      "inSitemap": false,
+      "status": 404,
+      "ttfbMs": 296,
+      "signals": {
+        "url": "https://www.margotwardrobe.com/this-page-does-not-exist-404",
+        "title": "404: This page could not be found.",
+        "description": "Margot is the AI wardrobe app that turns your closet into daily outfits, shopping verdicts and packing lists from what you already own. Now live on the App Store and Google Play.",
+        "robots": "noindex",
+        "canonical": "https://www.margotwardrobe.com",
+        "canonicalInHead": false,
+        "lang": "en",
+        "hreflang": [
+          {
+            "lang": "en",
+            "href": "https://www.margotwardrobe.com"
+          },
+          {
+            "lang": "fr",
+            "href": "https://www.margotwardrobe.com/fr"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://www.margotwardrobe.com"
+          }
+        ],
+        "h1s": [
+          "404"
+        ],
+        "ogTitle": "Margot · Wardrobe app — daily outfits from what you own",
+        "ogImage": "https://www.margotwardrobe.com/opengraph-image?c42495cac46b34c1",
+        "jsonld": [
+          {
+            "ok": true,
+            "types": [
+              "Organization"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "WebSite"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "SoftwareApplication"
+            ]
+          },
+          {
+            "ok": true,
+            "types": [
+              "FAQPage"
+            ]
+          }
+        ],
+        "wordCount": 18,
+        "imagesMissingAlt": 0,
+        "internalLinks": 0
+      },
+      "issues": []
+    }
+  ],
+  "global": [
+    {
+      "rule": "duplicate-title",
+      "level": "warn",
+      "detail": "\"404: This page could not be found.\" on https://www.margotwardrobe.com/fr/garde-robe-digitale, https://www.margotwardrobe.com/fr/vs/whering, https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui, https://www.margotwardrobe.com/this-page-does-not-exist-404"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/download → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/download → https://www.margotwardrobe.com/fr not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/download → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/garde-robe-digitale → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/garde-robe-digitale → https://www.margotwardrobe.com/fr not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/garde-robe-digitale → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/vs/whering → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/vs/whering → https://www.margotwardrobe.com/fr not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/vs/whering → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui → https://www.margotwardrobe.com/fr not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/this-page-does-not-exist-404 → https://www.margotwardrobe.com not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/this-page-does-not-exist-404 → https://www.margotwardrobe.com/fr not reciprocated"
+    },
+    {
+      "rule": "hreflang-reciprocity",
+      "level": "warn",
+      "detail": "https://www.margotwardrobe.com/this-page-does-not-exist-404 → https://www.margotwardrobe.com not reciprocated"
+    }
+  ],
+  "psi": {}
+}

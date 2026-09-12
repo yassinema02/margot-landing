@@ -1,24 +1,30 @@
-# Margot Landing — Next.js + Tailwind
+# Margot landing
 
-Production rewrite of the Claude Design prototype (preserved in `_legacy/`).
+Editorial website for Margot, built with Next.js 15, TypeScript, Tailwind and CSS Modules. The English homepage is `/`; the French homepage is `/fr`.
 
-## Stack
-- Next.js 15 (App Router) + TypeScript
-- Tailwind v3 with design tokens from the Ash & Moss system
-- `next/font` for Fraunces (variable, opsz + SOFT) and Inter Tight
+## Run and verify
 
-## Run
 ```bash
 npm install
-npm run dev
+npm run build
+npm start
+npm test
+node scripts/seo/check.mjs --base http://localhost:3000
 ```
 
-## Structure
-- `app/` — layout (fonts, metadata), root page (state + composition)
-- `components/` — Header, Hero, Problem, Features, MeetMargot, Pricing, SecondCapture, Faq, Footer, FadeIn, WaitlistForm, MargotSVG
-- `lib/content.ts` — EN/FR copy
-- `_legacy/` — original HTML/JSX prototype, kept for reference
+Use the production build for browser verification with the site's Content Security Policy.
 
-## TODO
-- Wire `WaitlistForm` `onSubmit` to the real Beehiiv endpoint (currently a 700ms stub).
-- Replace placeholder waitlist count in `success.headline` with a live value.
+## Structure
+
+- `components/LandingBody.tsx` — shared server-rendered homepage.
+- `components/Landing.module.css` — responsive landing design.
+- `components/OutfitComparison.tsx` — accessible before/after styling slider.
+- `components/ProductPreview.tsx` — application screenshots and feature selection.
+- `lib/home.ts` — French and English homepage copy and FAQ.
+- `app/(en)/` and `app/(fr)/` — localized pages and metadata.
+- `lib/fonts.ts` — Fraunces and Montserrat through `next/font`.
+- `docs/landing-audit-2026-09-12.md` — audit, SEO priorities and validation.
+
+The previous landing components, copy and prototypes have been removed. Git history retains earlier versions for rollback. Shared components still used by guides, legal pages and Studio Read remain in place.
+
+Production is served by the existing Vercel project `margot-landing`, connected to the `master` branch of `yassinema02/margot-landing`.

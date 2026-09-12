@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // Next 15 streams <title>/<meta>/<link rel=canonical> into the <body> on
+  // dynamic routes unless the user agent matches this list. The default list
+  // covers social previews and a few search engines, but NOT the AI crawlers
+  // (GPTBot, ClaudeBot, PerplexityBot…) that do not execute JS and read the
+  // <head> only. Extending it keeps title, canonical and hreflang in <head>
+  // for every crawler we want to be cited by. Default list kept verbatim.
+  htmlLimitedBots:
+    /[\w-]+-Google|Google-[\w-]+|Googlebot|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight|GPTBot|ChatGPT-User|OAI-SearchBot|ClaudeBot|Claude-Web|Claude-User|Claude-SearchBot|anthropic-ai|PerplexityBot|Perplexity-User|Google-Extended|cohere-ai|CCBot|Bytespider|Amazonbot|meta-externalagent|MistralAI-User|DuckAssistBot|YouBot|PetalBot|SemrushBot|AhrefsBot|MJ12bot|Screaming Frog|MargotSEOCheck/i,
+
   // Security headers for the public landing page
   async headers() {
     return [

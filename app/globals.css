@@ -20,3 +20,5 @@ a:hover { opacity: 0.7; }
 .sr-pulse { animation: sr-pulse 1.4s cubic-bezier(.4,0,.2,1) infinite; }
 .sr-dot   { animation: sr-dots 1.4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .sr-pulse, .sr-dot { animation: none !important; } }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

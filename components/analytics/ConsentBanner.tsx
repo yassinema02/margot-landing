@@ -31,7 +31,7 @@ export function ConsentBanner({ lang = "en" }: { lang?: "en" | "fr" }) {
       <div className="mx-auto flex max-w-[680px] flex-col gap-3 rounded-xl border border-warm2 bg-surface px-5 py-4 shadow-lg sm:flex-row sm:items-center sm:justify-between">
         <p className="font-sans text-[13px] leading-relaxed text-ink2">
           {c.text}{" "}
-          <Link href="/privacy" className="underline hover:text-ink">
+          <Link href={lang === "fr" ? "/fr/confidentialite" : "/privacy"} className="underline hover:text-ink">
             {c.privacy}
           </Link>
         </p>
