@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "12 August 2026";
+const LAST_UPDATED = "4 October 2026";
 
 export default function PrivacyPage() {
   return (
@@ -236,6 +236,7 @@ export default function PrivacyPage() {
               <tbody>
                 <Tr provider="Supabase" purpose="Storage of wardrobe data, accounts, wear logs" data="All wardrobe data, account data" />
                 <Tr provider="Google Gemini" purpose="Outfit suggestions, clothing analysis, shopping verdicts, and image processing" data="Wardrobe summaries, submitted photos/screenshots, style context" />
+                <Tr provider="Anthropic" purpose="Internal development tools: preparing the test sets that measure and improve clothing recognition" data="Uploaded clothing photos, without name, email address or account identifier" />
                 <Tr provider="RevenueCat" purpose="Validate and manage premium subscriptions" data="Subscription receipt + anonymous user ID" />
                 <Tr provider="Apple" purpose="Payment processing, app distribution" data="Per Apple's privacy policy" />
                 <Tr provider="OpenWeatherMap" purpose="Local weather for outfit context" data="Approximate location only" />
