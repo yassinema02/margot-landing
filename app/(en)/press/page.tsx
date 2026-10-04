@@ -6,7 +6,7 @@ const SITE_URL = "https://www.margotwardrobe.com";
 const URL = `${SITE_URL}/press`;
 const TITLE = "Margot press kit — brand assets and media contact";
 const DESCRIPTION =
-  "Press kit for Margot, the AI wardrobe app. Boilerplate at three lengths, founder bio, downloadable brand assets, founder soundbites, and contact for journalists.";
+  "Press kit for Margot, the wardrobe app. Boilerplate at three lengths, founder bio, downloadable brand assets, founder soundbites, and contact for journalists.";
 const PRESS_EMAIL = "margot@margotwardrobe.com";
 
 export const metadata: Metadata = {
@@ -54,10 +54,10 @@ export default function PressPage() {
     ["Tagline", "the magpie who reads your closet"],
     ["What it is", "AI wardrobe app for daily outfit suggestions from clothes you already own"],
     ["Status", "Live on the App Store and Google Play"],
-    ["Platform", "iOS and Android — both live, in feature parity"],
-    ["Pricing", "Free tier + Premium at $14.99 / mo or $59.99 / yr (Save 67%) · regional pricing in EUR + GBP · Family Sharing"],
+    ["Platform", "iOS and Android, both live"],
+    ["Pricing", "Free tier + Premium at $14.99 / mo, $59.99 / yr or $8.99 / week on the US App Store · prices vary by country and store (€14.90 / €59.99 in France, £12.90 / £59.99 in the UK) · Family Sharing on iOS"],
     ["Headquarters", "Paris, France"],
-    ["Primary markets", "France, then Belgium, Switzerland and Morocco — over 90% French-speaking"],
+    ["Primary markets", "Mostly France, then Spain and Belgium"],
     ["Founder", "Yassine Benlahmr"],
     ["Site", "margotwardrobe.com"],
     ["Socials", "@margotwardrobe on Instagram, TikTok, X"],
@@ -90,14 +90,14 @@ export default function PressPage() {
           <P>
             Margot is an AI wardrobe app that helps people get dressed from what they already own —
             not buy more. Each morning, Margot suggests one outfit based on the user's actual
-            closet, the weather where they are, and the calendar in front of them. She also tells
-            users when <em>not</em> to buy something — by checking whether a piece pairs with three
-            things they already own — and auto-drafts Vinted listings for items left unworn for
-            months.
+            closet, the weather where they are and, for subscribers, the events in their calendar.
+            She also tells users when <em>not</em> to buy something, by scoring how well a piece
+            works with what they already own, and writes Vinted listings on request for pieces they
+            no longer wear.
           </P>
           <P>
-            Now live on the App Store. Built by Yassine Benlahmr, for anyone whose wardrobe feels
-            larger than they need it to.
+            Now live on the App Store and Google Play. Founded by Yassine Benlahmr, for anyone
+            whose wardrobe feels larger than they need it to.
           </P>
         </Section>
 
@@ -121,9 +121,9 @@ export default function PressPage() {
         <Section title="Boilerplate · 50 words">
           <Quote>
             Margot is an AI wardrobe app for people who already own enough clothes. She catalogues
-            what you have, watches the weather and your calendar, and suggests one outfit each
-            morning. She also tells you when not to buy something — by checking whether it pairs
-            with three things you already own.
+            what you have, watches the weather (and your calendar, for subscribers), and suggests
+            one outfit each morning. She also tells you when not to buy something, by scoring how
+            well a piece works with what you already own.
           </Quote>
         </Section>
 
@@ -131,15 +131,15 @@ export default function PressPage() {
           <Quote>
             Margot is the AI wardrobe app for people who want a quiet morning, not a social network
             for their closet. Each morning, Margot suggests one outfit based on the user's actual
-            wardrobe, the weather where they are, and the calendar in front of them. She also tells
-            users when <em>not</em> to buy something — by checking whether a piece pairs with three
-            things they already own — and auto-drafts Vinted listings for items left unworn for
-            months.
+            wardrobe, the weather where they are and, for subscribers, the events in their
+            calendar. She also tells users when <em>not</em> to buy something, by scoring how well a
+            piece works with what they already own, and writes Vinted listings on request for pieces
+            they no longer wear.
             <br />
             <br />
-            Now live on the App Store. Built by founder Yassine Benlahmr. Margot is free to start,
-            with a Premium tier at $14.99 per month or $59.99 per year (Save 67%), and regional
-            equivalents in EUR and GBP.
+            Now live on the App Store and Google Play. Founded by Yassine Benlahmr. Margot is free
+            to start, with a Premium tier at $14.99 per month, $59.99 per year or $8.99 per week on
+            the US App Store; prices vary by country and store.
           </Quote>
         </Section>
 
@@ -147,28 +147,28 @@ export default function PressPage() {
           <Quote>
             <strong className="font-semibold text-ink">Margot</strong> is an AI wardrobe app for
             people who already own enough clothes. The premise is unfashionable in a category full
-            of social feeds and game mechanics: most people don't need more pieces, they need a way
-            to remember the ones they have.
+            of social feeds: most people don't need more pieces, they need a way to remember the
+            ones they have.
             <br />
             <br />
             Each morning, Margot suggests one outfit based on three inputs: the user's actual
             wardrobe (photographed once and tagged automatically by Margot's vision pipeline), the
-            weather where they are, and the calendar in front of them — the meeting, the rain, the
-            dinner they forgot they had. The suggestion arrives before the kettle whistles. There
-            is no social feed.
+            weather where they are and, for subscribers, the events in their calendar: the meeting,
+            the dinner they forgot they had. The suggestion arrives before the kettle whistles.
+            There is no social feed.
             <br />
             <br />
             Margot also runs in the opposite direction of every other shopping app. When a user is
-            tempted by something new, Margot's "Check Before You Buy" feature scores whether the
-            piece pairs with at least three items they already own, and gives a buy / consider /
-            skip verdict in the founder's voice. For items that have gone unworn for months, Margot
-            auto-drafts a Vinted listing — title, description, suggested price — ready to publish
-            in one tap.
+            tempted by something new, Margot's "Check Before You Buy" feature scores the piece
+            against what they already own (outfits it makes, duplicates, gaps it fills, personal
+            fit) and gives a buy / consider / skip verdict. For pieces that no longer get worn,
+            Margot writes a Vinted listing on request (title, description, suggested price range),
+            ready to paste into Vinted.
             <br />
             <br />
-            Built by founder Yassine Benlahmr and now live on the App Store,
-            Margot is free to start, with a Premium tier at $14.99
-            per month or $59.99 per year (Save 67%), and Family Sharing on iOS.
+            Founded by Yassine Benlahmr and now live on the App Store and Google Play, Margot is
+            free to start, with a Premium tier at $14.99 per month, $59.99 per year or $8.99 per
+            week on the US App Store, local prices elsewhere, and Family Sharing on iOS.
             The brand voice is literary and restrained, the visual identity is editorial cream and
             terracotta, and the brand mascot is a magpie — the bird who collects everything that
             shines and remembers where she put it.
@@ -179,11 +179,10 @@ export default function PressPage() {
 
         <Section title="The founder">
           <P>
-            <Strong>Yassine Benlahmr</Strong> is the solo founder and operator of Margot. He builds
-            from Paris, with a focus on quiet products that respect a user's morning. Margot
-            started from his own frustration with wardrobe apps that turned getting dressed into a
-            social performance — and from the observation that nobody actually needs more clothes,
-            they just need to remember the ones they have.
+            <Strong>Yassine Benlahmr</Strong> is the founder of Margot. His focus is quiet products
+            that respect a user's morning. Margot started from his own frustration with wardrobe
+            apps that turned getting dressed into a social performance — and from the observation
+            that nobody actually needs more clothes, they just need to remember the ones they have.
           </P>
           <P>
             Before Margot, Yassine worked on consumer iOS products and AI tooling. He writes the
@@ -278,8 +277,8 @@ export default function PressPage() {
           </div>
 
           <P className="mt-6 text-ink3 italic text-[14px]">
-            App screenshots are not yet public — the app is in private TestFlight. We'll share
-            high-resolution screens directly with credentialed press on request.
+            App screenshots are on the App Store and Google Play listings. We can share
+            high-resolution screens with press on request.
           </P>
         </Section>
 

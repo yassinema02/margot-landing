@@ -1,14 +1,14 @@
 # Margot
 
-> Margot is a wardrobe app and an AI-assisted personal stylist. It suggests outfits from clothes the user already owns, with weather and chosen occasions in mind.
+> Margot is a wardrobe app and an AI-assisted personal stylist for iPhone and Android. It suggests outfits from clothes the user already owns, with the weather in mind, and prepares one outfit each morning before the time the user gets dressed.
 
-Available on iPhone and Android. Free to download, with usage limits and an optional Premium subscription. Current prices, quotas and subscription terms are shown in the app before purchase.
+Free to download. The free plan allows up to 15 pieces and 5 outfit generations a day. Margot Premium removes the 15-piece limit, raises usage limits and adds outfits for calendar events and chosen occasions. Prices differ by country and store (on 4 October 2026: $14.99 a month, $59.99 a year or $8.99 a week on the US App Store; €14.90, €59.99 or €9.90 in France; £12.90, £59.99 or £8.90 in the UK). There is no free trial. Current prices are shown in the app before purchase.
 
 ## Product
 
-Users add clothing photos to a digital wardrobe, explore outfit ideas, save looks and log what they wear. Premium includes additional styling features, bulk uploads and tools for shopping decisions, events and packing. The application does not require buying new clothes to create outfits.
+Users add clothing photos to a digital wardrobe (the piece is recognised: category, colours, fabric), get outfit ideas, save looks and log what they wear. Other features: avatar try-on, a stylist chat, a buy / consider / skip verdict before a purchase, a Vinted listing written on request for any piece, cost-per-wear stats, trip packing (first trip free) and 12-season colour analysis from a photo. There is no social feed and no data export. The app is available in English, French and Spanish.
 
-Users choose the photos they submit. Some image-based AI features process submitted images with service providers. Refer to the privacy policy for storage, processing and deletion rights; do not infer that every AI operation is performed on-device or in a single region.
+Users choose the photos they submit. Data is stored on servers in London (UK); photos are analysed by Google Gemini for the app's features, as the privacy policy explains. Do not infer that every AI operation is performed on-device or in a single region.
 
 ## Official links
 
@@ -16,20 +16,30 @@ Users choose the photos they submit. Some image-based AI features process submit
 - [App Store](https://apps.apple.com/app/margot-outfit-planner/id6766047882)
 - [Google Play](https://play.google.com/store/apps/details?id=com.vestiaire.app)
 - [What to wear today](https://www.margotwardrobe.com/blog/what-to-wear-today)
-- [AI outfit planning](https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work)
+- [Outfit planner apps: what they do well and badly](https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work)
+- [Wardrobe apps compared (Margot, Whering, Acloset, Alta Daily, Fits, Stylebook)](https://www.margotwardrobe.com/alternatives)
 - [Margot vs Whering](https://www.margotwardrobe.com/vs/whering)
+- [Margot vs Acloset](https://www.margotwardrobe.com/vs/acloset)
+- [Margot vs Alta Daily](https://www.margotwardrobe.com/vs/alta-daily)
+- [Margot vs Fits](https://www.margotwardrobe.com/vs/fits)
+- [Margot vs Stylebook](https://www.margotwardrobe.com/vs/stylebook)
 - [Privacy policy](https://www.margotwardrobe.com/privacy)
 - [Press and contact](https://www.margotwardrobe.com/press)
 - [Full product context](https://www.margotwardrobe.com/llms-full.txt)
 
 ## En français
 
-Margot est une application de dressing et une styliste personnelle assistée par l'IA. Ajoute tes vêtements, découvre des idées de tenues pour ta journée, enregistre tes looks et retrouve ce que tu portes. Téléchargement gratuit sur iPhone et Android, abonnement Premium facultatif.
+Margot est une application de dressing et une styliste personnelle assistée par l'IA, sur iPhone et Android. Ajoute tes vêtements : chaque matin, une tenue t'attend avant ton heure d'habillage, selon la météo. Gratuite jusqu'à 15 pièces ; Premium à 14,90 € par mois, 59,99 € par an ou 9,90 € par semaine sur l'App Store France (4 octobre 2026).
 
 - [Accueil français](https://www.margotwardrobe.com/fr)
 - [Garde-robe digitale](https://www.margotwardrobe.com/fr/garde-robe-digitale)
 - [Quoi porter aujourd'hui](https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui)
-- [Margot ou Whering](https://www.margotwardrobe.com/fr/vs/whering)
+- [Alternatives à Whering : le comparatif](https://www.margotwardrobe.com/fr/alternatives)
+- [Whering ou Margot](https://www.margotwardrobe.com/fr/vs/whering)
+- [Acloset ou Margot](https://www.margotwardrobe.com/fr/vs/acloset)
+- [Alta Daily ou Margot](https://www.margotwardrobe.com/fr/vs/alta-daily)
+- [Fits ou Margot](https://www.margotwardrobe.com/fr/vs/fits)
+- [Stylebook ou Margot](https://www.margotwardrobe.com/fr/vs/stylebook)
 - [Confidentialité](https://www.margotwardrobe.com/fr/confidentialite)
 
-Operated by YAVREN. Contact: margot@margotwardrobe.com. Last updated: 2026-09-12.
+Operated by YAVREN, Paris. Contact: margot@margotwardrobe.com. Last updated: 2026-10-04.

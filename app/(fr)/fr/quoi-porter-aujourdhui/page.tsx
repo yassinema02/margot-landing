@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { safeJson } from "@/lib/jsonld";
+import { authorJsonLd, PUBLISHER_JSON_LD } from "@/lib/author";
+import { Byline } from "@/components/Byline";
+import { RelatedLinks } from "@/components/RelatedLinks";
+import { relatedForFrGuide } from "@/lib/related";
 import { AppStoreBadge } from "@/components/AppStoreBadge";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/launch";
 
@@ -10,6 +14,8 @@ const TITLE = "Quoi porter aujourd'hui ? Méthode + tenue du jour · Margot";
 const DESCRIPTION =
   "Quoi porter aujourd'hui ? Trois questions (météo ressentie, agenda, ce que tu as déjà porté), un tableau par température et la tenue du jour préparée par Margot.";
 const PUBLISHED = "2026-09-08";
+// Last substantive edit (facts, prices, copy). Drives the byline, dateModified and the sitemap.
+const UPDATED = "2026-10-04";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -40,7 +46,7 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     alternateLocale: ["en_GB"],
     publishedTime: `${PUBLISHED}T08:00:00+02:00`,
-    authors: ["Margot"],
+    authors: ["Yassine Benlahmr"],
     images: ["https://www.margotwardrobe.com/opengraph-image"],
   },
   twitter: {
@@ -54,24 +60,30 @@ export const metadata: Metadata = {
 
 // The three-question method. Rendered as the numbered steps AND used for
 // the HowTo JSON-LD so both stay identical.
-const STEPS: { name: string; text: string; detail: string }[] = [
+const STEPS: { name: string; text: string; detail: string[] }[] = [
   {
     name: "Quelle météo, ressentie, entre ton départ et ton retour ?",
     text: "Regarde la température ressentie à l'heure où tu sors et à celle où tu rentres, pas la maximale de la journée. Habille-toi pour la plus basse des deux, avec une couche que tu pourras enlever.",
-    detail:
-      "Le chiffre qui compte n'est pas celui de midi. C'est celui de 8 h 15 sur le quai, et celui de 19 h quand tu ressors. Le vent et l'humidité pèsent plus que deux degrés d'écart : 12 °C sous un ciel gris et humide se portent comme 8, 12 °C au soleil sans vent se portent comme 15. Une fois la fourchette connue, la règle tient en une phrase : une couche pour la température la plus basse que tu vas croiser, et cette couche doit pouvoir se retirer sans que la tenue s'effondre.",
+    detail: [
+      "Le chiffre qui compte n'est pas celui de midi. C'est celui de 8 h 15 sur le quai, et celui de 19 h quand tu ressors. Le vent et l'humidité pèsent plus que deux degrés d'écart : 12 °C sous un ciel gris et humide se portent comme 8, 12 °C au soleil sans vent se portent comme 15.",
+      "Une fois la fourchette connue, la règle tient en une phrase : une couche pour la température la plus basse que tu vas croiser, et cette couche doit pouvoir se retirer sans que la tenue s'effondre.",
+    ],
   },
   {
     name: "Que dit ton agenda ?",
     text: "Repère l'événement le plus contraignant de la journée (réunion, déjeuner, trajet à vélo, dîner) et choisis d'abord la pièce qu'il impose. Le reste de la tenue se construit autour.",
-    detail:
-      "Le dress code n'est pas une affaire de mode, c'est une affaire de contexte. Une journée sans rendez-vous et une journée avec un entretien à 14 h ne demandent pas le même effort, et il est inutile de le fournir les deux fois. Prends la contrainte la plus forte de ta journée : la veste pour la présentation, les chaussures pour les trois kilomètres à pied, le pantalon confortable pour le train. Cette pièce est ton point d'ancrage. Tout ce que tu ajoutes ensuite doit aller avec elle, pas l'inverse.",
+    detail: [
+      "Le dress code n'est pas une affaire de mode, c'est une affaire de contexte. Une journée sans rendez-vous et une journée avec un entretien à 14 h ne demandent pas le même effort, et il est inutile de le fournir les deux fois.",
+      "Prends la contrainte la plus forte de ta journée : la veste pour la présentation, les chaussures pour les trois kilomètres à pied, le pantalon confortable pour le train. Cette pièce est ton point d'ancrage. Tout ce que tu ajoutes ensuite doit aller avec elle, pas l'inverse.",
+    ],
   },
   {
     name: "Qu'as-tu déjà porté cette semaine ?",
     text: "Écarte ce que tu as mis lundi et mardi, puis pars d'une pièce que tu n'as pas portée depuis trois semaines. C'est elle qui donne la tenue, et c'est là que le « rien à me mettre » disparaît.",
-    detail:
-      "La mémoire est le maillon faible. On remet les mêmes cinq tenues parce qu'elles sont devant, pas parce qu'elles sont les meilleures. Une fois par semaine, ou chaque matin si tu as le réflexe, cherche une pièce que tu aimes et que tu n'as pas touchée depuis un mois. Fais-en le point de départ, ajoute deux pièces neutres qui vont avec, une seule qui contraste. La tenue existait déjà dans ton placard ; il fallait juste qu'on te la rappelle.",
+    detail: [
+      "La mémoire est le maillon faible. On remet les mêmes cinq tenues parce qu'elles sont devant, pas parce qu'elles sont les meilleures.",
+      "Une fois par semaine, ou chaque matin si tu as le réflexe, cherche une pièce que tu aimes et que tu n'as pas touchée depuis un mois. Fais-en le point de départ, ajoute deux pièces neutres qui vont avec, une seule qui contraste. La tenue existait déjà dans ton placard ; il fallait juste qu'on te la rappelle.",
+    ],
   },
 ];
 
@@ -120,19 +132,19 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Quelle appli dit quoi porter aujourd'hui ?",
-    a: "Margot. Chaque matin, elle prépare une tenue composée uniquement de vêtements que tu possèdes, selon la météo réelle de l'endroit où tu es, les titres de ton agenda et ce que tu n'as pas porté récemment. Elle est disponible sur iOS et Android, gratuite pour commencer. Whering propose aussi, depuis août 2026, des suggestions selon la météo dans son planificateur ; nous comparons les deux dans un article dédié.",
+    a: "Margot. Chaque matin, elle prépare une tenue composée uniquement de vêtements que tu possèdes, selon la météo de l'endroit où tu es et, avec Premium, les événements de ton agenda. Elle est disponible sur iOS et Android, gratuite pour commencer. Whering propose aussi des suggestions selon la météo dans son planificateur (vérifié le 4 octobre 2026) ; nous comparons les deux dans un article dédié.",
   },
   {
     q: "Comment faire une tenue avec ce que j'ai ?",
-    a: "Commence par une pièce, pas par une idée. Prends celle que tu n'as pas mise depuis longtemps, ajoute deux pièces neutres qui vont avec, puis une seule qui contraste. Vérifie ensuite la formalité (ta journée) et la température (les couches). Si tu bloques, photographie ton placard dans Margot : elle compose la tenue à partir de tes pièces, en respectant les couleurs qui te vont vraiment.",
+    a: "Commence par une pièce, pas par une idée. Prends celle que tu n'as pas mise depuis longtemps, ajoute deux pièces neutres qui vont avec, puis une seule qui contraste. Vérifie ensuite la formalité (ta journée) et la température (les couches). Si tu bloques, photographie ton placard dans Margot : elle compose la tenue à partir de tes pièces, en tenant compte des couleurs qui te vont, si tu as fait ta colorimétrie.",
   },
   {
     q: "Est-ce que Margot fonctionne avec ma météo locale ?",
-    a: "Oui. Margot lit la météo du jour pour l'endroit où tu es, telle que ton téléphone la fournit : température prévue à l'heure de ton départ et de ton retour, pluie ou vent annoncés. Si tu te déplaces, la tenue suit. La tenue du jour est préparée avant ton réveil avec la prévision de la nuit, puis mise à jour si la prévision change nettement dans la journée.",
+    a: "Oui. Margot utilise la météo de l'endroit où tu es : la position de ton téléphone si tu l'autorises, sinon la ville que tu as choisie. Elle regarde la température, la température ressentie et le temps qu'il fait (pluie, vent). La tenue du jour est préparée juste avant ton heure d'habillage avec la prévision du jour.",
   },
   {
     q: "Que faire si je n'aime pas la tenue proposée ?",
-    a: "Passe-la. Margot en propose une autre, et retient pourquoi la première n'allait pas : trop habillée, une couleur que tu évites, une pièce que tu n'aimes plus. Tu peux aussi remplacer une seule pièce et garder le reste. Chaque refus affine les suivantes ; après une ou deux semaines, les propositions ressemblent à ce que tu aurais choisi toi-même, un peu plus tôt le matin.",
+    a: "Passe-la. Margot en propose une autre, et retient pourquoi la première n'allait pas : trop habillée, une couleur que tu évites, une pièce que tu n'aimes plus. Tu peux aussi remplacer une seule pièce et garder le reste. Chaque refus affine les suivantes : peu à peu, les propositions ressemblent davantage à ce que tu aurais choisi toi-même.",
   },
 ];
 
@@ -155,14 +167,9 @@ export default function QuoiPorterAujourdhuiPage() {
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     inLanguage: "fr-FR",
     datePublished: PUBLISHED,
-    dateModified: PUBLISHED,
-    author: { "@type": "Organization", name: "Margot", url: `${SITE_URL}/fr` },
-    publisher: {
-      "@type": "Organization",
-      name: "Margot",
-      url: `${SITE_URL}/`,
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
-    },
+    dateModified: UPDATED,
+    author: authorJsonLd(),
+    publisher: PUBLISHER_JSON_LD,
     image: [`${SITE_URL}/opengraph-image`],
     about: {
       "@type": "SoftwareApplication",
@@ -205,20 +212,14 @@ export default function QuoiPorterAujourdhuiPage() {
   return (
     <main className="bg-bg text-ink min-h-screen px-6 py-[clamp(48px,7vw,96px)]">
       <article className="max-w-[760px] mx-auto">
-        <Link
-          href="/fr"
-          className="font-sans text-[12px] font-medium tracking-tight7 text-ink3 hover:text-ink no-underline"
-        >
-          ← Retour à Margot
-        </Link>
-
-        <header className="mt-8 mb-10">
+        <header className="mb-10">
           <div className="font-sans text-[11px] font-semibold tracking-wider2 uppercase text-peach mb-4">
             Tenue du jour · Méthode
           </div>
           <h1 className="font-display font-normal text-ink opsz-144 m-0 text-[clamp(34px,4.6vw,56px)] leading-[1.05] tracking-tight2 [text-wrap:balance]">
             Quoi porter aujourd'hui ? La méthode en 3 questions <em>(et l'appli qui y répond chaque matin)</em>
           </h1>
+          <Byline lang="fr" published={PUBLISHED} updated={UPDATED} />
           <p className="mt-5 font-sans text-[17px] leading-[1.6] text-ink2 tracking-tight7 max-w-[640px] [text-wrap:pretty]">
             Pour savoir quoi porter aujourd'hui, réponds à trois questions : quelle météo il fera vraiment entre ton départ et ton retour, ce que ton agenda impose, et ce que tu as déjà porté cette semaine. Trois réponses, une tenue. Et si tu préfères que quelqu'un s'en charge, Margot te la prépare chaque matin depuis ton placard réel.
           </p>
@@ -226,7 +227,7 @@ export default function QuoiPorterAujourdhuiPage() {
 
         <hr className="border-warm2 my-10" />
 
-        <Section title="La méthode en 3 questions">
+        <Section title="Comment savoir quoi porter aujourd'hui ?">
           <P>
             La question du matin n'est pas une question de goût. Ton goût va très bien. C'est une question de contraintes, et ton placard n'en dit aucune : il range les vêtements par ce à quoi ils ressemblent sur un cintre, pas par ce qu'ils vaudront à 9 h 14 sous une pluie fine, avec un déjeuner client et un dîner que tu avais oublié. Les trois questions ci-dessous remettent les contraintes dans l'ordre. Chacune se suffit à elle-même.
           </P>
@@ -243,19 +244,21 @@ export default function QuoiPorterAujourdhuiPage() {
                   <p className="font-sans text-[16px] leading-[1.65] text-ink tracking-tight7 m-0 mb-3 [text-wrap:pretty]">
                     {s.text}
                   </p>
-                  <p className="font-sans text-[15px] leading-[1.65] text-ink2 tracking-tight7 m-0 [text-wrap:pretty]">
-                    {s.detail}
-                  </p>
+                  {s.detail.map((para) => (
+                    <p key={para.slice(0, 24)} className="font-sans text-[15px] leading-[1.65] text-ink2 tracking-tight7 m-0 mt-3 first:mt-0 [text-wrap:pretty]">
+                      {para}
+                    </p>
+                  ))}
                 </div>
               </li>
             ))}
           </ol>
           <P className="mt-8">
-            Trois réponses, une tenue, en moins de trois minutes une fois que le réflexe est pris. Si tu veux passer directement à la réponse, c'est exactement ce que fait <Link href="/fr" className="text-ink underline decoration-peach underline-offset-4">Margot</Link> pendant que tu dors.
+            Trois réponses, une tenue, en moins de trois minutes une fois que le réflexe est pris. Si tu veux passer directement à la réponse, c'est ce que fait <Link href="/fr" className="text-ink underline decoration-peach underline-offset-4">Margot</Link> juste avant ton heure d'habillage.
           </P>
         </Section>
 
-        <Section title="Quoi porter selon la température">
+        <Section title="Quoi porter selon la température ?">
           <P>
             Le tableau ci-dessous part de la température ressentie, pas de celle du bulletin. Les exemples sont volontairement précis : une tenue vague ne s'enfile pas. Adapte les pièces à ce que tu possèdes ; la logique des couches et des matières, elle, ne change pas.
           </P>
@@ -294,7 +297,7 @@ export default function QuoiPorterAujourdhuiPage() {
           </P>
         </Section>
 
-        <Section title="Pourquoi on n'a jamais rien à se mettre">
+        <Section title="Pourquoi a-t-on l'impression de n'avoir rien à se mettre ?">
           <P>
             Ce n'est pas une impression. Selon l'étude publiée par l'ADEME avec l'Obsoco en juin 2025, une personne en France déclare posséder 79 vêtements en moyenne, alors qu'un comptage réel en trouve 175, et plus de la moitié restent au placard sans être portés. Le problème n'est donc pas le manque. C'est l'inverse : trop de pièces, mal indexées, et aucune mémoire de ce qui va avec quoi au moment précis où on en a besoin.
           </P>
@@ -306,26 +309,29 @@ export default function QuoiPorterAujourdhuiPage() {
           </P>
         </Section>
 
-        <Section title="Comment Margot choisit ta tenue du jour">
+        <Section title="Comment Margot choisit-elle ta tenue du jour ?">
           <P>
             Margot est une styliste qui vit dans ton téléphone et qui a lu ton placard une fois pour toutes. Chaque matin, elle répond aux trois questions à ta place, avec trois sources que tu lui as ouvertes.
           </P>
           <Ul>
             <Li>
-              <Strong>La météo réelle.</Strong> Pas la saison, pas la moyenne : la prévision pour ta position, entre l'heure où tu sors et celle où tu rentres, pluie et vent compris.
+              <Strong>La météo réelle.</Strong> Pas la saison, pas la moyenne : la météo de ta position, température ressentie, pluie et vent compris.
             </Li>
             <Li>
-              <Strong>Ton agenda.</Strong> Margot lit les titres de tes événements, jamais leur contenu. « Point équipe 9 h » et « Dîner chez Léa » ne donnent pas la même veste, et elle le sait avant toi.
+              <Strong>Ton agenda.</Strong> Avec Premium, Margot tient compte des événements de ton agenda : titre, horaire et lieu, jamais les notes. « Point équipe 9 h » et « Dîner chez Léa » ne demandent pas la même veste.
             </Li>
             <Li>
-              <Strong>Ce que tu n'as pas porté.</Strong> Elle tient le compte, discrètement, de ce qui a été mis et quand. La tenue du jour penche vers ce qui dort depuis des semaines. Ce n'est pas une leçon de morale, c'est un aide-mémoire.
+              <Strong>Ce que tu portes.</Strong> Elle tient le compte, discrètement, de ce qui a été mis et quand. Elle privilégie ce que tu portes vraiment et ressort de temps en temps une pièce oubliée, en te le disant. Ce n'est pas une leçon de morale, c'est un aide-mémoire.
             </Li>
           </Ul>
           <P>
-            Avec ces trois entrées, elle compose une tenue depuis tes pièces, en la passant au crible d'un moteur de 49 règles de style, harmonie des couleurs, matières et saison, silhouette, formalité, et de ta colorimétrie personnelle en 12 saisons, établie depuis une photo à l'inscription. Le résultat est une seule proposition, pas un fil à faire défiler.
+            Avec ces trois entrées, elle compose une tenue depuis tes pièces, en la passant au crible de règles de style (harmonie des couleurs, matières et saison, silhouette, formalité) et de ta colorimétrie personnelle en 12 saisons, si tu l'as faite depuis une photo dans tes réglages de style. Le résultat : une tenue en tête d'écran, d'autres seulement si tu en demandes.
           </P>
           <P>
-            Le détail qui change le matin : la tenue est <Strong>préparée à l'avance</Strong>, pendant la nuit, avec la prévision de la veille. Quand tu ouvres l'application, elle est déjà là, sans attente. Un rappel arrive à ton heure, celle que tu as choisie, pas à sept heures pour tout le monde. Tu acceptes, tu passes, ou tu remplaces une pièce ; elle retient ton choix et fait un peu mieux le lendemain. Le tout tient dans le temps d'un café.
+            Le détail qui change le matin : la tenue est <Strong>préparée à l'avance</Strong>, juste avant ton heure d'habillage (ou la veille au soir si tu le choisis), avec la prévision du jour. Quand tu ouvres l'application, elle est déjà là, sans attente.
+          </P>
+          <P>
+            Un rappel arrive à ton heure, celle que tu as choisie, pas à sept heures pour tout le monde. Tu acceptes, tu passes, ou tu remplaces une pièce ; elle retient ton choix et fait un peu mieux le lendemain. Le tout tient dans le temps d'un café.
           </P>
           <P className="text-ink3 font-display italic">
             Margot ne t'inventera pas un style. Elle travaille avec le tien, celui qui est déjà sur les cintres.
@@ -364,9 +370,7 @@ export default function QuoiPorterAujourdhuiPage() {
           </div>
         </aside>
 
-        <div className="mt-12 font-display italic text-ink3 text-[13px] leading-[1.7]">
-          À lire aussi : <Link href="/fr/garde-robe-digitale" className="text-ink underline decoration-peach underline-offset-4">le guide de la garde-robe digitale</Link> · <Link href="/fr/vs/whering" className="text-ink underline decoration-peach underline-offset-4">Whering ou Margot, le comparatif honnête</Link> · <Link href="/blog/what-to-wear-today" className="text-ink underline decoration-peach underline-offset-4">version anglaise de cet article</Link>.
-        </div>
+        <RelatedLinks title="À lire aussi" links={relatedForFrGuide("/fr/quoi-porter-aujourdhui")} />
       </article>
 
       <script type="application/ld+json" suppressHydrationWarning>

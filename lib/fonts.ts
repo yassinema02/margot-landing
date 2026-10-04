@@ -17,9 +17,13 @@ export const fraunces = Fraunces({
 // Montserrat remplace Inter Tight (fondateur 2026-08-24). Géométrique et plus
 // large qu'Inter Tight — les tokens tracking-tight* de tailwind.config.ts
 // compensent déjà, mais garder un œil sur les boutons étroits en mobile.
+// Normal style only: Montserrat italic was a fourth preloaded woff2 (~35 KiB)
+// on every page for a few legal captions. Emphasis in articles uses Fraunces
+// italic (components/blog/MdxComponents.tsx); those captions now get the
+// browser's synthesized oblique.
 export const montserrat = Montserrat({
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-montserrat",

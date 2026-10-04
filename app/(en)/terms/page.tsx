@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "12 August 2026";
+const LAST_UPDATED = "4 October 2026";
 
 export default function TermsPage() {
   return (
@@ -305,17 +305,7 @@ export default function TermsPage() {
           <P>
             In accordance with Articles L.616-1 and R.616-1 of the French Consumer Code, you
             may use a consumer mediator free of charge to seek an amicable resolution of a
-            dispute. EU consumers may also use the European Online Dispute Resolution
-            platform:{" "}
-            <a
-              href="https://ec.europa.eu/consumers/odr"
-              className="underline hover:text-peach"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ec.europa.eu/consumers/odr
-            </a>
-            .
+            dispute.
           </P>
         </Section>
 

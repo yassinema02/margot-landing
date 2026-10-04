@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { safeJson } from "@/lib/jsonld";
+import { authorJsonLd, PUBLISHER_JSON_LD } from "@/lib/author";
+import { Byline } from "@/components/Byline";
+import { RelatedLinks } from "@/components/RelatedLinks";
+import { relatedForFrGuide } from "@/lib/related";
 import { AppStoreBadge } from "@/components/AppStoreBadge";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/launch";
 
@@ -12,7 +16,9 @@ const DESCRIPTION =
   "Garde-robe digitale, virtuelle ou dressing virtuel : définition, méthode pour la créer en 45 minutes, comparatif de six applications en 2026 et FAQ.";
 const HEADLINE = "Garde-robe digitale : le guide complet (et comment la faire vivre au quotidien)";
 const PUBLISHED = "2026-09-08";
-const CHECKED = "8 septembre 2026";
+// Last substantive edit (facts, prices, copy). Drives the byline, dateModified and the sitemap.
+const UPDATED = "2026-10-04";
+const CHECKED = "4 octobre 2026";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -41,7 +47,7 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     siteName: "Margot",
     publishedTime: `${PUBLISHED}T09:00:00+02:00`,
-    modifiedTime: `${PUBLISHED}T09:00:00+02:00`,
+    modifiedTime: `${UPDATED}T09:00:00+02:00`,
     images: ["https://www.margotwardrobe.com/opengraph-image"],
   },
   twitter: {
@@ -58,15 +64,15 @@ export const metadata: Metadata = {
 const FAQ: { q: string; a: string }[] = [
   {
     q: "Quelle est la meilleure application de garde-robe virtuelle gratuite ?",
-    a: "Il n'y a pas une seule réponse : ça dépend de ce que tu attends. Whering est la plus connue et la plus sociale. Acloset est traduite dans dix-huit langues. Margot est la plus sobre : une tenue chaque matin, un verdict avant d'acheter, une annonce Vinted prête pour ce que tu ne portes plus. Les six applications du tableau ci-dessus se téléchargent gratuitement, sauf Stylebook (5,99 € une fois).",
+    a: "Il n'y a pas une seule réponse : ça dépend de ce que tu attends. Whering est la plus connue et mise sur la communauté. Acloset est traduite dans dix-huit langues. Margot est la plus sobre : une tenue chaque matin, un verdict avant d'acheter, une annonce Vinted rédigée à la demande. Les six applications du tableau ci-dessus se téléchargent gratuitement, sauf Stylebook (5,99 € une fois).",
   },
   {
     q: "Combien de temps faut-il pour digitaliser sa garde-robe ?",
-    a: "Compte 45 minutes pour les 30 à 50 pièces que tu portes vraiment, à raison d'une photo par pièce sur un fond uni. Le reste s'ajoute au fil des jours : tu photographies ce que tu portes, pas ce qui dort. Avec Margot, cinq pièces suffisent pour recevoir une première tenue, et la garde-robe se complète toute seule à mesure que tu notes tes tenues.",
+    a: "Compte 45 minutes pour les 30 à 50 pièces que tu portes vraiment, à raison d'une photo par pièce sur un fond uni. Le reste s'ajoute au fil des jours : tu photographies ce que tu portes, pas ce qui dort. Avec Margot, trois pièces suffisent pour recevoir une première tenue (dont un haut et un bas) ; tu ajoutes les autres au fil des jours.",
   },
   {
     q: "Est-ce que mes photos restent privées ?",
-    a: "Chez Margot, oui. Tes photos de vêtements t'appartiennent : elles sont stockées sur des serveurs en Europe, chiffrées en transit et au repos, jamais vendues ni utilisées pour de la publicité. Il n'y a pas de fil social, donc personne ne voit ton dressing. Chaque application a sa propre politique : avant d'en choisir une, lis la rubrique « confidentialité » de sa fiche sur l'App Store ou Google Play.",
+    a: "Chez Margot, oui. Tes photos de vêtements t'appartiennent : elles sont stockées sur des serveurs à Londres (Royaume-Uni), chiffrées en transit et au repos, jamais vendues ni utilisées pour de la publicité. Pour te proposer des tenues, elles sont analysées par Google Gemini, comme l'indique la politique de confidentialité. Il n'y a pas de fil social, donc personne ne voit ton dressing. Chaque application a sa propre politique : avant d'en choisir une, lis la rubrique « confidentialité » de sa fiche sur l'App Store ou Google Play.",
   },
   {
     q: "Garde-robe digitale et dressing virtuel, c'est la même chose ?",
@@ -78,7 +84,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Une application de garde-robe fonctionne-t-elle sur Android ?",
-    a: "La plupart, oui. Au 8 septembre 2026, Margot, Whering, Indyx, Acloset et Klodsy sont disponibles sur iOS et sur Android. Stylebook reste réservée à l'iPhone et à l'iPad. Si tu changes de téléphone, vérifie aussi que tes données te suivent : sur Margot, ta garde-robe est liée à ton compte, pas à ton appareil.",
+    a: "La plupart, oui. Au 4 octobre 2026, Margot, Whering, Indyx, Acloset et Klodsy sont disponibles sur iOS et sur Android. Stylebook reste réservée à l'iPhone et à l'iPad. Si tu changes de téléphone, vérifie aussi que tes données te suivent : sur Margot, ta garde-robe est liée à ton compte, pas à ton appareil.",
   },
 ];
 
@@ -94,56 +100,56 @@ type Row = {
 };
 
 // Facts checked on the official App Store (France) and Google Play listings
-// plus each vendor's site on 2026-09-08. Keep the date in CHECKED in sync.
+// plus each vendor's site on 2026-10-04. Keep the date in CHECKED in sync.
 const ROWS: Row[] = [
   {
     app: "Margot",
     platforms: "iOS · Android",
-    free: "Oui",
-    premium: "14,99 €/mois ou 59,99 €/an",
-    daily: "Oui — une tenue chaque matin, selon la météo et l'agenda",
-    check: "Oui — verdict acheter / réfléchir / passer",
-    vinted: "Oui — brouillon d'annonce pour les pièces non portées",
+    free: "Oui, jusqu'à 15 pièces",
+    premium: "14,90 €/mois, 59,99 €/an ou 9,90 €/semaine",
+    daily: "Oui, une tenue chaque matin selon la météo (et l'agenda avec Premium)",
+    check: "Oui : verdict acheter / réfléchir / passer",
+    vinted: "Oui, annonce rédigée à la demande",
     fr: "Oui",
   },
   {
     app: "Whering",
     platforms: "iOS · Android",
     free: "Oui",
-    premium: "Crédits dès 2,99 € ; options payantes (ex. Créateur de tenues 4,99 €)",
-    daily: "Oui — suggestions de tenues et météo",
-    check: "Partiel — pas de verdict",
-    vinted: "Non",
+    premium: "Pas d'abonnement : crédits dès 2,99 € (essayage virtuel, scan de la galerie) ; « Créateur de tenues » 4,99 €",
+    daily: "Oui : 6 tenues par jour (W Pick) et suggestions selon la météo dans le planificateur",
+    check: "Partiel : associer une pièce de ta wishlist à ta garde-robe, pas de verdict mentionné",
+    vinted: "Non mentionnée",
     fr: "Oui",
   },
   {
     app: "Indyx",
     platforms: "iOS · Android",
-    free: "Oui",
+    free: "Oui, pièces et tenues illimitées",
     premium: "13,99 €/mois ou 84,99 €/an ; stylistes humains en supplément",
-    daily: "Non — planches de tenues manuelles",
-    check: "Non",
-    vinted: "Non",
-    fr: "Non — anglais uniquement",
+    daily: "Non mentionnée : planches de tenues à composer soi-même",
+    check: "Non mentionné",
+    vinted: "Non mentionnée",
+    fr: "Non, anglais uniquement",
   },
   {
     app: "Acloset",
     platforms: "iOS · Android",
-    free: "Oui",
-    premium: "9,99 €/mois ou 69,99 €/an (offre de base 3,99 €/mois)",
-    daily: "Oui — idées de tenues quotidiennes",
-    check: "Partiel — conseiller shopping, pas de verdict",
-    vinted: "Non",
+    free: "Oui, jusqu'à 100 pièces",
+    premium: "9,99 €/mois ou 69,99 €/an (offre de base 3,99 €/mois ou 29,99 €/an)",
+    daily: "Oui, selon la météo et ton agenda",
+    check: "Partiel : tu peux demander à son styliste si une pièce va avec ton dressing, pas de verdict mentionné",
+    vinted: "Non mentionnée",
     fr: "Oui",
   },
   {
     app: "Stylebook",
-    platforms: "iOS uniquement",
-    free: "Non — 5,99 € une fois",
+    platforms: "iPhone et iPad uniquement",
+    free: "Non, 5,99 € une fois",
     premium: "Aucun abonnement",
-    daily: "Non — tenues composées à la main",
-    check: "Non",
-    vinted: "Non",
+    daily: "Non : mélange aléatoire de tes pièces (Outfit Shuffle)",
+    check: "Partiel : comparer un achat à ton placard, pas de verdict mentionné",
+    vinted: "Non mentionnée",
     fr: "Oui",
   },
   {
@@ -151,9 +157,9 @@ const ROWS: Row[] = [
     platforms: "iOS · Android",
     free: "Oui",
     premium: "11,99 €/mois ou 3,99 €/semaine ; crédits dès 2,99 €",
-    daily: "Sur demande — générateur de looks",
-    check: "Non — essayage virtuel, pas de verdict",
-    vinted: "Non",
+    daily: "Sur demande : générateur de looks",
+    check: "Non mentionné (essayage virtuel sur ta photo)",
+    vinted: "Non mentionnée",
     fr: "Oui",
   },
 ];
@@ -178,14 +184,9 @@ export default function GardeRobeDigitalePage() {
     mainEntityOfPage: { "@type": "WebPage", "@id": URL },
     inLanguage: "fr-FR",
     datePublished: PUBLISHED,
-    dateModified: PUBLISHED,
-    author: { "@type": "Organization", name: "Margot", url: `${SITE_URL}/fr` },
-    publisher: {
-      "@type": "Organization",
-      name: "Margot",
-      url: `${SITE_URL}/`,
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
-    },
+    dateModified: UPDATED,
+    author: authorJsonLd(),
+    publisher: PUBLISHER_JSON_LD,
     image: [`${SITE_URL}/opengraph-image`],
     isPartOf: { "@type": "WebSite", name: "Margot", url: `${SITE_URL}/` },
     about: [
@@ -223,14 +224,7 @@ export default function GardeRobeDigitalePage() {
   return (
     <main className="bg-bg text-ink min-h-screen px-6 py-[clamp(48px,7vw,96px)]">
       <article className="max-w-[760px] mx-auto">
-        <Link
-          href="/fr"
-          className="font-sans text-[12px] font-medium tracking-tight7 text-ink3 hover:text-ink no-underline"
-        >
-          ← Retour à Margot
-        </Link>
-
-        <header className="mt-8 mb-10">
+        <header className="mb-10">
           <div className="font-sans text-[11px] font-semibold tracking-wider2 uppercase text-peach mb-4">
             Guide · Garde-robe digitale
           </div>
@@ -240,9 +234,7 @@ export default function GardeRobeDigitalePage() {
           <p className="mt-6 font-sans text-[17px] leading-[1.6] text-ink2 tracking-tight7 max-w-[640px] [text-wrap:pretty]">
             Une <Strong>garde-robe digitale</Strong> (ou garde-robe virtuelle, dressing virtuel) est l'inventaire photographié de tes vêtements, rangé dans une application qui te sert à composer des tenues avec ce que tu possèdes déjà, à savoir ce que tu portes vraiment et à décider si un achat vaut la peine. Une photo par pièce, une seule fois. Ensuite, c'est le dressing qui travaille pour toi.
           </p>
-          <p className="mt-3 font-display italic text-ink3 opsz-96 text-[15px] leading-[1.45] tracking-tight5">
-            Publié le 8 septembre 2026 · prix et disponibilités vérifiés le {CHECKED}.
-          </p>
+          <Byline lang="fr" published={PUBLISHED} updated={UPDATED} updatedLabel="checked" />
         </header>
 
         <div className="rounded-3xl border border-warm2 bg-surface px-[clamp(20px,3vw,32px)] py-[clamp(20px,3vw,28px)]">
@@ -288,13 +280,13 @@ export default function GardeRobeDigitalePage() {
           </P>
         </Section>
 
-        <Section title="À quoi ça sert, concrètement">
+        <Section title="À quoi sert une garde-robe digitale ?">
           <Ol>
             <Li>
               <Strong>Répondre à « je n'ai rien à me mettre » en une minute.</Strong> Le matin, tu n'ouvres pas le placard, tu ouvres l'application. Une bonne garde-robe digitale propose une tenue composée avec tes pièces, ajustée à la météo du jour et à ce que tu as prévu. Tu acceptes, tu ajustes, tu pars.
             </Li>
             <Li>
-              <Strong>Porter enfin ce qui dort.</Strong> Selon l'Ademe et l'ObSoCo (étude publiée en 2025), plus de la moitié des vêtements rangés dans les placards des Français restent inutilisés. Une garde-robe digitale rend ces pièces visibles, et une styliste comme Margot les glisse dans tes tenues avant qu'elles ne soient oubliées pour de bon.
+              <Strong>Porter enfin ce qui dort.</Strong> Selon l'Ademe et l'ObSoCo (étude publiée en 2025), plus de la moitié des vêtements rangés dans les placards des Français restent inutilisés. Une garde-robe digitale rend ces pièces visibles, et Margot en ressort une de temps en temps dans tes tenues.
             </Li>
             <Li>
               <Strong>Acheter moins, mais mieux.</Strong> Toujours selon l'Ademe et l'ObSoCo (2025), chaque Français a fait entrer en moyenne 42 articles d'habillement neufs dans son placard en 2024. Avec ton inventaire sous la main, tu vérifies avant de payer si la pièce qui te tente s'associe à ce que tu as déjà. Margot rend un verdict simple : acheter, réfléchir ou passer.
@@ -303,12 +295,12 @@ export default function GardeRobeDigitalePage() {
               <Strong>Préparer une valise sans y passer la soirée.</Strong> Quatre jours à Lisbonne, une réunion le mardi, de la pluie annoncée : tu choisis tes tenues depuis l'application et tu ne plies que ce qui servira.
             </Li>
             <Li>
-              <Strong>Vendre ce que tu ne portes plus.</Strong> Une pièce qui n'est pas sortie depuis des mois, l'application le sait. Margot prépare alors un brouillon d'annonce Vinted, titre, description et prix suggéré compris, prêt à publier.
+              <Strong>Vendre ce que tu ne portes plus.</Strong> Depuis la fiche d'une pièce, Margot rédige à ta demande une annonce Vinted, avec titre, description et fourchette de prix, prête à coller dans Vinted.
             </Li>
           </Ol>
         </Section>
 
-        <Section title="Comment créer sa garde-robe digitale en 45 minutes">
+        <Section title="Comment créer sa garde-robe digitale en 45 minutes ?">
           <P>
             La méthode qui marche n'est pas « je photographie tout ce week-end ». C'est « je commence par ce que je porte, et je laisse l'application grandir avec moi ». Voici les étapes, chacune tient debout toute seule.
           </P>
@@ -320,16 +312,16 @@ export default function GardeRobeDigitalePage() {
               <Strong>Sors les pièces que tu portes vraiment (10 minutes).</Strong> Pas le placard entier. Les 30 à 50 pièces de la saison en cours, celles que tu prends sans réfléchir. Pose-les sur le lit.
             </Li>
             <Li>
-              <Strong>Photographie chaque pièce, une fois (15 minutes).</Strong> Fond uni, lumière du jour, vêtement à plat ou sur cintre. Une photo par pièce suffit ; l'application enlève le fond et range la fiche.
+              <Strong>Photographie chaque pièce, une fois (15 minutes).</Strong> Fond uni, lumière du jour, vêtement à plat ou sur cintre. Une photo par pièce suffit ; l'application détoure la photo (sur iPhone récent) ou en fait une photo studio, et range la fiche.
             </Li>
             <Li>
               <Strong>Laisse l'application trier (5 minutes).</Strong> Margot détecte la catégorie, la couleur et la matière de chaque photo. Tu relis, tu corriges les deux ou trois erreurs, c'est tout.
             </Li>
             <Li>
-              <Strong>Demande une première tenue (5 minutes).</Strong> Avec cinq pièces, Margot propose déjà quelque chose. Accepte, rejette ou ajuste : c'est ainsi qu'elle apprend ton goût, pas celui d'un magazine.
+              <Strong>Demande une première tenue (5 minutes).</Strong> Dès trois pièces, dont un haut et un bas, Margot propose déjà une tenue. Accepte, rejette ou ajuste : c'est ainsi qu'elle apprend ton goût, pas celui d'un magazine.
             </Li>
             <Li>
-              <Strong>Complète au fil des jours (0 minute de plus).</Strong> Chaque fois que tu sors une pièce qui n'est pas encore dans l'application, tu la photographies. En deux semaines, la garde-robe digitale reflète la vraie.
+              <Strong>Complète au fil des jours (0 minute de plus).</Strong> Chaque fois que tu sors une pièce qui n'est pas encore dans l'application, tu la photographies. Au fil des semaines, la garde-robe digitale finit par refléter la vraie.
             </Li>
             <Li>
               <Strong>Note ce que tu portes.</Strong> Un geste par jour, celui qui donne sa valeur à tout le reste : l'application sait ce qui tourne, ce qui dort, et ce qui coûte cher à chaque port.
@@ -343,7 +335,7 @@ export default function GardeRobeDigitalePage() {
           </P>
         </Section>
 
-        <Section title="Les applications de garde-robe digitale en 2026">
+        <Section title="Quelle application de garde-robe digitale choisir en 2026 ?">
           <P>
             Six applications reviennent dans les recherches en français. Le tableau compare ce qui compte au quotidien : sur quoi ça tourne, ce que ça coûte, et si l'application décide avec toi ou te laisse tout faire à la main. Margot y figure : on a pris soin d'être aussi justes avec les autres qu'avec nous.
           </P>
@@ -378,17 +370,23 @@ export default function GardeRobeDigitalePage() {
             </table>
           </div>
           <P className="text-ink3 text-[14px]">
-            Données vérifiées le {CHECKED} sur les pages officielles (fiches App Store France et Google Play, sites des éditeurs). Les prix affichés sont ceux de l'App Store France ; ils peuvent varier selon le pays et le magasin d'applications.
+            Données vérifiées le {CHECKED} sur les pages officielles (fiches App Store France et Google Play, sites des éditeurs). Les prix affichés sont ceux de l'App Store France ; ils peuvent varier selon le pays et le magasin d'applications. « Non mentionné » signifie que la fonction n'apparaît ni sur la fiche ni sur le site officiel à cette date, ce qui ne prouve pas qu'elle n'existe pas.
           </P>
           <P>
-            <Strong>Ce que dit le tableau, en deux phrases.</Strong> Whering reste l'application la plus répandue : sa fiche App Store revendique plus de 9 millions d'utilisatrices et un vrai réseau social du vêtement, avec une fiche traduite en français. Margot fait le pari inverse : pas de fil, une seule tenue chaque matin, un verdict avant d'acheter et une annonce Vinted prête pour ce qui dort. Le comparatif détaillé est ici : <Link href="/fr/vs/whering" className="text-ink underline decoration-peach underline-offset-4">Whering ou Margot ?</Link> (et <Link href="/vs/whering" className="text-ink underline decoration-peach underline-offset-4">en anglais</Link>).
+            <Strong>Ce que dit le tableau, en deux phrases.</Strong> Whering reste la plus connue : c'est elle qui compte le plus de notes sur l'App Store France parmi ces six applis, sa fiche revendique plus de 9 millions d'utilisateurs et elle mise sur la communauté.
           </P>
           <P>
-            Indyx et Stylebook sont les deux applications les plus « manuelles » : très bien pour qui aime composer ses planches de tenues soi-même, moins pour qui veut une réponse le matin. Acloset et Klodsy proposent des tenues, mais sans verdict d'achat ni lien vers la revente.
+            Margot fait le pari inverse : pas de fil, une tenue prête chaque matin, un verdict avant d'acheter et une annonce Vinted rédigée à la demande. Le comparatif détaillé est ici : <Link href="/fr/vs/whering" className="text-ink underline decoration-peach underline-offset-4">Whering ou Margot ?</Link> (et <Link href="/vs/whering" className="text-ink underline decoration-peach underline-offset-4">en anglais</Link>).
+          </P>
+          <P>
+            <Strong>Les autres comparatifs.</Strong> <Link href="/fr/vs/acloset" className="text-ink underline decoration-peach underline-offset-4">Acloset ou Margot</Link>, <Link href="/fr/vs/fits" className="text-ink underline decoration-peach underline-offset-4">Fits ou Margot</Link>, <Link href="/fr/vs/stylebook" className="text-ink underline decoration-peach underline-offset-4">Stylebook ou Margot</Link>, <Link href="/fr/vs/alta-daily" className="text-ink underline decoration-peach underline-offset-4">Alta Daily ou Margot</Link>, et <Link href="/fr/alternatives" className="text-ink underline decoration-peach underline-offset-4">le tableau des alternatives à Whering</Link>.
+          </P>
+          <P>
+            Indyx et Stylebook sont les deux applications les plus « manuelles » : très bien pour qui aime composer ses tenues soi-même (Indyx propose aussi des stylistes humains, en supplément), moins pour qui veut une réponse le matin. Acloset et Klodsy proposent des tenues et un essayage virtuel, mais leurs fiches ne mentionnent ni verdict d'achat ni aide à la revente sur Vinted.
           </P>
         </Section>
 
-        <Section title="Ce qu'une garde-robe digitale ne fait pas">
+        <Section title="Que ne fait pas une garde-robe digitale ?">
           <Ul>
             <Li>
               <Strong>Elle ne se remplit pas toute seule.</Strong> Il faut prendre les photos, au moins une fois par pièce. Les applications aident (fond retiré, tri par couleur et catégorie), mais les quinze premières minutes sont pour toi.
@@ -403,7 +401,7 @@ export default function GardeRobeDigitalePage() {
               <Strong>Elle ne fait pas disparaître le placard.</Strong> Une application ne range pas, ne repasse pas, ne recoud pas. Elle t'évite d'acheter une cinquième chemise blanche, ce qui est déjà beaucoup.
             </Li>
             <Li>
-              <Strong>Elle ne sera jamais parfaite le premier jour.</Strong> Les suggestions deviennent vraiment justes après une à deux semaines, une fois que l'application a vu ce que tu portes réellement, pas ce que tu aimerais porter.
+              <Strong>Elle ne sera jamais parfaite le premier jour.</Strong> Les suggestions s'affinent à mesure que l'application voit ce que tu portes réellement, pas ce que tu aimerais porter.
             </Li>
           </Ul>
         </Section>
@@ -444,13 +442,11 @@ export default function GardeRobeDigitalePage() {
             </a>
           </div>
           <p className="mt-4 m-0 font-sans text-[12px] text-ink3 tracking-tight7">
-            Gratuit pour commencer. Premium à 14,99 €/mois ou 59,99 €/an, résiliable à tout moment.
+            Gratuit pour commencer. Premium à 14,90 €/mois, 59,99 €/an ou 9,90 €/semaine, résiliable à tout moment.
           </p>
         </aside>
 
-        <div className="mt-12 font-display italic text-ink3 text-[13px] [text-wrap:pretty]">
-          À lire ensuite : <Link href="/fr/vs/whering" className="text-ink underline decoration-peach underline-offset-4">Whering ou Margot ? Comparatif honnête</Link> · <Link href="/fr/quoi-porter-aujourdhui" className="text-ink underline decoration-peach underline-offset-4">Quoi porter aujourd'hui</Link> · <Link href="/blog/alternative-to-whering" className="text-ink underline decoration-peach underline-offset-4">An honest alternative to Whering</Link> (en anglais) · <Link href="/fr" className="text-ink underline decoration-peach underline-offset-4">Retour à l'accueil</Link>.
-        </div>
+        <RelatedLinks title="À lire aussi" links={relatedForFrGuide("/fr/garde-robe-digitale")} />
       </article>
 
       <script type="application/ld+json" suppressHydrationWarning>

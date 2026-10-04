@@ -19,10 +19,12 @@ export function Footer({ lang }: { lang: HomeLocale }) {
       { label: "Garde-robe digitale", href: "/fr/garde-robe-digitale" },
       { label: "Quoi porter aujourd’hui", href: "/fr/quoi-porter-aujourdhui" },
       { label: "Margot ou Whering", href: "/fr/vs/whering" },
+      { label: "Comparatif des applis de dressing", href: "/fr/alternatives" },
     ] : [
       { label: "The journal", href: "/blog" },
       { label: "What to wear today", href: "/blog/what-to-wear-today" },
       { label: "Margot vs Whering", href: "/vs/whering" },
+      { label: "Wardrobe apps compared", href: "/alternatives" },
     ] },
     { title: fr ? "Restons en contact" : "Keep in touch", links: [
       { label: "Instagram", href: "https://instagram.com/margotwardrobe" },

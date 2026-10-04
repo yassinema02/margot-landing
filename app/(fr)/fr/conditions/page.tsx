@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "12 août 2026";
+const LAST_UPDATED = "4 octobre 2026";
 
 export default function ConditionsPage() {
   return (
@@ -326,17 +326,7 @@ export default function ConditionsPage() {
         <P>
           Conformément aux articles L.616-1 et R.616-1 du Code de la consommation, vous pouvez
           recourir gratuitement à un médiateur de la consommation en vue de la résolution
-          amiable d&apos;un litige. Vous pouvez également utiliser la plateforme européenne de
-          règlement en ligne des litiges :{" "}
-          <a
-            href="https://ec.europa.eu/consumers/odr"
-            className="underline hover:text-peach"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ec.europa.eu/consumers/odr
-          </a>
-          .
+          amiable d&apos;un litige.
         </P>
       </Section>
 

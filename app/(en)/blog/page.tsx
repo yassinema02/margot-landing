@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { RelatedLinks } from "@/components/RelatedLinks";
+import { relatedForBlogIndex } from "@/lib/related";
 import { getAllPosts, formatPostDate } from "@/lib/blog";
 import { safeJson } from "@/lib/jsonld";
 
@@ -92,6 +94,8 @@ export default function BlogIndexPage() {
             </li>
           ))}
         </ul>
+
+        <RelatedLinks title="Wardrobe apps, compared" links={relatedForBlogIndex()} />
       </article>
 
       <script type="application/ld+json" suppressHydrationWarning>
