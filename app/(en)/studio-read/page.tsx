@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { StudioReadArchetypes } from "@/components/StudioReadArchetypes";
 import { StudioReadClient } from "./StudioReadClient";
 import { MargotMark } from "@/components/MargotMark";
 import { STUDIO_READ_COPY } from "@/lib/studioRead/copy";
@@ -42,6 +43,7 @@ export default function StudioReadPage() {
       <div className="mx-auto max-w-[1320px] px-6 py-12 sm:px-14 sm:py-16 lg:py-20">
         <StudioReadClient locale="en" />
       </div>
+      <StudioReadArchetypes locale="en" />
     </main>
   );
 }

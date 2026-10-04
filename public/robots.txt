@@ -54,5 +54,40 @@ Allow: /
 User-Agent: YouBot
 Allow: /
 
+User-Agent: OAI-SearchBot
+Allow: /
+
+User-Agent: Claude-SearchBot
+Allow: /
+
+User-Agent: Claude-User
+Allow: /
+
+User-Agent: Googlebot
+Allow: /
+
+User-Agent: Bingbot
+Allow: /
+
+User-Agent: Applebot
+Allow: /
+
+User-Agent: Amazonbot
+Allow: /
+
+User-Agent: meta-externalagent
+Allow: /
+
+User-Agent: meta-externalfetcher
+Allow: /
+
+User-Agent: DuckAssistBot
+Allow: /
+
+User-Agent: MistralAI-User
+Allow: /
+
+User-Agent: GoogleOther
+Allow: /
+
 Sitemap: https://www.margotwardrobe.com/sitemap.xml
-Host: https://www.margotwardrobe.com

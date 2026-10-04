@@ -3,7 +3,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getAllPostSlugs, getPostBySlug, formatPostDate } from "@/lib/blog";
+import { getAllPostSlugs, getPostBySlug } from "@/lib/blog";
+import { authorJsonLd, PUBLISHER_JSON_LD } from "@/lib/author";
+import { Byline } from "@/components/Byline";
+import { RelatedLinks } from "@/components/RelatedLinks";
+import { relatedForPost } from "@/lib/related";
 import { mdxComponents } from "@/components/blog/MdxComponents";
 import { safeJson } from "@/lib/jsonld";
 import { AppStoreBadge } from "@/components/AppStoreBadge";
@@ -13,24 +17,19 @@ import { AppStoreBadge } from "@/components/AppStoreBadge";
 // ask AI assistants, so the answers are extractable/citeable.
 const FAQ_BY_SLUG: Record<string, { q: string; a: string }[]> = {
   "what-to-wear-today": [
-    { q: "Is there an app that tells you what to wear each day?", a: "Yes. Margot suggests one outfit every morning from the clothes you already own, chosen for the day's weather and your calendar. It's free on the App Store and starts working after you add as few as five pieces." },
-    { q: "How do I stop wasting time deciding what to wear?", a: "Remove the decision instead of speeding it up. Margot picks one outfit each morning from your own wardrobe, so getting dressed takes seconds rather than the five-to-twelve minutes most people lose to it." },
-    { q: "Does Margot use the weather and my calendar?", a: "Yes. Margot reads the local weather and the events on your calendar — the meeting, the rain, the dinner — and adjusts the suggested outfit to suit the day in front of you." },
+    { q: "Is there an app that tells you what to wear each day?", a: "Yes. Margot suggests one outfit every morning from the clothes you already own, chosen for the day's weather (and your calendar events with Premium). It's free on the App Store and Google Play and starts suggesting once you have three pieces, including a top and a bottom." },
+    { q: "How do I stop wasting time deciding what to wear?", a: "Remove the decision instead of speeding it up. Margot has one outfit ready each morning from your own wardrobe, so you start from an answer rather than from a full wardrobe." },
+    { q: "Does Margot use the weather and my calendar?", a: "Yes. Margot uses the local weather for everyone. If you connect your calendar, Premium also dresses you for your events, like the meeting or the dinner." },
   ],
   "ai-outfit-planner-does-it-work": [
     { q: "Does AI outfit planning actually work in 2026?", a: "For getting dressed faster from clothes you already own, yes. For replacing a human stylist who reads your body and personality in a room, no. The realistic win is a quicker morning and fewer impulse purchases, not a personal-shopper replacement." },
     { q: "What can an AI stylist app actually do?", a: "It can catalogue your wardrobe from photos, suggest outfits that match the weather and your calendar, and flag when a potential purchase duplicates what you already own. It cannot judge fit in person or replace a stylist's eye." },
-    { q: "Is there a free AI outfit planner?", a: "Yes. Margot is free to download on the App Store and Google Play, with daily outfit suggestions from your own wardrobe. A Premium tier (14.99/month or 59.99/year in USD, EUR or GBP) unlocks unlimited suggestions plus the shopping and resale features." },
-  ],
-  "alternative-to-whering": [
-    { q: "What is a good alternative to Whering?", a: "Margot is the closest restraint-first alternative: the same category (AI wardrobe with outfit suggestions) but built around one quiet daily outfit and no social feed. Choose Whering for a wardrobe community; choose Margot to have the morning decision answered privately." },
-    { q: "Is Margot free like Whering?", a: "Both have a free tier. Margot is free to download on the App Store and Google Play, with an optional Premium tier at 14.99/month or 59.99/year in USD, EUR or GBP." },
-    { q: "Can I switch from Whering to Margot?", a: "There is no direct import yet. The simplest path is to photograph items as you wear them over a couple of weeks; Margot starts working with as few as five pieces." },
+    { q: "Is there a free AI outfit planner?", a: "Yes. Margot is free to download on the App Store and Google Play, with daily outfit suggestions from your own wardrobe (up to 15 pieces and 5 outfit generations a day). Premium removes the 15-piece limit and raises the limits, for example 20 outfit generations a day. On the US App Store it costs $14.99 a month, $59.99 a year or $8.99 a week; prices vary by country and store (€14.90 or €59.99 in France, £12.90 or £59.99 in the UK)." },
   ],
   "how-to-sell-on-vinted": [
     { q: "How do I sell clothes on Vinted fast?", a: "Three things move a listing: a specific title (Brand · Item · Detail · Size), an honest price 10–15% above the median sold price, and three clear photos (full piece, fabric close-up, label or flaw). Together they take about five minutes per item." },
-    { q: "What makes a Vinted listing sell?", a: "Specificity, not better clothes. A clear title, a price benchmarked to sold listings, and honest photos in natural light. Vague listings sit for months; specific ones sell in days." },
-    { q: "Can an app write my Vinted listings?", a: "Yes. Margot auto-drafts a Vinted listing — title, description, suggested price — for pieces you haven't worn in months, ready to publish in one tap. It's free on the App Store." },
+    { q: "What makes a Vinted listing sell?", a: "Specificity, not better clothes. A clear title, a price benchmarked to sold listings, and honest photos in natural light. Vague listings tend to sit; specific ones tend to sell faster." },
+    { q: "Can an app write my Vinted listings?", a: "Yes. From any piece's page, Margot writes a Vinted listing when you ask: title, description, hashtags and a suggested price range, ready to paste into Vinted. Margot is free on the App Store and Google Play, with 2 listings a month on the free plan." },
   ],
 };
 
@@ -99,26 +98,10 @@ export default async function BlogPostPage({
     "@type": "Article",
     headline: f.title,
     description: f.excerpt,
-    // Person author rather than Organization — feeds E-E-A-T signals
-    // (Google treats individual byline + sameAs links as a stronger
-    // expertise indicator than a faceless org).
-    author: {
-      "@type": "Person",
-      name: "Yassine Benlahmr",
-      url: `${SITE_URL}/press`,
-      jobTitle: "Founder",
-      worksFor: { "@type": "Organization", name: "Margot", url: `${SITE_URL}/` },
-      sameAs: [
-        "https://instagram.com/margotwardrobe",
-        "https://tiktok.com/@margotwardrobe",
-        "https://x.com/margotwardrobe",
-      ],
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Margot",
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
-    },
+    // Person author rather than Organization: a named, linked byline is a
+    // stronger expertise signal than a faceless org. Shared with the guides.
+    author: authorJsonLd(),
+    publisher: PUBLISHER_JSON_LD,
     datePublished: f.date,
     dateModified: f.updated ?? f.date,
     image: `${SITE_URL}/blog/${f.slug}/opengraph-image`,
@@ -207,21 +190,7 @@ export default async function BlogPostPage({
           <p className="mt-5 font-display italic text-ink3 opsz-96 text-[clamp(16px,1.7vw,19px)] leading-[1.45] tracking-tight5 max-w-[600px] [text-wrap:pretty]">
             {f.excerpt}
           </p>
-          <div className="mt-5 font-sans text-[12px] tracking-wider2 uppercase text-ink3">
-            By{" "}
-            <Link href="/press" className="text-ink no-underline border-b border-peach/60 hover:border-peach">
-              Yassine Benlahmr
-            </Link>
-            , founder of Margot <span aria-hidden="true">·</span>{" "}
-            <time dateTime={f.date}>{formatPostDate(f.date)}</time>
-            {f.updated && f.updated !== f.date && (
-              <>
-                {" "}
-                <span aria-hidden="true">·</span> Updated <time dateTime={f.updated}>{formatPostDate(f.updated)}</time>
-              </>
-            )}{" "}
-            <span aria-hidden="true">·</span> {f.readingTime} min read
-          </div>
+          <Byline lang="en" published={f.date} updated={f.updated} readingTime={f.readingTime} />
         </header>
 
         <hr className="border-warm2 my-10" />
@@ -252,12 +221,14 @@ export default async function BlogPostPage({
           </section>
         ) : null}
 
+        <RelatedLinks title="Keep reading" links={relatedForPost(f.slug)} />
+
         <aside className="mt-16 rounded-3xl border border-warm2 bg-surface px-[clamp(24px,4vw,40px)] py-[clamp(28px,4vw,40px)] flex flex-col items-center text-center">
           <div className="font-sans text-[11px] font-semibold tracking-wider2 uppercase text-peach mb-3">
             Try Margot
           </div>
           <p className="font-display italic text-ink opsz-96 text-[clamp(18px,2vw,22px)] leading-[1.4] tracking-tight5 max-w-[460px] mx-auto m-0 mb-5 [text-wrap:pretty]">
-            Margot is live and free on the App Store. One outfit, every morning.
+            Margot is free on the App Store and Google Play. An outfit ready every morning.
           </p>
           <AppStoreBadge lang="EN" size="lg" />
         </aside>

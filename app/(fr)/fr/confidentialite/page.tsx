@@ -358,7 +358,7 @@ export default function ConfidentialitePage() {
             d&apos;<Strong>introduire une réclamation</Strong> auprès de votre autorité de
             protection des données (en France : la CNIL,{" "}
             <a
-              href="https://www.cnil.fr"
+              href="https://www.cnil.fr/fr"
               className="underline hover:text-peach"
               target="_blank"
               rel="noopener noreferrer"

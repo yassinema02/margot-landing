@@ -1,6 +1,6 @@
 # Margot — product context
 
-Last updated: 2026-09-12.
+Last updated: 2026-10-04.
 
 ## Overview
 
@@ -11,10 +11,10 @@ The name Margot refers to the magpie in French folklore. The brand's focus is ma
 ## How it works
 
 1. Add photos of clothing to a digital wardrobe. Start with everyday tops, bottoms and shoes; the rest can be added over time.
-2. Explore outfit suggestions from those clothes, considering weather and a selected occasion.
+2. Get outfit suggestions from those clothes, with the weather in mind. An outfit is prepared before the time the user gets dressed, and more can be requested. With Premium, suggestions can also follow calendar events or a chosen occasion. Suggestions start from three pieces (a top and a bottom, or a dress).
 3. Save looks, change a piece, and log what was worn. The user makes the final styling decision.
 
-Some functions and generations have usage limits. Premium offers additional suggestions, bulk uploads and tools for shopping decisions, events and travel packing. Check Before You Buy helps users consider how a prospective piece fits with their wardrobe.
+The free plan allows up to 15 pieces, 5 outfit generations a day, one avatar try-on a week, one purchase verdict a day, two resale listings a month and one trip plan. Premium removes the 15-piece limit, raises these limits (for example 20 outfit generations and 15 try-ons a day) and adds event outfits and wardrobe gap analysis. Check Before You Buy returns a buy / consider / skip verdict from a score based on outfits the piece would make, near-duplicates, gaps it fills and the user's profile. From any piece's page, Margot can write a Vinted listing (title, description, hashtags, price range) that the user copies into Vinted; there is no automatic listing. There is no social feed, no follower system and no data export.
 
 The homepage includes an interactive before/after styling scene showing the same fictional woman and man in different outfit combinations. These generated editorial images are labelled as illustrative, not customer testimonials or proof of a virtual try-on result. App preview images are presented separately.
 
@@ -23,11 +23,11 @@ The homepage includes an interactive before/after styling scene showing the same
 - iPhone: https://apps.apple.com/app/margot-outfit-planner/id6766047882
 - Android: https://play.google.com/store/apps/details?id=com.vestiaire.app
 
-Free to download, with a limited free version and an optional Premium subscription. Prices, quotas and terms are displayed in the application before purchase. Do not assume that one numerical price applies to every currency or store.
+Free to download, with a limited free version and an optional Premium subscription. No free trial. Prices observed on 4 October 2026: US App Store $14.99 a month, $59.99 a year, $8.99 a week; France (App Store and Google Play) €14.90, €59.99, €9.90; UK App Store £12.90, £59.99, £8.90. Prices, quotas and terms are displayed in the application before purchase. Do not assume that one numerical price applies to every currency or store.
 
 ## Privacy and account control
 
-Users choose the images they submit. Some image-based AI features require processing by service providers. The privacy policy describes storage, processing, retention and deletion rights. This product summary does not imply that all operations happen on-device, that no submitted photo is stored, or that every provider processes data in the same region.
+Users choose the images they submit. Data is stored on servers in London (UK), and photos are analysed by Google Gemini for the app's features, as stated in the privacy policy. The privacy policy describes storage, processing, retention and deletion rights. This product summary does not imply that all operations happen on-device, that no submitted photo is stored, or that every provider processes data in the same region.
 
 - Privacy: https://www.margotwardrobe.com/privacy
 - Confidentialité : https://www.margotwardrobe.com/fr/confidentialite
@@ -41,16 +41,19 @@ Users choose the images they submit. Some image-based AI features require proces
 - https://www.margotwardrobe.com/blog — English wardrobe articles.
 - https://www.margotwardrobe.com/blog/what-to-wear-today — Everyday outfit planning.
 - https://www.margotwardrobe.com/blog/ai-outfit-planner-does-it-work — Uses and limitations of AI outfit planning.
-- https://www.margotwardrobe.com/vs/whering — Wardrobe app comparison.
+- https://www.margotwardrobe.com/blog/how-to-sell-on-vinted — Writing Vinted listings that sell.
+- https://www.margotwardrobe.com/alternatives — Six wardrobe apps compared, with sources.
+- https://www.margotwardrobe.com/vs/whering, /vs/acloset, /vs/alta-daily, /vs/fits, /vs/stylebook — Head-to-head comparisons.
 - https://www.margotwardrobe.com/fr/garde-robe-digitale — Guide du dressing virtuel.
 - https://www.margotwardrobe.com/fr/quoi-porter-aujourdhui — Choisir une tenue pour sa journée.
-- https://www.margotwardrobe.com/fr/vs/whering — Comparaison des approches Margot et Whering.
+- https://www.margotwardrobe.com/fr/alternatives — Alternatives à Whering, six applications comparées.
+- https://www.margotwardrobe.com/fr/vs/whering, /fr/vs/acloset, /fr/vs/alta-daily, /fr/vs/fits, /fr/vs/stylebook — Comparatifs détaillés.
 
-Competitor features and prices can change. Refer to current official listings when comparing products; this file makes no claim of unique market-wide capabilities, rankings or competitor user counts.
+Competitor features and prices can change. The comparison pages list their official sources and the date they were checked; refer to current official listings. This file makes no claim of unique market-wide capabilities or rankings.
 
 ## Publisher
 
-YAVREN. Contact: margot@margotwardrobe.com.
+YAVREN, Paris. Contact: margot@margotwardrobe.com.
 
 - https://www.margotwardrobe.com/press
 - https://instagram.com/margotwardrobe

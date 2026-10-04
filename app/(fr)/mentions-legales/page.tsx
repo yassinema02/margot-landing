@@ -125,7 +125,7 @@ export default function MentionsLegalesPage() {
           </a>
           . Vous pouvez également introduire une réclamation auprès de la CNIL (
           <a
-            href="https://www.cnil.fr"
+            href="https://www.cnil.fr/fr"
             className="underline hover:text-peach"
             target="_blank"
             rel="noopener noreferrer"
