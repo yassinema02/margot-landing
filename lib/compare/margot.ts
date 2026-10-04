@@ -1,11 +1,9 @@
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/launch";
 import type { Lang, Localized } from "./types";
 
-// Margot's side of every comparison, checked against the production app on
-// 2026-10-04 (server quotas in _quota_config, wardrobe_free_cap(), store
-// listings, RevenueCat). Re-check and update here when any of these change:
-// prices (App Store / Play), free-plan limits (the hard-paywall test lowers the
-// wardrobe cap), event outfits being Premium-only, data hosting.
+// Margot's side of every comparison, checked against the production app and
+// the store listings on 2026-10-04. Re-check and update here whenever prices,
+// free-plan limits, Premium-only features or data hosting change.
 
 const SITE_URL = "https://www.margotwardrobe.com";
 
