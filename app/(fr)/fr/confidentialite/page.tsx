@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "12 août 2026";
+const LAST_UPDATED = "4 octobre 2026";
 
 export default function ConfidentialitePage() {
   return (
@@ -283,6 +283,7 @@ export default function ConfidentialitePage() {
             <tbody>
               <Tr cells={["Supabase", "Stockage des garde-robes, comptes et journaux de port", "Toutes les données de garde-robe et de compte"]} />
               <Tr cells={["Google Gemini", "Suggestions de tenues, analyse de vêtements, verdicts d'achat et traitement d'images", "Résumés de garde-robe, photos/captures soumises, contexte de style"]} />
+              <Tr cells={["Anthropic", "Outils internes de développement : préparation des jeux de test qui mesurent et améliorent la reconnaissance des vêtements", "Photos de vêtements téléversées, sans nom, adresse email ni identifiant de compte"]} />
               <Tr cells={["RevenueCat", "Validation et gestion des abonnements premium", "Reçu d'abonnement + identifiant utilisateur anonyme"]} />
               <Tr cells={["Apple", "Traitement des paiements, distribution de l'application", "Selon la politique de confidentialité d'Apple"]} />
               <Tr cells={["OpenWeatherMap", "Météo locale pour le contexte des tenues", "Localisation approximative uniquement"]} />
