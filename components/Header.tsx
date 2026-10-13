@@ -10,7 +10,8 @@ export function Header() {
   const links = [
     { href: "#comment-ca-marche", label: fr ? "Comment ça marche" : "How it works" },
     { href: "#dans-lapp", label: fr ? "Dans l’app" : "Inside the app" },
-    { href: "#le-journal", label: fr ? "Le journal" : "The journal" },
+    { href: "#offre", label: fr ? "Offre" : "Plans" },
+    { href: "#questions", label: "FAQ" },
   ];
   return <header className={styles.header} onKeyDown={(event) => { if (event.key === "Escape") setOpen(false); }}>
     <a className={styles.skipLink} href="#main-content">{fr ? "Aller au contenu" : "Skip to content"}</a>

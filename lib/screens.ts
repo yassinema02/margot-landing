@@ -21,17 +21,22 @@ export const SCREEN_SIZE = { width: 780, height: 1696 } as const;
 /**
  * Vertical focus (0 = top, 100 = bottom) when a screen is shown in a cropped
  * card rather than a full phone, so the card shows the part its caption is
- * about. Tuned by eye on the rendered page.
+ * about. Tuned by eye on the rendered page, per language because the French
+ * and English captures are not always scrolled to the same point.
  */
-export const SCREEN_FOCUS: Record<ScreenName, number> = {
+const FOCUS: Record<ScreenName, number> = {
   home: 0,
-  "add-photo": 41,
-  "outfit-collection": 100,
-  "tryon-result": 38,
-  "chat-conversation": 45,
-  shopping: 71,
-  "travel-packing": 38,
-  styles: 38,
+  "add-photo": 54,
+  "outfit-collection": 99,
+  "tryon-result": 39,
+  "chat-conversation": 34,
+  shopping: 36,
+  "travel-packing": 36,
+  styles: 39,
+};
+export const SCREEN_FOCUS: Record<ScreenLang, Record<ScreenName, number>> = {
+  en: FOCUS,
+  fr: { ...FOCUS, shopping: 52 },
 };
 
 export function screenSrc(lang: ScreenLang, name: ScreenName): string {

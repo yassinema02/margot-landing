@@ -1,134 +1,176 @@
+import { MARGOT_LIMITS as L } from "@/lib/compare/margot";
+import type { ScreenName } from "@/lib/screens";
+
 export type HomeLocale = "en" | "fr";
 
-export const HOME = {
+/** One app screen as shown on the homepage, with its description for screen readers. */
+export type HomeScreen = { name: ScreenName; alt: string };
+export type HomeCard = { title: string; body: string; screen: HomeScreen };
+
+export type HomeCopy = {
+  /** <title>, meta description and JSON-LD app description: never rendered in the page body. */
+  title: string;
+  description: string;
+  schemaDescription: string;
+  category: string;
+  headline: string;
+  intro: string;
+  heroScreen: HomeScreen;
+  download: string;
+  free: string;
+  stats: readonly [string, string, string];
+  statsNote: string;
+  stepsTitle: string;
+  steps: readonly HomeCard[];
+  featuresTitle: string;
+  features: readonly HomeCard[];
+  screensNote: string;
+  offerTitle: string;
+  offerFree: string;
+  offerFreeItems: readonly string[];
+  offerPremium: string;
+  offerPremiumItems: readonly string[];
+  offerNote: string;
+  faqTitle: string;
+  faqIntro: string;
+  faq: readonly { q: string; a: string }[];
+  privacy: string;
+  readMoreTitle: string;
+  guides: readonly { title: string; href: string }[];
+  closing: string;
+  closingBody: string;
+  qr: string;
+};
+
+const count = (n: number, word: string) => `${n} ${word}${n > 1 ? "s" : ""}`;
+
+export const HOME: Record<HomeLocale, HomeCopy> = {
   fr: {
     title: "Margot — Application dressing et idées de tenues du jour",
     description: "Redécouvre ton dressing avec Margot : des idées de tenues à partir de tes vêtements, adaptées à ta journée. À télécharger sur iPhone et Android.",
-    category: "Ton dressing. Ta styliste personnelle.",
-    headline: "De quoi t’habiller. De quoi te plaire.",
-    intro: "Ce jean que tu adores. Cette chemise oubliée. Margot compose des idées de tenues avec tes vêtements, pour la journée qui t’attend.",
+    schemaDescription: "Margot est une application de dressing et une styliste personnelle assistée par l’IA. Tu ajoutes tes vêtements et elle propose des idées de tenues à partir de ce que tu possèdes, en tenant compte de la météo (et, avec Premium, de l’occasion). Tu peux enregistrer tes looks et suivre ce que tu portes.",
+    category: "Application dressing · Ta styliste personnelle",
+    headline: "Tes vêtements. Tes nouveaux looks.",
+    intro: "Margot compose tes tenues avec ce que tu possèdes déjà, pour la journée qui t’attend.",
+    heroScreen: { name: "home", alt: "Écran « Ta tenue du jour » de Margot : une chemise blanche, un jean droit et des mocassins, avec les boutons Une autre et Portée" },
     download: "Télécharger Margot",
     free: "Gratuite à télécharger. Premium en option.",
-    explore: "Découvrir comment ça marche",
-    comparison: {
-      before: "Avant",
-      after: "Avec Margot",
-      beforeAlt: "Avant : une femme et un homme dans des tenues peu coordonnées, avec une attitude hésitante",
-      afterAlt: "Avec Margot : la même femme et le même homme, souriants dans des tenues coordonnées, chemise bleue et maille bordeaux, veste marine et pantalon gris",
-      label: "Comparer les tenues avant et avec Margot",
-      instruction: "Fais glisser pour voir la différence.",
-      caption: "Moins de doutes. Plus toi.",
-      note: "Mise en scène illustrative",
-    },
-    statement: "Ta prochaine tenue préférée est peut-être déjà dans ton dressing.",
-    statementBody: "Margot t’aide à voir tes vêtements autrement. À retrouver ceux que tu oublies. À associer ceux que tu aimes. Et à sortir avec une tenue dans laquelle tu te sens bien.",
+    stats: ["comptes créés", "vêtements ajoutés", "tenues composées"],
+    statsNote: "Dans les dressings Margot, d’après les compteurs de l’application.",
     stepsTitle: "Un petit début. Plein de possibilités.",
     steps: [
-      { title: "Ajoute tes essentiels", body: "Photographie quelques hauts, bas et chaussures que tu portes en ce moment. Tu peux compléter ton dressing au fil des jours." },
-      { title: "Découvre des associations", body: "Margot te propose des tenues à partir de ton dressing, en tenant compte de la météo. Avec Premium, elle s’adapte aussi à l’occasion que tu choisis." },
-      { title: "Porte ce qui te ressemble", body: "Garde une idée, change une pièce, indique ce que tu as porté. Tes tenues préférées restent à portée de main." },
+      { title: "Ajoute tes vêtements", body: "Prends en photo quelques hauts, bas et chaussures. Margot reconnaît chaque pièce et la range pour toi.", screen: { name: "add-photo", alt: "Écran « Ça convient ? » : la photo d’une chemise blanche détourée, prête à rejoindre le dressing" } },
+      { title: "Margot compose tes tenues", body: "Des idées avec tes pièces, selon la météo. Garde tes préférées en favoris.", screen: { name: "outfit-collection", alt: "Écran des tenues : deux tenues favorites, « Une journée en ville » et « Douceur du week-end »" } },
+      { title: "Vois-la sur toi", body: "Essaie une tenue sur ton avatar, ou importe un look repéré sur Instagram ou dans la rue.", screen: { name: "tryon-result", alt: "Écran « Voir sur moi » : une femme en veste camel, haut blanc et pantalon marron" } },
     ],
-    productTitle: "Moins d’hésitation devant le placard.",
-    productBody: "Une application de dressing pour les vraies journées : le matin pressé, le dîner prévu, le départ en week-end.",
-    productCaption: "Aperçus de l’application, présentés en anglais.",
-    previews: [
-      { title: "Une idée pour aujourd’hui", body: "Une proposition composée avec tes vêtements. Un point de départ que tu peux t’approprier, selon ton envie du moment.", src: "/screenshots/01-daily.jpg", alt: "Écran Margot : une tenue du jour composée d’une chemise, d’un blazer, d’un pantalon et de mocassins" },
-      { title: "Ton dressing, enfin visible", body: "Retrouve tes pièces au même endroit et redécouvre les associations auxquelles tu n’avais pas pensé.", src: "/screenshots/03-looks.jpg", alt: "Écran Margot : des idées de looks créées à partir des vêtements du dressing" },
-      { title: "Une valise qui se tient", body: "Prépare des tenues pour ton prochain voyage et retrouve les pièces à emporter. Ta première valise est offerte, les suivantes avec Premium.", src: "/screenshots/06-travel.jpg", alt: "Écran Margot : préparation des tenues et de la valise pour un voyage" },
+    featuresTitle: "Et aussi, dans ta poche.",
+    features: [
+      { title: "Ta styliste, à toute heure", body: "Demande « une tenue simple pour demain au bureau ? », Margot répond avec tes vêtements.", screen: { name: "chat-conversation", alt: "Conversation avec Margot : pour une tenue de bureau, elle propose une chemise Oxford, un jean droit et des mocassins" } },
+      { title: "Du shopping pour ton dressing", body: "Des pièces qui vont avec ce que tu as déjà, et un avis franc avant d’acheter.", screen: { name: "shopping", alt: "Écran shopping : des pièces recommandées, un pull en cachemire et des baskets en cuir, à essayer sur soi" } },
+      { title: "Ta valise, sans oubli", body: "Destination, dates, météo : Margot prépare quoi emporter. Ton premier voyage est offert.", screen: { name: "travel-packing", alt: "Écran de voyage à Lisbonne : la météo prévue et une valise où la marinière et le pull en mérinos sont cochés" } },
+      { title: "Elle apprend tes goûts", body: "Glisse à droite les tenues que tu porterais, Margot en tient compte.", screen: { name: "styles", alt: "Écran « Tu porterais cette tenue ? » avec les boutons Pas pour moi et Je porterais" } },
     ],
-    offerTitle: "Fais-lui une place. À ton rythme.",
-    offerIntro: "Commence avec la version gratuite. Si tu veux aller plus loin, découvre les possibilités de Margot Premium dans l’application.",
-    offerFree: "Pour commencer",
-    offerFreeBody: "Crée ton dressing, explore les suggestions de tenues et retrouve tes pièces. Certaines fonctions et générations sont limitées.",
-    offerPremium: "Pour aller plus loin",
-    offerPremiumBody: "Un dressing sans limite de pièces (15 en gratuit), davantage de suggestions et d’essayages, et des outils pour tes achats, tes événements et tes voyages.",
-    offerNote: "Les tarifs, les quotas et les conditions de l’abonnement sont présentés dans l’application avant tout achat.",
-    guidesTitle: "Les bonnes idées se cultivent.",
-    guidesBody: "Des conseils concrets pour mieux connaître ton dressing et trouver quoi porter.",
-    guides: [
-      { category: "Le dressing", title: "Créer une garde-robe digitale qui sert vraiment", body: "Par où commencer, quelles pièces ajouter et comment en faire une habitude utile.", href: "/fr/garde-robe-digitale" },
-      { category: "Le quotidien", title: "Quoi porter aujourd’hui ?", body: "Une méthode simple pour choisir une tenue selon ta météo et ta journée.", href: "/fr/quoi-porter-aujourdhui" },
-      { category: "Le choix de l’app", title: "Margot ou Whering : laquelle te correspond ?", body: "Compare les approches et les fonctionnalités avant de choisir ton application.", href: "/fr/vs/whering" },
+    screensNote: "Écrans de l’application, avec des données de démonstration.",
+    offerTitle: "Gratuite pour commencer. Premium pour aller plus loin.",
+    offerFree: "Gratuit",
+    offerFreeItems: [
+      `Jusqu’à ${L.freePieces} pièces dans ton dressing`,
+      `${L.freeOutfitsPerDay} tenues générées par jour`,
+      `${count(L.freeTryOnsPerWeek, "essayage")} par semaine`,
+      "Ton premier voyage offert",
     ],
+    offerPremium: "Premium",
+    offerPremiumItems: [
+      "Pièces illimitées",
+      `${L.premiumOutfitsPerDay} tenues générées par jour`,
+      `${count(L.premiumTryOnsPerDay, "essayage")} par jour`,
+      "Des tenues pour tes événements",
+      "Toutes tes valises",
+    ],
+    offerNote: "Les tarifs, les quotas et les conditions sont affichés dans l’application avant tout achat.",
     faqTitle: "Avant de faire connaissance.",
     faqIntro: "Les réponses aux questions que tu te poses peut-être encore.",
     faq: [
-      { q: "Qu’est-ce que l’application Margot ?", a: "Margot est une application de dressing et une styliste personnelle assistée par l’IA. Tu ajoutes tes vêtements et elle propose des idées de tenues à partir de ce que tu possèdes, en tenant compte de la météo (et, avec Premium, de l’occasion). Tu peux enregistrer tes looks et suivre ce que tu portes." },
+      { q: "Qu’est-ce que l’application Margot ?", a: "Margot est une application de dressing et ta styliste personnelle. Tu ajoutes tes vêtements et elle propose des idées de tenues à partir de ce que tu possèdes, en tenant compte de la météo (et, avec Premium, de l’occasion). Tu peux enregistrer tes looks et suivre ce que tu portes." },
       { q: "Dois-je photographier tout mon dressing ?", a: "Non. Commence par quelques pièces que tu portes en ce moment, en incluant des hauts, des bas et des chaussures pour pouvoir composer une tenue complète. Ajoute le reste à ton rythme : tu n’as pas besoin de consacrer un week-end entier à ton placard." },
       { q: "Est-ce que Margot est gratuite ?", a: "Margot est gratuite à télécharger et propose une version gratuite avec des limites d’utilisation. Un abonnement Premium permet d’accéder à davantage de fonctions et de suggestions. Les tarifs et les conditions sont affichés dans l’application avant l’achat." },
       { q: "Margot existe-t-elle sur iPhone et Android ?", a: "Oui. Tu peux télécharger Margot sur l’App Store pour iPhone et sur Google Play pour Android. Les liens vers les deux boutiques sont disponibles sur cette page." },
       { q: "Est-ce que Margot m’oblige à acheter de nouveaux vêtements ?", a: "Non. Les idées de tenues partent des vêtements que tu ajoutes à ton dressing. L’objectif est de t’aider à utiliser ce que tu possèdes déjà. Si tu envisages un achat, la fonction Check Before You Buy peut aussi t’aider à voir comment la pièce s’associe à ton dressing." },
-      { q: "Que deviennent mes photos et mes données ?", a: "Tu choisis les photos que tu ajoutes. Certaines fonctions d’IA nécessitent de traiter les images soumises auprès de prestataires. La politique de confidentialité détaille le stockage, les traitements et tes droits, notamment la suppression de ton compte et de tes données." },
+      { q: "Que deviennent mes photos et mes données ?", a: "Tu choisis les photos que tu ajoutes. Certaines fonctions nécessitent de traiter les images que tu envoies auprès de prestataires. La politique de confidentialité détaille le stockage, les traitements et tes droits, notamment la suppression de ton compte et de tes données." },
     ],
     privacy: "Lire la politique de confidentialité",
+    readMoreTitle: "À lire",
+    guides: [
+      { title: "Créer une garde-robe digitale qui sert vraiment", href: "/fr/garde-robe-digitale" },
+      { title: "Quoi porter aujourd’hui ?", href: "/fr/quoi-porter-aujourdhui" },
+      { title: "Margot ou Whering : laquelle te correspond ?", href: "/fr/vs/whering" },
+    ],
     closing: "Demain matin, ouvre ton dressing avec une idée.",
     closingBody: "Tes vêtements ont encore beaucoup à te raconter.",
-    stats: ["comptes créés", "vêtements ajoutés", "tenues composées"],
-    statsNote: "Dans les dressings Margot, d’après les compteurs de l’application.",
+    qr: "Scanne pour télécharger sur iPhone",
   },
   en: {
     title: "Margot — Wardrobe App & Daily Outfit Planner",
     description: "Rediscover your wardrobe with Margot. Get outfit ideas from clothes you already own, made for the day ahead. Download on iPhone and Android.",
-    category: "Your wardrobe. Your personal stylist.",
-    headline: "Good clothes. Great together.",
-    intro: "The jeans you love. The shirt you forgot about. Margot puts your own clothes together into outfit ideas for the day ahead.",
+    schemaDescription: "Margot is a wardrobe app and an AI-assisted personal stylist. Add your clothes and get outfit ideas from what you already own, with the weather in mind (and your chosen occasion with Premium). You can save looks and keep track of what you wear.",
+    category: "Wardrobe app · Your personal stylist",
+    headline: "Your clothes. Whole new outfits.",
+    intro: "Margot styles outfits from what you already own, for the day ahead.",
+    heroScreen: { name: "home", alt: "Margot’s “Wear this today” screen: a white shirt, straight jeans and loafers, with Another and Worn it buttons" },
     download: "Download Margot",
     free: "Free to download. Optional Premium subscription.",
-    explore: "See how it works",
-    comparison: {
-      before: "Before",
-      after: "With Margot",
-      beforeAlt: "Before: a woman and a man in loosely coordinated outfits, looking unsure",
-      afterAlt: "With Margot: the same woman and man, smiling in coordinated outfits, a blue shirt and burgundy knit, a navy jacket and grey trousers",
-      label: "Compare outfits before and with Margot",
-      instruction: "Drag to see the difference.",
-      caption: "Less doubt. More you.",
-      note: "Illustrative styling scene",
-    },
-    statement: "Your next favourite outfit might already be in your wardrobe.",
-    statementBody: "Margot helps you see your clothes differently. Rediscover the pieces you overlook. Pair the ones you love. And head out feeling like yourself.",
+    stats: ["accounts created", "pieces added", "outfits composed"],
+    statsNote: "Across Margot wardrobes, from the app’s counters.",
     stepsTitle: "Start small. Find a lot to wear.",
     steps: [
-      { title: "Add your everyday pieces", body: "Photograph a few tops, bottoms and shoes you’re wearing this season. You can build up the rest of your wardrobe as you go." },
-      { title: "Find new combinations", body: "Margot suggests outfits from your wardrobe with the weather in mind. With Premium, she also dresses you for the occasion you choose." },
-      { title: "Make the outfit yours", body: "Save an idea, swap a piece, log what you wore. Keep the combinations you love ready for another day." },
+      { title: "Add your clothes", body: "Snap a few tops, bottoms and shoes. Margot recognises each piece and files it for you.", screen: { name: "add-photo", alt: "“Looks good?” screen: a white shirt cut out from its photo, ready to join the wardrobe" } },
+      { title: "Margot puts outfits together", body: "Ideas made from your pieces, with the weather in mind. Keep your favourites close.", screen: { name: "outfit-collection", alt: "Outfits screen: two favourite outfits, “A day in the city” and “An easy weekend”" } },
+      { title: "See it on you", body: "Try an outfit on your avatar, or import a look you spotted online or out and about.", screen: { name: "tryon-result", alt: "“See it on me” screen: a woman in a camel blazer, white top and brown trousers" } },
     ],
-    productTitle: "Less wondering what to wear.",
-    productBody: "A wardrobe app for real life: the rushed morning, the dinner plan, the weekend away.",
-    productCaption: "A look inside the Margot app.",
-    previews: [
-      { title: "An idea for today", body: "An outfit put together from your own clothes. A starting point to make your own, whatever you feel like wearing.", src: "/screenshots/01-daily.jpg", alt: "Margot daily outfit screen showing a shirt, blazer, trousers and loafers" },
-      { title: "Your wardrobe, in view", body: "Find your pieces in one place and discover combinations you might never have thought to try.", src: "/screenshots/03-looks.jpg", alt: "Margot screen showing outfit ideas created from clothes in a personal wardrobe" },
-      { title: "A suitcase that makes sense", body: "Plan outfits for your next trip and keep track of what to pack. Your first trip is free, more with Margot Premium.", src: "/screenshots/06-travel.jpg", alt: "Margot travel screen showing outfits and a packing list for a trip" },
+    featuresTitle: "And there’s more.",
+    features: [
+      { title: "A stylist on call", body: "Ask for “an easy outfit for the office tomorrow” and Margot answers with your own clothes.", screen: { name: "chat-conversation", alt: "Chat with Margot: asked for an office outfit, she suggests an Oxford shirt, straight jeans and loafers" } },
+      { title: "Shop for your wardrobe", body: "Pieces that work with what you own, and an honest verdict before you buy.", screen: { name: "shopping", alt: "Shopping screen: recommended pieces, a cashmere knit and leather trainers, to try on yourself" } },
+      { title: "Pack with a plan", body: "Destination, dates, weather: Margot works out what to pack. Your first trip is free.", screen: { name: "travel-packing", alt: "Lisbon trip screen: the forecast and a suitcase with a Breton top and a merino sweater packed" } },
+      { title: "She learns your taste", body: "Swipe right on outfits you’d wear and Margot takes note.", screen: { name: "styles", alt: "“Would you wear this outfit?” screen with Not for me and I’d wear it buttons" } },
     ],
-    offerTitle: "Make room for Margot. At your pace.",
-    offerIntro: "Start with the free version. When you want to explore more, discover Margot Premium in the app.",
-    offerFree: "A place to start",
-    offerFreeBody: "Build your wardrobe, explore outfit suggestions and find your pieces. Some features and generations have usage limits.",
-    offerPremium: "More possibilities",
-    offerPremiumBody: "An unlimited wardrobe (15 pieces on the free plan), more suggestions and try-ons, and tools for shopping decisions, events and trips.",
+    screensNote: "App screens shown with demo data.",
+    offerTitle: "Free to start. Premium when you want more.",
+    offerFree: "Free",
+    offerFreeItems: [
+      `Up to ${L.freePieces} pieces in your wardrobe`,
+      `${L.freeOutfitsPerDay} outfit generations a day`,
+      `${count(L.freeTryOnsPerWeek, "try-on")} a week`,
+      "Your first trip free",
+    ],
+    offerPremium: "Premium",
+    offerPremiumItems: [
+      "Unlimited pieces",
+      `${L.premiumOutfitsPerDay} outfit generations a day`,
+      `${count(L.premiumTryOnsPerDay, "try-on")} a day`,
+      "Outfits for your events",
+      "Every trip you plan",
+    ],
     offerNote: "Subscription prices, usage limits and terms are shown in the app before you make a purchase.",
-    guidesTitle: "A little wardrobe inspiration.",
-    guidesBody: "Practical reads for getting to know your clothes and deciding what to wear.",
-    guides: [
-      { category: "Everyday dressing", title: "What to wear today, finally answered", body: "A practical starting point for the daily wardrobe decision.", href: "/blog/what-to-wear-today" },
-      { category: "Personal styling", title: "Does an AI outfit planner actually work?", body: "What a digital stylist can help with, and where your own taste comes in.", href: "/blog/ai-outfit-planner-does-it-work" },
-      { category: "Choosing your app", title: "Margot or Whering: which suits you?", body: "Compare the approaches and features before choosing a wardrobe app.", href: "/vs/whering" },
-    ],
     faqTitle: "Before we get acquainted.",
     faqIntro: "A few things you might still be wondering.",
     faq: [
-      { q: "What is the Margot wardrobe app?", a: "Margot is a wardrobe app and an AI-assisted personal stylist. Add your clothes and get outfit ideas from what you already own, with the weather in mind (and your chosen occasion with Premium). You can save looks and keep track of what you wear." },
+      { q: "What is the Margot wardrobe app?", a: "Margot is a wardrobe app and your personal stylist. Add your clothes and get outfit ideas from what you already own, with the weather in mind (and your chosen occasion with Premium). You can save looks and keep track of what you wear." },
       { q: "Do I have to photograph my whole wardrobe?", a: "No. Start with a few pieces you wear regularly, including tops, bottoms and shoes so there’s enough to build a complete outfit. Add more as you go. You don’t need to spend an entire weekend cataloguing your closet." },
       { q: "Is Margot free?", a: "Margot is free to download and includes a free version with usage limits. An optional Premium subscription offers more features and suggestions. Prices and subscription terms are shown in the app before you buy." },
       { q: "Is Margot available on iPhone and Android?", a: "Yes. Download Margot from the App Store for iPhone or Google Play for Android. You’ll find links to both stores on this page." },
       { q: "Will I need to buy new clothes?", a: "No. Outfit suggestions start with the clothes you add to your wardrobe. The aim is to help you use what you already own. If you’re considering a purchase, Check Before You Buy can help you see how it fits with your wardrobe." },
-      { q: "What happens to my photos and data?", a: "You choose the photos you add. Some AI features require submitted images to be processed by service providers. Our privacy policy explains storage, processing and your rights, including how to delete your account and data." },
+      { q: "What happens to my photos and data?", a: "You choose the photos you add. Some features require the images you submit to be processed by service providers. Our privacy policy explains storage, processing and your rights, including how to delete your account and data." },
     ],
     privacy: "Read the privacy policy",
+    readMoreTitle: "Further reading",
+    guides: [
+      { title: "What to wear today, finally answered", href: "/blog/what-to-wear-today" },
+      { title: "Does an outfit planner actually work?", href: "/blog/ai-outfit-planner-does-it-work" },
+      { title: "Margot or Whering: which suits you?", href: "/vs/whering" },
+    ],
     closing: "Tomorrow morning, open your wardrobe with an idea.",
     closingBody: "There’s a lot of life left in your clothes.",
-    stats: ["accounts created", "pieces added", "outfits composed"],
-    statsNote: "Across Margot wardrobes, from the app’s counters.",
+    qr: "Scan to download on iPhone",
   },
-} as const;
+};

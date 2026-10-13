@@ -41,7 +41,7 @@ export function LandingStructuredData({ lang }: { lang: "en" | "fr" }) {
       applicationCategory: "LifestyleApplication",
       operatingSystem: "iOS, Android",
       inLanguage: lang,
-      description: t.faq[0].a,
+      description: t.schemaDescription,
       url: `${SITE_URL}${lang === "fr" ? "/fr" : "/"}`,
       image: `${SITE_URL}/opengraph-image`,
       downloadUrl: [APP_STORE_URL, PLAY_STORE_URL],

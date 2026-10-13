@@ -10,10 +10,12 @@ describe("app screens", () => {
     expect(screenSrc("en", "styles")).toBe("/screens/en/styles.webp");
   });
 
-  it("gives every screen a focus between 0 and 100", () => {
-    for (const name of SCREEN_NAMES) {
-      expect(SCREEN_FOCUS[name]).toBeGreaterThanOrEqual(0);
-      expect(SCREEN_FOCUS[name]).toBeLessThanOrEqual(100);
+  it("gives every screen a focus between 0 and 100 in each language", () => {
+    for (const lang of ["fr", "en"] as const) {
+      for (const name of SCREEN_NAMES) {
+        expect(SCREEN_FOCUS[lang][name], `${lang}/${name}`).toBeGreaterThanOrEqual(0);
+        expect(SCREEN_FOCUS[lang][name], `${lang}/${name}`).toBeLessThanOrEqual(100);
+      }
     }
   });
 
