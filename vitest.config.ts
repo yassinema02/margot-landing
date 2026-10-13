@@ -6,5 +6,7 @@ const root = fileURLToPath(new URL("./", import.meta.url));
 
 export default defineConfig({
   resolve: { alias: [{ find: /^@\//, replacement: root }] },
+  // tsconfig keeps JSX for Next; tests that import components need it compiled.
+  oxc: { jsx: { runtime: "automatic" } },
   test: { environment: "node", include: ["lib/**/*.test.ts", "app/**/*.test.ts", "scripts/**/*.test.mjs"] },
 });

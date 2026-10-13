@@ -16,7 +16,7 @@ The name Margot refers to the magpie in French folklore. The brand's focus is ma
 
 The free plan allows up to 15 pieces, 5 outfit generations a day, one avatar try-on a week, one purchase verdict a day, two resale listings a month and one trip plan. Premium removes the 15-piece limit, raises these limits (for example 20 outfit generations and 15 try-ons a day) and adds event outfits and wardrobe gap analysis. Check Before You Buy returns a buy / consider / skip verdict from a score based on outfits the piece would make, near-duplicates, gaps it fills and the user's profile. From any piece's page, Margot can write a Vinted listing (title, description, hashtags, price range) that the user copies into Vinted; there is no automatic listing. There is no social feed, no follower system and no data export.
 
-The homepage includes an interactive before/after styling scene showing the same fictional woman and man in different outfit combinations. These generated editorial images are labelled as illustrative, not customer testimonials or proof of a virtual try-on result. App preview images are presented separately.
+The homepage shows screens from the app (today's outfit, adding a piece, saved outfits, a try-on, the stylist chat, shopping suggestions, a packing list and style preferences), in English on the English page and in French on the French page. They use demo data and are labelled as such; they are not customer results.
 
 ## Availability and price
 
