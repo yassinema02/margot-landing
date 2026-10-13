@@ -9,6 +9,16 @@ const SITE_URL = "https://www.margotwardrobe.com";
 
 export const MARGOT_CHECKED = "2026-10-04";
 
+/** Free and Premium quotas. Edit here and every page that quotes them follows. */
+export const MARGOT_LIMITS = {
+  freePieces: 15,
+  freeOutfitsPerDay: 5,
+  premiumOutfitsPerDay: 20,
+  freeTryOnsPerWeek: 1,
+  premiumTryOnsPerDay: 15,
+} as const;
+const L = MARGOT_LIMITS;
+
 /** schema.org description of Margot, embedded in comparison pages. */
 export const MARGOT_SCHEMA = {
   "@type": "SoftwareApplication",
@@ -68,8 +78,8 @@ export const MARGOT_ROWS: Record<RowKey, Localized<string>> = {
     en: "With Premium: title, time and place of your events, never your notes",
   },
   tryon: {
-    fr: "Oui : 1 par semaine en gratuit, 15 par jour avec Premium",
-    en: "Yes: 1 a week free, 15 a day with Premium",
+    fr: `Oui : ${L.freeTryOnsPerWeek} par semaine en gratuit, ${L.premiumTryOnsPerDay} par jour avec Premium`,
+    en: `Yes: ${L.freeTryOnsPerWeek} a week free, ${L.premiumTryOnsPerDay} a day with Premium`,
   },
   buy: {
     fr: "Oui : verdict « vaut le coup », « à réfléchir » ou « passe ton tour »",
@@ -105,8 +115,8 @@ export const PRICE_LABELS: Record<PriceKey, Localized<string>> = {
 // note, because prices differ by country and store (never one price for all).
 export const MARGOT_PRICES: Record<PriceKey, Localized<string>> = {
   free: {
-    fr: "0 € : jusqu'à 15 pièces, 5 générations de tenues par jour",
-    en: "$0: up to 15 pieces, 5 outfit generations a day",
+    fr: `0 € : jusqu'à ${L.freePieces} pièces, ${L.freeOutfitsPerDay} générations de tenues par jour`,
+    en: `$0: up to ${L.freePieces} pieces, ${L.freeOutfitsPerDay} outfit generations a day`,
   },
   subscription: {
     fr: "Premium : 9,90 € / semaine, 14,90 € / mois ou 59,99 € / an",
@@ -123,8 +133,8 @@ export const MARGOT_PRICE_NOTE: Localized<string> = {
 
 /** What Premium adds, in one sentence, for FAQ answers. */
 export const MARGOT_PREMIUM_SUMMARY: Localized<string> = {
-  fr: "Margot Premium lève la limite de 15 pièces, passe de 5 à 20 générations de tenues par jour et d'un essayage par semaine à 15 par jour, et ajoute les tenues pour tes événements.",
-  en: "Margot Premium removes the 15-piece limit, raises outfit generations from 5 to 20 a day and try-ons from one a week to 15 a day, and adds outfits for your events.",
+  fr: `Margot Premium lève la limite de ${L.freePieces} pièces, passe de ${L.freeOutfitsPerDay} à ${L.premiumOutfitsPerDay} générations de tenues par jour et d'un essayage par semaine à ${L.premiumTryOnsPerDay} par jour, et ajoute les tenues pour tes événements.`,
+  en: `Margot Premium removes the ${L.freePieces}-piece limit, raises outfit generations from ${L.freeOutfitsPerDay} to ${L.premiumOutfitsPerDay} a day and try-ons from one a week to ${L.premiumTryOnsPerDay} a day, and adds outfits for your events.`,
 };
 
 export function margotSources(lang: Lang) {
