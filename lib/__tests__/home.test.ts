@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { MARGOT_LIMITS } from "../compare/margot";
 import { HOME, type HomeCopy } from "../home";
@@ -32,17 +34,26 @@ describe("HOME", () => {
     expect(HOME.fr.faq).toHaveLength(6);
   });
 
-  it.each(LANGS)("uses every app screen exactly once in %s", (lang) => {
+  it.each(LANGS)("uses each app screen at most once in %s", (lang) => {
     const t = HOME[lang];
-    const used = [t.heroScreen, ...t.steps.map((s) => s.screen), ...t.features.map((f) => f.screen)].map((s) => s.name);
-    expect([...used].sort()).toEqual([...SCREEN_NAMES].sort());
+    const used = [...t.steps.map((s) => s.screen), ...t.features.map((f) => f.screen)].map((s) => s.name);
+    expect(new Set(used).size).toBe(used.length);
+    for (const name of used) expect(SCREEN_NAMES).toContain(name);
   });
 
-  it.each(LANGS)("describes every %s screen for screen readers", (lang) => {
+  it.each(LANGS)("describes every %s image for screen readers", (lang) => {
     const t = HOME[lang];
-    for (const screen of [t.heroScreen, ...t.steps.map((s) => s.screen), ...t.features.map((f) => f.screen)]) {
+    for (const screen of [...t.steps.map((s) => s.screen), ...t.features.map((f) => f.screen)]) {
       expect(screen.alt.length, screen.name).toBeGreaterThan(30);
     }
+    expect(t.comparison.beforeAlt.length).toBeGreaterThan(30);
+    expect(t.comparison.afterAlt.length).toBeGreaterThan(30);
+    expect(t.video.transcript.length).toBeGreaterThan(30);
+  });
+
+  it.each(LANGS)("ships the %s video, its poster and the slider photos", (lang) => {
+    const files = [`video/margot-15s-${lang}.mp4`, `video/margot-15s-${lang}-poster.webp`, ...["before", "after", "blazer", "tank", "jeans", "sneakers"].map((n) => `editorial/avant-apres/${n}.webp`)];
+    for (const file of files) expect(existsSync(join(process.cwd(), "public", file)), file).toBe(true);
   });
 
   it.each(LANGS)("keeps visible %s copy free of AI wording and em dashes", (lang) => {

@@ -6,6 +6,22 @@ export type HomeLocale = "en" | "fr";
 /** One app screen as shown on the homepage, with its description for screen readers. */
 export type HomeScreen = { name: ScreenName; alt: string };
 export type HomeCard = { title: string; body: string; screen: HomeScreen };
+/** Hero before/after slider: the same morning, the same clothes. */
+export type HomeComparison = {
+  before: string;
+  after: string;
+  beforeAlt: string;
+  afterAlt: string;
+  thought: string;
+  today: string;
+  label: string;
+  hint: string;
+  instruction: string;
+  caption: string;
+  note: string;
+};
+/** 15-second explainer at the top of "how it works". */
+export type HomeVideo = { intro: string; label: string; transcript: string; play: string; pause: string; note: string };
 
 export type HomeCopy = {
   /** <title>, meta description and JSON-LD app description: never rendered in the page body. */
@@ -15,12 +31,13 @@ export type HomeCopy = {
   category: string;
   headline: string;
   intro: string;
-  heroScreen: HomeScreen;
+  comparison: HomeComparison;
   download: string;
   free: string;
   stats: readonly [string, string, string];
   statsNote: string;
   stepsTitle: string;
+  video: HomeVideo;
   steps: readonly HomeCard[];
   featuresTitle: string;
   features: readonly HomeCard[];
@@ -52,12 +69,32 @@ export const HOME: Record<HomeLocale, HomeCopy> = {
     category: "Application dressing · Ta styliste personnelle",
     headline: "Tes vêtements. Tes nouveaux looks.",
     intro: "Margot compose tes tenues avec ce que tu possèdes déjà, pour la journée qui t’attend.",
-    heroScreen: { name: "home", alt: "Écran « Ta tenue du jour » de Margot : une chemise blanche, un jean droit et des mocassins, avec les boutons Une autre et Portée" },
+    comparison: {
+      before: "Sans Margot",
+      after: "Avec Margot",
+      beforeAlt: "Sans Margot : une femme en pyjama, la main sur le front, devant un lit couvert de vêtements en vrac",
+      afterAlt: "Avec Margot : la même femme, souriante, en blazer noir, débardeur blanc, jean droit et baskets blanches, devant son lit rangé",
+      thought: "Rien à me mettre…",
+      today: "Ta tenue du jour",
+      label: "Comparer la même matinée, sans Margot et avec Margot",
+      hint: "Glisse",
+      instruction: "Fais glisser pour voir la différence.",
+      caption: "Les mêmes vêtements. Une vraie tenue.",
+      note: "Mise en scène illustrative",
+    },
     download: "Télécharger Margot",
     free: "Gratuite à télécharger. Premium en option.",
-    stats: ["comptes créés", "vêtements ajoutés", "tenues composées"],
-    statsNote: "Dans les dressings Margot, d’après les compteurs de l’application.",
+    stats: ["téléchargements", "vêtements ajoutés", "tenues composées"],
+    statsNote: "Téléchargements cumulés sur iPhone et Android. Vêtements et tenues : compteurs de l’application.",
     stepsTitle: "Un petit début. Plein de possibilités.",
+    video: {
+      intro: "Regarde comment ça marche, en quinze secondes.",
+      label: "Vidéo de 15 secondes : comment marche Margot",
+      transcript: "Rien à te mettre ? Un : prends tes vêtements en photo. Deux : Margot compose ta tenue. Trois : vois-la sur toi. Margot, gratuite sur iPhone et Android.",
+      play: "Lire la vidéo",
+      pause: "Mettre la vidéo en pause",
+      note: "Vidéo sans son. Mise en scène illustrative.",
+    },
     steps: [
       { title: "Ajoute tes vêtements", body: "Prends en photo quelques hauts, bas et chaussures. Margot reconnaît chaque pièce et la range pour toi.", screen: { name: "add-photo", alt: "Écran « Ça convient ? » : la photo d’une chemise blanche détourée, prête à rejoindre le dressing" } },
       { title: "Margot compose tes tenues", body: "Des idées avec tes pièces, selon la météo. Garde tes préférées en favoris.", screen: { name: "outfit-collection", alt: "Écran des tenues : deux tenues favorites, « Une journée en ville » et « Douceur du week-end »" } },
@@ -116,12 +153,32 @@ export const HOME: Record<HomeLocale, HomeCopy> = {
     category: "Wardrobe app · Your personal stylist",
     headline: "Your clothes. Whole new outfits.",
     intro: "Margot styles outfits from what you already own, for the day ahead.",
-    heroScreen: { name: "home", alt: "Margot’s “Wear this today” screen: a white shirt, straight jeans and loafers, with Another and Worn it buttons" },
+    comparison: {
+      before: "Without Margot",
+      after: "With Margot",
+      beforeAlt: "Without Margot: a woman in pyjamas, hand on her forehead, in front of a bed covered in a heap of clothes",
+      afterAlt: "With Margot: the same woman, smiling, in a black blazer, white tank top, straight jeans and white trainers, in front of her tidy bed",
+      thought: "Nothing to wear…",
+      today: "Wear this today",
+      label: "Compare the same morning, without and with Margot",
+      hint: "Drag",
+      instruction: "Drag to see the difference.",
+      caption: "Same clothes. A real outfit.",
+      note: "Illustrative scene",
+    },
     download: "Download Margot",
     free: "Free to download. Optional Premium subscription.",
-    stats: ["accounts created", "pieces added", "outfits composed"],
-    statsNote: "Across Margot wardrobes, from the app’s counters.",
+    stats: ["downloads", "pieces added", "outfits composed"],
+    statsNote: "Total downloads on iPhone and Android. Pieces and outfits: the app’s counters.",
     stepsTitle: "Start small. Find a lot to wear.",
+    video: {
+      intro: "See how it works, in fifteen seconds.",
+      label: "15-second video: how Margot works",
+      transcript: "Nothing to wear? One: snap your clothes. Two: Margot styles your outfit. Three: see it on you. Margot, free on iPhone and Android.",
+      play: "Play video",
+      pause: "Pause video",
+      note: "No sound. Illustrative scene.",
+    },
     steps: [
       { title: "Add your clothes", body: "Snap a few tops, bottoms and shoes. Margot recognises each piece and files it for you.", screen: { name: "add-photo", alt: "“Looks good?” screen: a white shirt cut out from its photo, ready to join the wardrobe" } },
       { title: "Margot puts outfits together", body: "Ideas made from your pieces, with the weather in mind. Keep your favourites close.", screen: { name: "outfit-collection", alt: "Outfits screen: two favourite outfits, “A day in the city” and “An easy weekend”" } },

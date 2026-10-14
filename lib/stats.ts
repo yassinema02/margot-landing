@@ -31,6 +31,10 @@ export async function getLandingStats(): Promise<LiveStats | null> {
   }
 }
 
+// Total App Store + Google Play downloads, rounded down. The stores are not
+// reachable from the database, so this one is updated by hand (checked 2026-10-14).
+export const DOWNLOADS = 12000;
+
 // "25600" -> "25,600+" (en) / "25 600+" (fr, narrow no-break space).
 export function formatStat(value: number, lang: "en" | "fr"): string {
   return `${new Intl.NumberFormat(lang === "fr" ? "fr-FR" : "en-US").format(value)}+`;
