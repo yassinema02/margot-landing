@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { HOME, type HomeLocale } from "@/lib/home";
 import { APP_STORE_URL } from "@/lib/launch";
-import { formatStat, type LiveStats } from "@/lib/stats";
+import { DOWNLOADS, formatStat, type LiveStats } from "@/lib/stats";
 import { AppScreen } from "./AppScreen";
+import { BeforeAfter } from "./BeforeAfter";
+import { ExplainerVideo } from "./ExplainerVideo";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { StoreLinks } from "./StoreLinks";
@@ -23,16 +25,22 @@ export function LandingBody({ lang, liveStats }: { lang: HomeLocale; liveStats?:
           <p className={styles.micro}>{t.free}</p>
         </div>
         <div className={styles.heroVisual}>
-          <AppScreen lang={lang} screen={t.heroScreen} variant="phone" sizes="(max-width: 760px) 250px, 300px" priority />
+          <BeforeAfter copy={t.comparison} />
         </div>
       </section>
       {liveStats && <div className={styles.proof}>
-        <dl>{[liveStats.wardrobes, liveStats.garments, liveStats.outfits].map((value, i) => <div key={t.stats[i]}><dt>{t.stats[i]}</dt><dd>{formatStat(value, lang)}</dd></div>)}</dl>
+        <dl>{[DOWNLOADS, liveStats.garments, liveStats.outfits].map((value, i) => <div key={t.stats[i]}><dt>{t.stats[i]}</dt><dd>{formatStat(value, lang)}</dd></div>)}</dl>
         <p>{t.statsNote}</p>
       </div>}
       <section id="comment-ca-marche" className={styles.stepsSection} aria-labelledby="steps-title">
         <div className={styles.container}>
-          <h2 id="steps-title">{t.stepsTitle}</h2>
+          <div className={styles.stepsIntro}>
+            <div>
+              <h2 id="steps-title">{t.stepsTitle}</h2>
+              <p className={styles.body}>{t.video.intro}</p>
+            </div>
+            <ExplainerVideo lang={lang} copy={t.video} />
+          </div>
           <ol className={styles.steps}>{t.steps.map((step, i) => <li key={step.title}>
             <span className={styles.stepNumber} aria-hidden="true">{i + 1}</span>
             <h3>{step.title}</h3><p>{step.body}</p>
