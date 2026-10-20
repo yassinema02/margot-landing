@@ -81,9 +81,11 @@ export default function PrivacyPage() {
               </Li>
               <Li>
                 <Strong>Body profile (optional):</Strong> gender, height, body shape, proportions and
-                measurements you enter, and the selfie used to create your avatar. They are used only to
-                create and update your avatar. Measurements are never sent as numbers to the provider
-                that generates the image: it only receives a description in words.
+                measurements you enter, and the selfie used to create your avatar. They are used to
+                create and update your avatar and to personalise your advice (fit, sizes, stylist); the
+                selfie also helps recognise your clothes in your photos. Proportions and measurements
+                are used only for your avatar, and measurements are never sent as numbers to the
+                provider that generates the image: it only receives a description in words.
               </Li>
               <Li>
                 <Strong>Shopping and scan data:</Strong> product links, screenshots, item photos,

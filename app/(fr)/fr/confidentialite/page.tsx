@@ -96,11 +96,13 @@ export default function ConfidentialitePage() {
               métadonnées des articles (catégorie, couleur, marque, étiquettes, notes).
             </Li>
             <Li>
-              <Strong>Morphologie (facultatif) :</Strong> genre, taille, silhouette, proportions et
-              mensurations que vous indiquez, ainsi que le selfie qui sert à créer votre avatar. Elles
-              servent uniquement à créer et mettre à jour votre avatar. Les mensurations ne sont jamais
-              transmises en chiffres au prestataire qui génère l&apos;image : il ne reçoit qu&apos;une
-              description en mots.
+              <Strong>Morphologie (facultatif) :</Strong> genre, taille (hauteur), silhouette,
+              proportions et mensurations que vous indiquez, ainsi que le selfie qui sert à créer votre
+              avatar. Elles servent à créer et mettre à jour votre avatar et à personnaliser vos conseils
+              (coupes, tailles, styliste) ; le selfie sert aussi à reconnaître vos vêtements sur vos
+              photos. Les proportions et les mensurations ne servent qu&apos;à votre avatar, et les
+              mensurations ne sont jamais transmises en chiffres au prestataire qui génère l&apos;image :
+              il ne reçoit qu&apos;une description en mots.
             </Li>
             <Li>
               <Strong>Données de shopping et de scan :</Strong> liens produits, captures
