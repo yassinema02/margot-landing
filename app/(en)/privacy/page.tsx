@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "4 October 2026";
+const LAST_UPDATED = "20 October 2026";
 
 export default function PrivacyPage() {
   return (
@@ -78,6 +78,12 @@ export default function PrivacyPage() {
               <Li>
                 <Strong>Wardrobe data:</Strong> photos of clothing items you upload, item metadata
                 (category, color, brand, tags, notes).
+              </Li>
+              <Li>
+                <Strong>Body profile (optional):</Strong> gender, height, body shape, proportions and
+                measurements you enter, and the selfie used to create your avatar. They are used only to
+                create and update your avatar. Measurements are never sent as numbers to the provider
+                that generates the image: it only receives a description in words.
               </Li>
               <Li>
                 <Strong>Shopping and scan data:</Strong> product links, screenshots, item photos,

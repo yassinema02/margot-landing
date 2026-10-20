@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "4 octobre 2026";
+const LAST_UPDATED = "20 octobre 2026";
 
 export default function ConfidentialitePage() {
   return (
@@ -94,6 +94,13 @@ export default function ConfidentialitePage() {
             <Li>
               <Strong>Données de garde-robe :</Strong> photos de vêtements que vous ajoutez,
               métadonnées des articles (catégorie, couleur, marque, étiquettes, notes).
+            </Li>
+            <Li>
+              <Strong>Morphologie (facultatif) :</Strong> genre, taille, silhouette, proportions et
+              mensurations que vous indiquez, ainsi que le selfie qui sert à créer votre avatar. Elles
+              servent uniquement à créer et mettre à jour votre avatar. Les mensurations ne sont jamais
+              transmises en chiffres au prestataire qui génère l&apos;image : il ne reçoit qu&apos;une
+              description en mots.
             </Li>
             <Li>
               <Strong>Données de shopping et de scan :</Strong> liens produits, captures
