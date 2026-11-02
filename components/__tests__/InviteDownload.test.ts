@@ -105,7 +105,7 @@ describe("copyInviteLink", () => {
 });
 
 describe("InviteDownload", () => {
-  const props = { href: STORE, store: "app_store" as const, label: "Télécharger sur l'App Store", primary: true, placement: "social_invite" };
+  const props = { href: STORE, store: "app_store" as const, label: "Télécharger dans l'App Store", primary: true, placement: "social_invite" };
 
   it("is a real store link, tracked like every other store button", () => {
     const html = renderToStaticMarkup(createElement(InviteDownload, { ...props, copyUrl: URL_ }));

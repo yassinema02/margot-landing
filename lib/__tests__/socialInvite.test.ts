@@ -199,6 +199,23 @@ describe("INVITE_COPY", () => {
     expect(INVITE_COPY.es.invalid).toBe("Este enlace ya no es válido");
   });
 
+  it("labels the store buttons with the stores' own badge wording", () => {
+    // Apple and Google badges, as on the rest of the site (AppStoreBadge, the
+    // « Disponible sur Google Play » buttons of the French pages).
+    expect([INVITE_COPY.fr.appStore, INVITE_COPY.fr.playStore]).toEqual([
+      "Télécharger dans l'App Store",
+      "Disponible sur Google Play",
+    ]);
+    expect([INVITE_COPY.en.appStore, INVITE_COPY.en.playStore]).toEqual([
+      "Download on the App Store",
+      "Get it on Google Play",
+    ]);
+    expect([INVITE_COPY.es.appStore, INVITE_COPY.es.playStore]).toEqual([
+      "Descargar en el App Store",
+      "Disponible en Google Play",
+    ]);
+  });
+
   it("follows the copy rules: no em dash, no emoji, no AI, no exclamation, no reward", () => {
     for (const locale of ["fr", "en", "es"] as const) {
       for (const text of Object.values(INVITE_COPY[locale])) {

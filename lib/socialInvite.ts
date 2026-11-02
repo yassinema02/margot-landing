@@ -160,8 +160,8 @@ export const INVITE_COPY: Record<
     hasApp: "Déjà l'app ? Ouvre ce lien sur ton téléphone.",
     invalid: "Ce lien n'est plus valable",
     unavailable: "On n'a pas pu vérifier ce lien, il reste peut-être valable. Installe Margot et colle-le dans l'app.",
-    appStore: "Télécharger sur l'App Store",
-    playStore: "Télécharger sur Google Play",
+    appStore: "Télécharger dans l'App Store",
+    playStore: "Disponible sur Google Play",
   },
   en: {
     metaTitle: "An invitation to Margot",
@@ -181,6 +181,6 @@ export const INVITE_COPY: Record<
     invalid: "Este enlace ya no es válido",
     unavailable: "No hemos podido comprobar este enlace, puede que siga siendo válido. Instala Margot y pégalo en la app.",
     appStore: "Descargar en el App Store",
-    playStore: "Descargar en Google Play",
+    playStore: "Disponible en Google Play",
   },
 };
