@@ -22,7 +22,12 @@ const mem = new Map<string, number[]>();
 /** Trusted client IP — never `x-forwarded-for` (spoofable). */
 export function clientIp(req: Request): string {
   const ip = (req as unknown as { ip?: string }).ip;
-  return ip ?? req.headers.get("x-real-ip") ?? "unknown";
+  return ip ?? clientIpFromHeaders(req.headers);
+}
+
+/** Same rule for a server component, which only sees `headers()`. */
+export function clientIpFromHeaders(headers: Pick<Headers, "get">): string {
+  return headers.get("x-real-ip") ?? "unknown";
 }
 
 export async function isRateLimited(

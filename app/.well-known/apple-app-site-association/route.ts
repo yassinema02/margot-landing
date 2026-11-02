@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 /**
- * Apple App Site Association — Universal Links pour les liens d'auth Margot.
+ * Apple App Site Association — Universal Links pour les liens d'auth Margot
+ * et les invitations sociales (/i/<jeton>).
  *
  * Pourquoi ce fichier existe : les liens de récupération de mot de passe et de
  * confirmation d'email transportent `access_token` et `refresh_token` dans le
@@ -20,7 +21,12 @@ import { NextResponse } from "next/server";
  *   associatedDomains: ['applinks:www.margotwardrobe.com']
  *
  * Team ID H5H5T938YD (Yavren SAS) · bundle com.vestiaire.app.
- * Le chemin correspond au `pathPrefix: '/app/auth'` déjà déclaré côté Android.
+ * Les chemins correspondent aux `pathPrefix` '/app/auth' et '/i/' déclarés
+ * côté Android (app.config.js), dont la vérification passe par
+ * /.well-known/assetlinks.json.
+ *
+ * Invitations : l'app installée reçoit le lien et garde le jeton. Sans l'app,
+ * la page web /i/<jeton> s'affiche.
  */
 const AASA = {
   applinks: {
@@ -32,6 +38,10 @@ const AASA = {
             "/": "/app/auth/*",
             comment:
               "Liens d'authentification (reset de mot de passe, confirmation d'email)",
+          },
+          {
+            "/": "/i/*",
+            comment: "Invitations sociales",
           },
         ],
       },
