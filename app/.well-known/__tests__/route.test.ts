@@ -17,15 +17,23 @@ describe("apple-app-site-association", () => {
     ]);
   });
 
-  it("couvre les chemins d'auth, et eux seuls", async () => {
+  it("couvre les chemins d'auth et les invitations, et eux seuls", async () => {
     const body = await GET().json();
     const paths = body.applinks.details[0].components.map(
       (c: Record<string, string>) => c["/"],
     );
-    // Doit rester aligné sur le `pathPrefix: '/app/auth'` déclaré côté Android
-    // dans apps/mobile/app.config.js — les deux plateformes ouvrent les mêmes
-    // liens.
-    expect(paths).toEqual(["/app/auth/*"]);
+    // Doit rester aligné sur les `pathPrefix` '/app/auth' et '/i/' déclarés
+    // côté Android dans apps/mobile/app.config.js : les deux plateformes
+    // ouvrent les mêmes liens.
+    expect(paths).toEqual(["/app/auth/*", "/i/*"]);
+  });
+
+  it("ouvre les invitations sociales dans l'app", async () => {
+    const body = await GET().json();
+    expect(body.applinks.details[0].components).toContainEqual({
+      "/": "/i/*",
+      comment: "Invitations sociales",
+    });
   });
 
   it("ne capture pas la racine du site (sinon toute page ouvrirait l'app)", async () => {
