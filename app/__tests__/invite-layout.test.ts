@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createElement, type ReactElement } from "react";
 
@@ -19,10 +19,19 @@ const importsOf = (source: string) => Array.from(source.matchAll(/from\s+["']([^
 type Layout = (props: { children: React.ReactNode }) => Promise<ReactElement>;
 let InviteLayout: Layout;
 
+// The GA id set below is put back afterwards: other test files in the same
+// worker must not inherit it.
+const previousGaId = process.env.NEXT_PUBLIC_GA_ID;
+
 beforeAll(async () => {
   // Even with every tracker configured, none may appear on /i/.
   process.env.NEXT_PUBLIC_GA_ID = "G-TESTTEST";
   InviteLayout = (await import("../(invite)/layout")).default as unknown as Layout;
+});
+
+afterAll(() => {
+  if (previousGaId === undefined) delete process.env.NEXT_PUBLIC_GA_ID;
+  else process.env.NEXT_PUBLIC_GA_ID = previousGaId;
 });
 
 async function render(lang?: string): Promise<string> {
