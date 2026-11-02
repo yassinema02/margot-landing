@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ReactElement } from "react";
 
@@ -11,7 +11,7 @@ const rpc = vi.fn();
 let configured = true;
 vi.mock("@/lib/supabase", () => ({ getSupabase: () => (configured ? { rpc } : null) }));
 
-import InvitePage, { generateMetadata, dynamic, runtime } from "../(en)/i/[token]/page";
+import InvitePage, { generateMetadata, dynamic, runtime } from "../(invite)/i/[token]/page";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/launch";
 
 const TOKEN = "0f8e2a4c-1b3d-4e5f-8a9b-0c1d2e3f4a5b";
@@ -39,10 +39,17 @@ async function render(token = TOKEN): Promise<{ html: string; text: string }> {
 
 const INES = { display_name: "Inès", username: "ines.b", initial: "I" };
 
+let warn: ReturnType<typeof vi.spyOn>;
+
 beforeEach(() => {
   rpc.mockReset();
   configured = true;
   visit();
+  warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+});
+
+afterEach(() => {
+  warn.mockRestore();
 });
 
 describe("/i/[token] route config", () => {
@@ -78,7 +85,7 @@ describe("/i/[token] metadata", () => {
   });
 
   it("does not pass the invitation URL on as a referrer", async () => {
-    expect((await generateMetadata()).referrer).toBe("origin");
+    expect((await generateMetadata()).referrer).toBe("no-referrer");
   });
 
   it("follows the visitor's language", async () => {
@@ -145,27 +152,27 @@ describe("/i/[token] valid invitation", () => {
     expect(text).toContain("Already have the app? Open this link on your phone.");
   });
 
-  it("marks up the content in the visitor's language", async () => {
-    rpc.mockResolvedValue({ data: INES, error: null });
-    visit({ lang: "fr-FR" });
-    expect((await render()).html).toContain('lang="fr"');
-  });
-
   it("tracks store taps under their own placement", async () => {
     rpc.mockResolvedValue({ data: INES, error: null });
     const { html } = await render();
     expect(html).toContain('data-placement="social_invite"');
   });
+
+  it("no layout workaround for a cookie banner: the invite layout has none", async () => {
+    rpc.mockResolvedValue({ data: INES, error: null });
+    expect((await render()).html).not.toContain("pb-44");
+  });
 });
 
-describe("/i/[token] invalid or unavailable", () => {
-  it("unknown, expired or revoked token: calm message and a store button", async () => {
+describe("/i/[token] invalid: the link is definitely dead", () => {
+  it("unknown, expired or revoked token: calm message and a store button, nothing copied", async () => {
     rpc.mockResolvedValue({ data: null, error: null });
     const { html, text } = await render();
     expect(text).toContain("Ce lien n'est plus valable");
     expect(html).toContain(`href="${APP_STORE_URL}"`);
     expect(text).not.toContain("@");
     expect(text).not.toContain("Déjà l'app");
+    expect(text).not.toContain("pas pu vérifier");
     expect(html).toContain('data-placement="social_invite_invalid"');
   });
 
@@ -175,29 +182,69 @@ describe("/i/[token] invalid or unavailable", () => {
     expect(rpc).not.toHaveBeenCalled();
   });
 
-  it("Supabase error: same calm message, no technical detail", async () => {
-    rpc.mockResolvedValue({ data: null, error: { message: "permission denied for function social_invite_preview", code: "42501" } });
-    const { html, text } = await render();
-    expect(text).toContain("Ce lien n'est plus valable");
-    expect(html).not.toMatch(/permission|42501|error/i);
-  });
-
-  it("Supabase throws: same calm message", async () => {
-    rpc.mockRejectedValue(new Error("fetch failed"));
-    expect((await render()).text).toContain("Ce lien n'est plus valable");
-  });
-
-  it("no Supabase configured (build, preview): renders, does not crash", async () => {
-    configured = false;
-    expect((await render()).text).toContain("Ce lien n'est plus valable");
-  });
-
   it("other languages", async () => {
     rpc.mockResolvedValue({ data: null, error: null });
     visit({ lang: "en-US" });
     expect((await render()).text).toContain("This link is no longer valid");
     visit({ lang: "es-ES" });
     expect((await render()).text).toContain("Este enlace ya no es válido");
+  });
+});
+
+describe("/i/[token] unavailable: the link could not be checked", () => {
+  const UNAVAILABLE_FR =
+    "On n'a pas pu vérifier ce lien, il reste peut-être valable. Installe Margot et colle-le dans l'app.";
+
+  async function expectUnavailable() {
+    const { html, text } = await render();
+    expect(text).toContain(UNAVAILABLE_FR);
+    expect(text).not.toContain("Ce lien n'est plus valable");
+    expect(html).toContain(`href="${APP_STORE_URL}"`);
+    expect(html).toContain('data-placement="social_invite_unavailable"');
+    expect(text).toContain("Déjà l'app ? Ouvre ce lien sur ton téléphone.");
+    return { html, text };
+  }
+
+  it("Supabase error: neutral message, store button, no technical detail", async () => {
+    rpc.mockResolvedValue({ data: null, error: { message: "permission denied for function social_invite_preview", code: "42501" } });
+    const { html } = await expectUnavailable();
+    expect(html).not.toMatch(/permission|42501|error/i);
+  });
+
+  it("Supabase throws", async () => {
+    rpc.mockRejectedValue(new Error("fetch failed"));
+    await expectUnavailable();
+  });
+
+  it("no Supabase configured (build, preview): renders, does not crash", async () => {
+    configured = false;
+    await expectUnavailable();
+  });
+
+  it("still copies the link on tap: the app checks it", async () => {
+    rpc.mockRejectedValue(new Error("fetch failed"));
+    const el = (await InvitePage({ params: Promise.resolve({ token: TOKEN }) })) as ReactElement;
+    const buttons: ReactElement<{ copyUrl?: string }>[] = [];
+    const walk = (node: unknown) => {
+      if (!node || typeof node !== "object") return;
+      if (Array.isArray(node)) return node.forEach(walk);
+      const element = node as ReactElement<{ children?: unknown; copyUrl?: string }>;
+      if (typeof element.type === "function" && element.type.name === "InviteDownload") buttons.push(element);
+      walk(element.props?.children);
+    };
+    walk(el);
+    expect(buttons.length).toBeGreaterThan(0);
+    for (const button of buttons) expect(button.props.copyUrl).toBe(`https://www.margotwardrobe.com/i/${TOKEN}`);
+  });
+
+  it("other languages", async () => {
+    rpc.mockRejectedValue(new Error("fetch failed"));
+    visit({ lang: "en-US" });
+    expect((await render()).text).toContain("We couldn't check this link, it may still be valid. Install Margot and paste it in the app.");
+    visit({ lang: "es-ES" });
+    expect((await render()).text).toContain(
+      "No hemos podido comprobar este enlace, puede que siga siendo válido. Instala Margot y pégalo en la app.",
+    );
   });
 
   it("rate limit: past 30 lookups a minute from one address, no more Supabase calls", async () => {
@@ -209,7 +256,8 @@ describe("/i/[token] invalid or unavailable", () => {
     expect(rpc).toHaveBeenCalledTimes(30);
 
     visit({ ip: "203.0.113.7" });
-    expect((await render()).text).toContain("Ce lien n'est plus valable");
+    const { text } = await render();
+    expect(text).toContain(UNAVAILABLE_FR);
     expect(rpc).toHaveBeenCalledTimes(30);
 
     // Another address is not affected.
@@ -224,6 +272,12 @@ describe("/i/[token] invalid or unavailable", () => {
       await render();
     }
     requestHeaders = new Headers({ "user-agent": IPHONE, "x-real-ip": "198.51.100.9", "x-forwarded-for": "9.9.9.9" });
-    expect((await render()).text).toContain("This link is no longer valid");
+    expect((await render()).text).toContain("We couldn't check this link");
+  });
+
+  it("never logs the token", async () => {
+    rpc.mockResolvedValue({ data: null, error: { message: "nope", code: "PGRST202" } });
+    await render();
+    expect(JSON.stringify(warn.mock.calls)).not.toContain(TOKEN);
   });
 });

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // The anon client is replaced by a fake whose rpc() each test scripts.
 const rpc = vi.fn();
@@ -18,9 +18,16 @@ import {
 
 const TOKEN = "0f8e2a4c-1b3d-4e5f-8a9b-0c1d2e3f4a5b";
 
+let warn: ReturnType<typeof vi.spyOn>;
+
 beforeEach(() => {
   rpc.mockReset();
   configured = true;
+  warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+});
+
+afterEach(() => {
+  warn.mockRestore();
 });
 
 describe("isInviteToken", () => {
@@ -43,42 +50,42 @@ describe("inviteUrl", () => {
 });
 
 describe("fetchInvitePreview", () => {
-  it("never calls Supabase for a token that is not a uuid", async () => {
+  it("never calls Supabase for a token that is not a uuid: invalid", async () => {
     for (const bad of ["abc", "", `${TOKEN}/x`, "1; drop table x"]) {
-      expect(await fetchInvitePreview(bad)).toBeNull();
+      expect(await fetchInvitePreview(bad)).toEqual({ status: "invalid" });
     }
     expect(rpc).not.toHaveBeenCalled();
   });
 
   it("calls social_invite_preview with the lower-case token", async () => {
     rpc.mockResolvedValue({ data: { display_name: "Inès", username: "ines.b", initial: "I" }, error: null });
-    const preview = await fetchInvitePreview(TOKEN.toUpperCase());
+    const lookup = await fetchInvitePreview(TOKEN.toUpperCase());
     expect(rpc).toHaveBeenCalledTimes(1);
     expect(rpc).toHaveBeenCalledWith("social_invite_preview", { p_token: TOKEN });
-    expect(preview).toEqual({ displayName: "Inès", username: "ines.b", initial: "I" });
+    expect(lookup).toEqual({ status: "valid", preview: { displayName: "Inès", username: "ines.b", initial: "I" } });
   });
 
-  it("null when Supabase is not configured", async () => {
-    configured = false;
-    expect(await fetchInvitePreview(TOKEN)).toBeNull();
-  });
-
-  it("null on a Supabase error, without throwing", async () => {
-    rpc.mockResolvedValue({ data: null, error: { message: "permission denied for function", code: "42501" } });
-    expect(await fetchInvitePreview(TOKEN)).toBeNull();
-  });
-
-  it("null when the call itself throws", async () => {
-    rpc.mockRejectedValue(new Error("fetch failed"));
-    expect(await fetchInvitePreview(TOKEN)).toBeNull();
-  });
-
-  it("null for an unknown, expired or revoked token (RPC returns null)", async () => {
+  it("invalid only for a definite null from the RPC (unknown, expired, revoked)", async () => {
     rpc.mockResolvedValue({ data: null, error: null });
-    expect(await fetchInvitePreview(TOKEN)).toBeNull();
+    expect(await fetchInvitePreview(TOKEN)).toEqual({ status: "invalid" });
   });
 
-  it("null when the payload does not have the expected shape", async () => {
+  it("unavailable when Supabase is not configured", async () => {
+    configured = false;
+    expect(await fetchInvitePreview(TOKEN)).toEqual({ status: "unavailable" });
+  });
+
+  it("unavailable on a Supabase error, without throwing", async () => {
+    rpc.mockResolvedValue({ data: null, error: { message: "permission denied for function", code: "42501" } });
+    expect(await fetchInvitePreview(TOKEN)).toEqual({ status: "unavailable" });
+  });
+
+  it("unavailable when the call itself throws", async () => {
+    rpc.mockRejectedValue(new Error("fetch failed"));
+    expect(await fetchInvitePreview(TOKEN)).toEqual({ status: "unavailable" });
+  });
+
+  it("unavailable when the payload does not have the expected shape (our bug, not the link's)", async () => {
     const bad = [
       "Inès",
       [],
@@ -90,8 +97,31 @@ describe("fetchInvitePreview", () => {
     ];
     for (const data of bad) {
       rpc.mockResolvedValueOnce({ data, error: null });
-      expect(await fetchInvitePreview(TOKEN)).toBeNull();
+      expect(await fetchInvitePreview(TOKEN)).toEqual({ status: "unavailable" });
     }
+  });
+
+  it("logs the error code only: never the token, never the message", async () => {
+    rpc.mockResolvedValue({ data: null, error: { message: `permission denied, token ${TOKEN}`, code: "42501" } });
+    await fetchInvitePreview(TOKEN);
+    rpc.mockRejectedValue(new Error(`boom ${TOKEN}`));
+    await fetchInvitePreview(TOKEN);
+    configured = false;
+    await fetchInvitePreview(TOKEN);
+
+    expect(warn).toHaveBeenCalledTimes(3);
+    const logged = JSON.stringify(warn.mock.calls);
+    expect(logged).toContain("42501");
+    expect(logged).not.toContain(TOKEN);
+    expect(logged).not.toMatch(/permission denied|boom/);
+  });
+
+  it("logs nothing for a valid or a dead link", async () => {
+    rpc.mockResolvedValueOnce({ data: null, error: null });
+    await fetchInvitePreview(TOKEN);
+    rpc.mockResolvedValueOnce({ data: { display_name: "Inès", username: "ines", initial: "I" }, error: null });
+    await fetchInvitePreview(TOKEN);
+    expect(warn).not.toHaveBeenCalled();
   });
 
   it("keeps only the three public fields", async () => {
@@ -99,18 +129,25 @@ describe("fetchInvitePreview", () => {
       data: { display_name: "Inès", username: "ines", initial: "I", user_id: "secret", avatar_url: "https://x/y.jpg" },
       error: null,
     });
-    expect(await fetchInvitePreview(TOKEN)).toEqual({ displayName: "Inès", username: "ines", initial: "I" });
+    expect(await fetchInvitePreview(TOKEN)).toEqual({
+      status: "valid",
+      preview: { displayName: "Inès", username: "ines", initial: "I" },
+    });
   });
 
   it("cleans the display name and derives a missing or blank initial", async () => {
-    rpc.mockResolvedValue({ data: { display_name: "  ‮élodie\u0007  ", username: "elo", initial: " " }, error: null });
-    expect(await fetchInvitePreview(TOKEN)).toEqual({ displayName: "élodie", username: "elo", initial: "É" });
+    rpc.mockResolvedValue({ data: { display_name: "  \u202Eélodie\u0007  ", username: "elo", initial: " " }, error: null });
+    expect(await fetchInvitePreview(TOKEN)).toEqual({
+      status: "valid",
+      preview: { displayName: "élodie", username: "elo", initial: "É" },
+    });
   });
 
   it("caps an oversized display name", async () => {
     rpc.mockResolvedValue({ data: { display_name: "a".repeat(500), username: "abc", initial: "A" }, error: null });
-    const preview = await fetchInvitePreview(TOKEN);
-    expect(Array.from(preview!.displayName).length).toBeLessThanOrEqual(40);
+    const lookup = await fetchInvitePreview(TOKEN);
+    expect(lookup.status).toBe("valid");
+    if (lookup.status === "valid") expect(Array.from(lookup.preview.displayName).length).toBeLessThanOrEqual(40);
   });
 });
 
@@ -152,6 +189,9 @@ describe("INVITE_COPY", () => {
     expect(INVITE_COPY.fr.pitch).toBe("Margot choisit ta tenue chaque matin, avec les vêtements que tu as déjà.");
     expect(INVITE_COPY.fr.hasApp).toBe("Déjà l'app ? Ouvre ce lien sur ton téléphone.");
     expect(INVITE_COPY.fr.invalid).toBe("Ce lien n'est plus valable");
+    expect(INVITE_COPY.fr.unavailable).toBe(
+      "On n'a pas pu vérifier ce lien, il reste peut-être valable. Installe Margot et colle-le dans l'app.",
+    );
   });
 
   it("matches the app's wording for an invalid link in every language", () => {

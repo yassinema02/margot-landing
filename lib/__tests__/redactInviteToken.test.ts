@@ -75,6 +75,23 @@ describe("redactInviteEvent (PostHog before_send)", () => {
     expect(out.event).toBe("$pageleave");
   });
 
+  it("scrubs object keys too: heatmap data is keyed by window.location.href", () => {
+    const href = `https://www.margotwardrobe.com/i/${TOKEN}`;
+    const event = {
+      uuid: "e3",
+      event: "$$heatmap",
+      properties: {
+        $current_url: href,
+        $heatmap_data: { [href]: [{ x: 10, y: 20, target_fixed: false, type: "click" }] },
+      },
+    };
+    const out = redactInviteEvent(event)!;
+    expect(JSON.stringify(out)).not.toContain(TOKEN);
+    expect(out.properties.$heatmap_data).toEqual({
+      "https://www.margotwardrobe.com/i/:token": [{ x: 10, y: 20, target_fixed: false, type: "click" }],
+    });
+  });
+
   it("passes null through (an earlier hook dropped the event)", () => {
     expect(redactInviteEvent(null)).toBeNull();
   });

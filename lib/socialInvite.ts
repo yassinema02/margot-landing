@@ -7,8 +7,17 @@ import { getSupabase } from "./supabase";
 // nothing else, and null when the token is unknown, expired, revoked, the
 // social switch is off or the inviter has no social profile. Founder
 // decision: no face on any public web page, so nothing else is ever read or
-// rendered. Every failure (no env, Supabase error, unexpected payload) reads
-// as "this link is no longer valid": never an exception, never a raw error.
+// rendered.
+//
+// Three outcomes, never an exception, never a raw error on the page:
+// - valid: the inviter to show;
+// - invalid: a definite answer that the link is dead (malformed token, or
+//   null from the RPC);
+// - unavailable: we could not check (no env, Supabase error or exception,
+//   unexpected payload, rate limit). The page then still offers the store
+//   and copies the link: the app checks it after install.
+// Logs carry a reason and the Postgres/PostgREST error code only: never the
+// token, never an error message.
 
 export const INVITE_ORIGIN = "https://www.margotwardrobe.com";
 
@@ -21,6 +30,19 @@ const DISPLAY_NAME_MAX = 40;
 const UNSAFE_CHARS = /[\u0000-\u001F\u007F-\u009F‎‏‪-‮⁦-⁩]/g;
 
 export type InvitePreview = { displayName: string; username: string; initial: string };
+
+export type InviteLookup =
+  | { status: "valid"; preview: InvitePreview }
+  | { status: "invalid" }
+  | { status: "unavailable" };
+
+export type UnavailableReason = "not_configured" | "rpc_error" | "exception" | "bad_payload" | "rate_limited";
+
+/** Server log for a lookup we could not complete: reason and error code only. */
+export function logInviteUnavailable(reason: UnavailableReason, code?: unknown): void {
+  const safeCode = typeof code === "string" && /^[A-Za-z0-9_]{1,16}$/.test(code) ? code : undefined;
+  console.warn("[social-invite] preview unavailable", safeCode ? { reason, code: safeCode } : { reason });
+}
 
 export function isInviteToken(token: unknown): token is string {
   return typeof token === "string" && UUID.test(token);
@@ -51,18 +73,33 @@ function toPreview(data: unknown): InvitePreview | null {
   return { displayName, username, initial: shown.toLocaleUpperCase() };
 }
 
-/** Inviter of a live invitation, or null (never throws). */
-export async function fetchInvitePreview(token: string): Promise<InvitePreview | null> {
-  if (!isInviteToken(token)) return null;
+/** Looks up the inviter of an invitation link (never throws). */
+export async function fetchInvitePreview(token: string): Promise<InviteLookup> {
+  if (!isInviteToken(token)) return { status: "invalid" };
   const sb = getSupabase();
-  if (!sb) return null;
-  try {
-    const { data, error } = await sb.rpc("social_invite_preview", { p_token: token.toLowerCase() });
-    if (error) return null;
-    return toPreview(data);
-  } catch {
-    return null;
+  if (!sb) {
+    logInviteUnavailable("not_configured");
+    return { status: "unavailable" };
   }
+  let data: unknown;
+  try {
+    const result = await sb.rpc("social_invite_preview", { p_token: token.toLowerCase() });
+    if (result.error) {
+      logInviteUnavailable("rpc_error", result.error.code);
+      return { status: "unavailable" };
+    }
+    data = result.data;
+  } catch {
+    logInviteUnavailable("exception");
+    return { status: "unavailable" };
+  }
+  if (data === null) return { status: "invalid" };
+  const preview = toPreview(data);
+  if (!preview) {
+    logInviteUnavailable("bad_payload");
+    return { status: "unavailable" };
+  }
+  return { status: "valid", preview };
 }
 
 export type InviteLocale = "fr" | "en" | "es";
@@ -111,6 +148,7 @@ export const INVITE_COPY: Record<
     pitch: string;
     hasApp: string;
     invalid: string;
+    unavailable: string;
     appStore: string;
     playStore: string;
   }
@@ -121,6 +159,7 @@ export const INVITE_COPY: Record<
     pitch: "Margot choisit ta tenue chaque matin, avec les vêtements que tu as déjà.",
     hasApp: "Déjà l'app ? Ouvre ce lien sur ton téléphone.",
     invalid: "Ce lien n'est plus valable",
+    unavailable: "On n'a pas pu vérifier ce lien, il reste peut-être valable. Installe Margot et colle-le dans l'app.",
     appStore: "Télécharger sur l'App Store",
     playStore: "Télécharger sur Google Play",
   },
@@ -130,6 +169,7 @@ export const INVITE_COPY: Record<
     pitch: "Margot picks your outfit every morning, from the clothes you already own.",
     hasApp: "Already have the app? Open this link on your phone.",
     invalid: "This link is no longer valid",
+    unavailable: "We couldn't check this link, it may still be valid. Install Margot and paste it in the app.",
     appStore: "Download on the App Store",
     playStore: "Get it on Google Play",
   },
@@ -139,6 +179,7 @@ export const INVITE_COPY: Record<
     pitch: "Margot elige tu outfit cada mañana, con la ropa que ya tienes.",
     hasApp: "¿Ya tienes la app? Abre este enlace en tu teléfono.",
     invalid: "Este enlace ya no es válido",
+    unavailable: "No hemos podido comprobar este enlace, puede que siga siendo válido. Instala Margot y pégalo en la app.",
     appStore: "Descargar en el App Store",
     playStore: "Descargar en Google Play",
   },

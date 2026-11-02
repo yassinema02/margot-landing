@@ -28,8 +28,9 @@ function redactDeep(value: unknown, depth: number): unknown {
   if (depth >= MAX_DEPTH) return value;
   if (Array.isArray(value)) return value.map((item) => redactDeep(item, depth + 1));
   if (isPlainObject(value)) {
+    // Keys too: heatmap data ($heatmap_data) is keyed by window.location.href.
     const out: Record<string, unknown> = {};
-    for (const [key, item] of Object.entries(value)) out[key] = redactDeep(item, depth + 1);
+    for (const [key, item] of Object.entries(value)) out[redactInviteToken(key)] = redactDeep(item, depth + 1);
     return out;
   }
   return value;
@@ -42,10 +43,11 @@ type EventLike = {
 };
 
 /**
- * PostHog `before_send` hook: rewrites every string property of the event
- * (URL, pathname, referrer, session entry, autocapture hrefs, person
- * properties) so no invitation token leaves the browser. Other events pass
- * through unchanged in value.
+ * PostHog `before_send` hook: rewrites every string of the event, values and
+ * object keys (URL, pathname, referrer, session entry, autocapture hrefs,
+ * heatmap data, person properties) so no invitation token leaves the
+ * browser in an event. Other events pass through unchanged in value.
+ * The /flags request is not an event: the invitation layout turns it off.
  */
 export function redactInviteEvent<E extends EventLike>(event: E | null): E | null {
   if (!event) return event;

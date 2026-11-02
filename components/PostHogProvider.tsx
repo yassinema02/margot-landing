@@ -17,8 +17,10 @@
  *
  * Invitation links (/i/<token>) carry a single-use token. `before_send`
  * rewrites it to /i/:token in every event (pageview, pageleave, autocapture,
- * store clicks: URL, pathname, referrer, session entry), so it never reaches
- * PostHog.
+ * heatmaps, store clicks: URL, pathname, referrer, session entry). The
+ * invitation layout also passes `disableFlags`: the /flags request is not an
+ * event, it carries $initial_current_url / $initial_pathname, and the landing
+ * uses no feature flag. The rest of the site keeps its remote config.
  */
 
 import { useEffect, Suspense } from "react";
@@ -41,16 +43,28 @@ export const POSTHOG_OPTIONS: Partial<PostHogConfig> = {
   before_send: redactInviteEvent, // /i/<token> → /i/:token everywhere
 };
 
+/** Init options; `disableFlags` skips /flags and remote config entirely. */
+export function posthogOptions({ disableFlags }: { disableFlags: boolean }): Partial<PostHogConfig> {
+  return disableFlags ? { ...POSTHOG_OPTIONS, advanced_disable_flags: true } : POSTHOG_OPTIONS;
+}
+
 /** `$current_url` of a manual pageview, invitation token removed. */
 export function pageviewUrl(origin: string, pathname: string, query: string): string {
   return redactInviteToken(origin + pathname + (query ? `?${query}` : ""));
 }
 
-export function PostHogProvider({ children }: { children: React.ReactNode }) {
+export function PostHogProvider({
+  children,
+  disableFlags = false,
+}: {
+  children: React.ReactNode;
+  /** Invitation page: no /flags request (see header). */
+  disableFlags?: boolean;
+}) {
   useEffect(() => {
     if (!POSTHOG_KEY || posthog.__loaded) return;
-    posthog.init(POSTHOG_KEY, POSTHOG_OPTIONS);
-  }, []);
+    posthog.init(POSTHOG_KEY, posthogOptions({ disableFlags }));
+  }, [disableFlags]);
 
   // Without a key there's no client to provide — render children untouched.
   if (!POSTHOG_KEY) return <>{children}</>;
