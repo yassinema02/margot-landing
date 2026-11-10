@@ -79,7 +79,7 @@ function snapshotOf(value:unknown,token:string,now:number): {snapshot:PublicVote
   if (o.choice!==['a','b'][index] || !Array.isArray(o.pieces) || o.pieces.length<2 || o.pieces.length>9) throw new VoteError('unavailable');
   const pieces=o.pieces.map(value=>{
    const p=record(value);
-   if (typeof p.media_id!=='string' || p.media_id.length!==36 || !UUID.test(p.media_id) || media.has(p.media_id) || !(p.name===null || text(p.name,500)) || !(p.category===null || text(p.category,500))) throw new VoteError('unavailable');
+   if (typeof p.media_id!=='string' || p.media_id.length!==36 || !UUID.test(p.media_id) || media.has(p.media_id) || !(p.name===null || typeof p.name==='string') || !(p.category===null || typeof p.category==='string')) throw new VoteError('unavailable');
    media.add(p.media_id);
    return {name:p.name as string|null,category:p.category as string|null,imageUrl:`${VOTE_ORIGIN}/v/${token}/media/${p.media_id}`};
   });

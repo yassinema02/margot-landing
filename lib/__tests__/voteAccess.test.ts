@@ -184,3 +184,26 @@ it('slow body is aborted within10s remote bound without SQL or fresh budget',asy
  const init={method:'POST',headers:{cookie,'content-type':'application/json'},body:stream,duplex:'half'} as RequestInit;
  const pending=f.service.cast(TOKEN,req('/ballot',init));await vi.advanceTimersByTimeAsync(10001);const res=await pending;expect(res.status).toBe(503);expect(canceled).toBe(true);expect(f.io.rpc.mock.calls.filter(([n])=>n==='social_vote_web_cast')).toHaveLength(0);expect(vi.getTimerCount()).toBe(0);
 });
+
+it.each([
+ {label:'name501 and category1001',name:'x'.repeat(501),category:'y'.repeat(1001)},
+ {label:'null metadata',name:null,category:null},
+ {label:'empty string metadata',name:'',category:''},
+])('published metadata remains readable across read/device/media: $label',async({name,category})=>{
+ const f=fixture();Object.assign(f.s.options[0].pieces[0],{name,category});f.row.my_choice='b';
+ const read=await f.service.read(TOKEN,req());expect.soft(read.status).toBe('ok');
+ if(read.status==='ok') {
+  expect(read.myChoice).toBe('b');expect(read.snapshot.options[0].pieces[0]).toEqual({name,category,imageUrl:`${VOTE_ORIGIN}/v/${TOKEN}/media/${MEDIA}`});
+ }
+ const initialized=await f.service.device(TOKEN,req('/device',{method:'POST'}));expect.soft(initialized.status).toBe(200);
+ const image=await f.service.media(TOKEN,MEDIA,req());expect.soft(image.status).toBe(200);
+ if(image.status===200)expect(Buffer.from(await image.arrayBuffer())).toEqual(JPEG);
+});
+it('piece metadata still rejects values other than string or null on all read surfaces',async()=>{
+ for(const field of ['name','category'])for(const value of [undefined,0,true,[],{}]) {
+  const f=fixture();Object.assign(f.s.options[0].pieces[0],{[field]:value});
+  expect(await f.service.read(TOKEN,req())).toEqual({status:'service_unavailable'});
+  expect((await f.service.device(TOKEN,req('/device',{method:'POST'}))).status).toBe(503);
+  expect((await f.service.media(TOKEN,MEDIA,req())).status).toBe(503);expect(f.io.download).not.toHaveBeenCalled();
+ }
+});
