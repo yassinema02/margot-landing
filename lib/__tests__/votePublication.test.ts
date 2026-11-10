@@ -259,3 +259,23 @@ it('suggestion rejects malformed capabilities and extra owner authority before a
  }
  expect(factory).not.toHaveBeenCalled();
 });
+
+it('8b validators reject terminal LF/CR/CRLF on tokens, IDs, hashes and source versions before I/O',async()=>{
+ const f=fixture();const create=vi.spyOn(backendModule,'voteBackend').mockReturnValue(f.io);
+ for(const suffix of ['\n','\r','\r\n']){
+  for(const body of [
+   {action:'suggestion',token:'A'.repeat(43)+suffix},
+   {action:'prepare',voteId:VOTE+suffix,expectedRevision:1,firstName:'Élo'},
+   {action:'publish',voteId:VOTE,revision:1,manifestHash:'a'.repeat(64)+suffix,consentVersion:1},
+  ]){
+   const response=await POST(new Request('https://www.margotwardrobe.com/api/social-vote-link',{method:'POST',headers:{authorization:'Bearer reader-jwt','content-type':'application/json'},body:JSON.stringify(body)}));
+   expect(response.status).toBe(400);
+  }
+  await expect(f.service.preview('jwt',{voteId:VOTE,revision:1,manifestHash:'a'.repeat(64),mediaId:id(10)+suffix})).rejects.toMatchObject({code:'invalid'});
+  await expect(f.service.preview('jwt',{voteId:VOTE,revision:1,manifestHash:'a'.repeat(64)+suffix,mediaId:id(10)})).rejects.toMatchObject({code:'invalid'});
+  const r=structuredClone(f.r);r.media[0].sourceVersion+=suffix;
+  expect(()=>parseReservation(r,OWNER,VOTE,1)).toThrow();
+ }
+ // Backend construction may precede publish validation; no Auth/DB/I/O is started.
+ expect(create).toHaveBeenCalledTimes(3);expect(f.io.user).not.toHaveBeenCalled();expect(f.io.rpc).not.toHaveBeenCalled();
+});
