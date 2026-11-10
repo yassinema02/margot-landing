@@ -1,3 +1,4 @@
+import { POST as report } from '../(vote)/v/[token]/report/route';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 vi.mock('server-only',()=>({}));
 import { POST as ballot, runtime, maxDuration } from '../(vote)/v/[token]/ballot/route';
@@ -78,4 +79,13 @@ it('installed optimizer validator rejects absolute canonical vote URLs and encod
  const validate=(url:string)=>ImageOptimizerCache.validateParams({headers:{accept:'image/webp'}} as Params[0],{url,w:'640',q:'75'},{...config,images:{...imageConfigDefault,...config.images}} as Params[2],false);
  expect(validate('/screens/en/home.webp')).toMatchObject({href:'/screens/en/home.webp',isAbsolute:false});
  for(const url of [`${VOTE_ORIGIN}/v/${TOKEN}/media/${MID}`,`https://www.margotwardrobe.com/%76/${TOKEN}/media/${MID}`,`https://www.margotwardrobe.com/screens/../v/${TOKEN}/media/${MID}`,`//www.margotwardrobe.com/v/${TOKEN}/media/${MID}`,`/v/${TOKEN}/media/${MID}`,`/%2576/${TOKEN}/media/${MID}`,`/screens/en/%2e%2e/%2e%2e/v/${TOKEN}/media/${MID}`])expect(validate(url)).toHaveProperty('errorMessage');
+});
+
+it('report route accepts only the bounded reason and exposes generic confirmation without a device or identity',async()=>{
+ const f=fixture();f.io.rpc.mockResolvedValue({status:'ok'});
+ const res=await report(request('report',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({reason:'privacy'})}),context);
+ expect(res.status).toBe(204);expect(await res.text()).toBe('');expect(f.io.rpc).toHaveBeenCalledTimes(1);expect(f.io.rpc).toHaveBeenCalledWith('social_vote_web_report',expect.objectContaining({p_token_hash:tokenHash(TOKEN),p_reason:'privacy'}),expect.anything());
+ expect((await report(request('report'),context)).status).toBe(405);
+ expect((await report(request('report',{method:'POST',headers:{origin:'https://evil.test'},body:JSON.stringify({reason:'spam'})}),context)).status).toBe(403);
+ expect((await report(request('report',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({reason:'free private text'})}),context)).status).toBe(400);
 });

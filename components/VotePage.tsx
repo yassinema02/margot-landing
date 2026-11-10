@@ -10,7 +10,7 @@ import { captureVoteEvent } from '@/components/PostHogProvider';
 export function VotePage({result,locale}:{result:PublicVoteReadResult;locale:VoteLocale}) {
  const c=VOTE_COPY[locale],router=useRouter();
  useEffect(()=>{captureVoteEvent('social_vote_web_viewed',{locale,result:result.status});},[locale,result.status]);
- return <main className="mx-auto min-h-screen w-full max-w-2xl px-4 py-8 text-ink">
+ return <main lang={locale} className="mx-auto min-h-screen w-full max-w-2xl px-4 py-8 text-ink">
   <div className="mb-8 text-center"><MargotMark fontSize={30}/></div>
   {result.status==='ok' ? <VoteBallot key={JSON.stringify(result.snapshot)} snapshot={result.snapshot} myChoice={result.myChoice} locale={locale}/> : <section className="rounded-3xl bg-surface p-6 text-center">
    <h1 className="font-display text-3xl">{result.status==='unavailable'?c.unavailable:result.status==='limited'?c.limited:c.temporary}</h1>

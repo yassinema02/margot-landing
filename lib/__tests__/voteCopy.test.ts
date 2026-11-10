@@ -15,3 +15,7 @@ it('provides the fixed lexical refusal in every locale',()=>{
  'Este texto contiene un término no permitido. Cámbialo para continuar',
  ]);
 });
+
+it('covers every bounded report reason and terminal state in the existing catalogue',()=>{
+ for(const lang of ['fr','en','es'] as const) for(const key of ['report','reportTitle','reportNotice','reportSend','reportSending','reportSent','reportFailed','reportLimited','reportUnavailable','reportCancel','report_harassment','report_hate','report_sexual','report_violence','report_spam','report_privacy','report_other'] as const)expect(VOTE_COPY[lang][key].length).toBeGreaterThan(0);
+});

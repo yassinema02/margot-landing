@@ -7,6 +7,8 @@ import { APP_STORE_URL, PLAY_STORE_URL } from '@/lib/launch';
 import { captureVoteEvent } from '@/components/PostHogProvider';
 
 type Choice='a'|'b';
+type ReportReason='harassment'|'hate'|'sexual'|'violence'|'spam'|'privacy'|'other';
+const REPORT_REASONS:ReportReason[]=['harassment','hate','sexual','violence','spam','privacy','other'];
 type State='social_text_rejected'|'idle'|'submitting'|'voted'|'closed'|'unavailable'|'cookie_required'|'rate_limited'|'service_unavailable'|'invalid';
 const BUTTON='min-h-[44px] rounded-full px-5 py-3 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4';
 
@@ -19,6 +21,8 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
  const lastAttempt=useRef<Choice|null>(null),recordedChoice=useRef(myChoice),unavailable=useRef(false);
  const lock=useRef(false),confirmed=useRef(false),controller=useRef<AbortController|null>(null),alive=useRef(true),expired=useRef(false),closed=useRef(snapshot.closed);
  const [expiredView,setExpiredView]=useState(false);
+ const [reportOpen,setReportOpen]=useState(false),[reportReason,setReportReason]=useState<ReportReason>('harassment'),[reportState,setReportState]=useState<'idle'|'sending'|'sent'|'failed'|'limited'>('idle');
+ const reportLock=useRef(false),reportAbort=useRef<AbortController|null>(null),reportAttempt=useRef<ReportReason|null>(null);
  useEffect(()=>{
   alive.current=true;
   const ua=navigator.userAgent;setPlatform(/Android/i.test(ua)?'android':/iPhone|iPad|iPod/i.test(ua)?'ios':'other');
@@ -32,7 +36,7 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
    timer=setTimeout(check,Math.min(2147483647,Math.max(1,(now<end?end:expiry)-now)));
   }
   check();window.addEventListener('focus',check);document.addEventListener('visibilitychange',check);
-  return ()=>{alive.current=false;clearTimeout(timer);controller.current?.abort();window.removeEventListener('focus',check);document.removeEventListener('visibilitychange',check);};
+  return ()=>{alive.current=false;clearTimeout(timer);controller.current?.abort();reportAbort.current?.abort();window.removeEventListener('focus',check);document.removeEventListener('visibilitychange',check);};
  },[snapshot.endsAt,snapshot.expiresAt]);
  async function submit(next:Choice) {
   if(lock.current || closed.current || expired.current || unavailable.current)return;
@@ -69,6 +73,20 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
    if(nextState==='rate_limited'){const delay=Number((error as {retryAfter?:unknown}).retryAfter);setRetryAfter(Number.isSafeInteger(delay)&&delay>0?delay:60);}
   } finally {clearTimeout(timeout);lock.current=false;if(controller.current===abort)controller.current=null;}
  }
+ async function report() {
+  if(reportLock.current || reportState==='sent' || expired.current || unavailable.current || !alive.current)return;
+  reportLock.current=true;setReportState('sending');
+  const reason=reportAttempt.current ?? reportReason;reportAttempt.current=reason;
+  const abort=new AbortController();reportAbort.current=abort;const timeout=setTimeout(()=>abort.abort(),50000);
+  try {
+   const response=await fetch(`${path}/report`,{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason}),signal:abort.signal});
+   if(!alive.current || expired.current || unavailable.current)return;
+   if(response.status===204){setReportState('sent');captureVoteEvent('social_reported',{target_kind:'vote',reason});}
+   else if(response.status===404 || response.status===403){unavailable.current=true;setState('unavailable');}
+   else setReportState(response.status===429?'limited':'failed');
+  } catch {if(alive.current && !expired.current && !unavailable.current)setReportState('failed');}
+  finally {clearTimeout(timeout);reportLock.current=false;if(reportAbort.current===abort)reportAbort.current=null;}
+ }
  async function copyLink(){
   const url=window.location.origin+path;setCopyUrl(url);
   try {if(!navigator.clipboard?.writeText)throw Error('clipboard_unavailable');await navigator.clipboard.writeText(url);if(alive.current)setCopyState('copied');}
@@ -104,6 +122,21 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
    <div className="grid grid-cols-2 gap-3">{(['a','b'] as const).map(option=><button type="button" key={option} aria-pressed={choice===option} disabled={state==='submitting'} onClick={()=>void submit(option)} className={`${BUTTON} text-surface disabled:opacity-50`} style={{background:choice===option?'#7D3048':'#2D3A33'}}>{option==='a'?c.voteA:c.voteB}</button>)}</div>
    {(['cookie_required','rate_limited','service_unavailable','invalid','social_text_rejected'] as State[]).includes(state) && <button type="button" onClick={()=>{if(lastAttempt.current)void submit(lastAttempt.current);}} className={`${BUTTON} mt-3 w-full border border-ink3`}>{c.retry}</button>}
   </form>}
+  <section className="mt-6 break-words" aria-label={c.reportTitle}>
+   {!reportOpen ? <button type="button" className={`${BUTTON} underline`} onClick={()=>{reportAttempt.current=null;setReportState('idle');setReportOpen(true);}}>{c.report}</button> : <>
+    <h2 className="font-display text-xl">{c.reportTitle}</h2>
+    {reportState==='sent' ? <p role="status">{c.reportSent}</p> : <>
+     <p className="my-3">{c.reportNotice}</p>
+     <label htmlFor="vote-report-reason">{c.reportTitle}</label>
+     <select id="vote-report-reason" value={reportReason} disabled={reportState==='sending'||!!reportAttempt.current} onChange={event=>setReportReason(event.target.value as ReportReason)} className="my-3 min-h-[44px] w-full rounded-xl border border-ink3 bg-surface p-3">
+      {REPORT_REASONS.map(reason=><option key={reason} value={reason}>{c[`report_${reason}`]}</option>)}
+     </select>
+     <p role="status" aria-live="polite">{reportState==='failed'?c.reportFailed:reportState==='limited'?c.reportLimited:reportState==='sending'?c.reportSending:''}</p>
+     <button type="button" className={`${BUTTON} bg-ink text-surface`} disabled={reportState==='sending'} onClick={()=>void report()}>{reportState==='failed'||reportState==='limited'?c.retry:c.reportSend}</button>
+    </>}
+    <button type="button" className={`${BUTTON} ml-2 border border-ink3`} disabled={reportState==='sending'} onClick={()=>{setReportOpen(false);reportAttempt.current=null;}}>{c.reportCancel}</button>
+   </>}
+  </section>
   {terminal && <aside data-vote-invitation="true" className="mt-9 rounded-3xl bg-surface p-5 text-center">
    <p className="font-display text-xl">{c.pitch}</p>
    <div className="mt-5 flex flex-wrap justify-center gap-3">{(platform==='android'?['android']:platform==='ios'?['ios']:['ios','android']).map(store=><a key={store} href={store==='ios'?APP_STORE_URL:PLAY_STORE_URL} rel="noreferrer" className={`${BUTTON} bg-ink text-surface no-underline`} onClick={()=>{void copyLink();captureVoteEvent('social_vote_web_store_clicked',{locale,platform:store,result:'clicked'});}}>{c.download} · {store==='ios'?c.appStore:c.playStore}</a>)}</div>

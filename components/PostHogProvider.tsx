@@ -44,9 +44,9 @@ export const POSTHOG_OPTIONS: Partial<PostHogConfig> = {
 };
 
 /** Init options; `disableFlags` skips /flags and remote config entirely. */
-export const VOTE_EVENTS = ['social_vote_web_viewed','social_vote_web_voted','social_vote_web_store_clicked'] as const;
+export const VOTE_EVENTS = ['social_vote_web_viewed','social_vote_web_voted','social_vote_web_store_clicked','social_reported'] as const;
 type VoteEvent = typeof VOTE_EVENTS[number];
-type VoteProps = {locale?: string; platform?: string; result?: string};
+type VoteProps = {locale?: string; platform?: string; result?: string; target_kind?: string; reason?: string};
 let strictVoteReady=false;
 const TRANSPORT_UUID=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 const VALUES = {locale:['fr','en','es'],platform:['ios','android','other'],result:['ok','unavailable','limited','service_unavailable','clicked']};
@@ -57,6 +57,10 @@ export function strictVoteEvent(event: unknown) {
   const anonymousId=posthog.get_distinct_id();
   if(typeof anonymousId!=='string'||!TRANSPORT_UUID.test(anonymousId)||typeof e.uuid!=='string'||!TRANSPORT_UUID.test(e.uuid)||!(e.timestamp instanceof Date)||!Number.isFinite(e.timestamp.getTime()))return null;
   if (!VOTE_EVENTS.includes(e.event as VoteEvent)) return null;
+  if(e.event==='social_reported') {
+    if(e.properties?.target_kind!=='vote' || typeof e.properties?.reason!=='string' || !['harassment','hate','sexual','violence','spam','privacy','other'].includes(e.properties.reason))return null;
+    return {uuid:e.uuid,timestamp:e.timestamp,event:e.event,properties:{target_kind:'vote',reason:e.properties.reason,token:POSTHOG_KEY,distinct_id:anonymousId}};
+  }
   const properties:VoteProps={};
   for(const key of ['locale','platform','result'] as const){
     const value=e.properties?.[key];

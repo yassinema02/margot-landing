@@ -14,6 +14,8 @@ vi.mock('react',async importOriginal=>{
  };
 });
 vi.mock('next/navigation',()=>({useRouter:()=>({refresh:vi.fn()}),usePathname:()=>'/v/'+ 'A'.repeat(43),useSearchParams:()=>new URLSearchParams()}));
+vi.mock('@/components/PostHogProvider',()=>({captureVoteEvent:vi.fn()}));
+import {captureVoteEvent} from '@/components/PostHogProvider';
 import {VotePage} from '@/components/VotePage';
 import {VoteBallot} from '@/components/VoteBallot';
 import {VOTE_COPY} from '@/lib/voteCopy';
@@ -55,7 +57,7 @@ function controlledBallot(myChoice:'b'|null){
   if(Array.isArray(node))return node.flatMap(buttons);if(!isValidElement<{children?:ReactNode}>(node))return [];
   return [...(node.type==='button'?[node as ReactElement<{children?:ReactNode;onClick:()=>void}>]:[]),...buttons(node.props.children)];
  }
- return {html:()=>renderToStaticMarkup(draw()),chooseA:()=>buttons(draw()).find(button=>button.props.children==='Je vote A')!.props.onClick(),windowTarget,documentTarget};
+ return {reportOpen:()=>buttons(draw()).find(b=>b.props.children===VOTE_COPY.fr.report)!.props.onClick(),sendReport:()=>buttons(draw()).find(b=>[VOTE_COPY.fr.reportSend,VOTE_COPY.fr.retry].includes(b.props.children as string))!.props.onClick(),cancelReport:()=>buttons(draw()).find(b=>b.props.children===VOTE_COPY.fr.reportCancel)!.props.onClick(),html:()=>renderToStaticMarkup(draw()),chooseA:()=>buttons(draw()).find(button=>button.props.children==='Je vote A')!.props.onClick(),windowTarget,documentTarget};
 }
 afterEach(()=>{for(const cleanup of hooks.cleanups.splice(0))cleanup();hooks.active=false;vi.useRealTimers();vi.unstubAllGlobals();vi.restoreAllMocks();});
 
@@ -84,4 +86,21 @@ it('keeps a newly server-confirmed choice when the timer closes voting',async()=
  vi.stubGlobal('fetch',vi.fn(async(url:string)=>String(url).endsWith('/device')?Response.json({status:'ok',confirmed:true}):Response.json({status:'ok',choice:'a',closed:false})));
  ballot.chooseA();await vi.advanceTimersByTimeAsync(0);expect(ballot.html()).toContain('Ton choix est enregistré : A');
  await vi.advanceTimersByTimeAsync(1001);const html=ballot.html();expect(html).toContain('Ton choix est enregistré : A');expect(html).not.toContain('<form');
+});
+
+it('anonymous_ballot_has_no_account_block and reports only through the existing route',async()=>{
+ const b=controlledBallot(null);const request=vi.fn(async(_url:string,_init:RequestInit)=>new Response(null,{status:204}));vi.stubGlobal('fetch',request);vi.mocked(captureVoteEvent).mockClear();
+ b.reportOpen();expect(b.html()).toContain('Signaler ce contenu');expect(b.html()).not.toMatch(/>Bloquer<|>Block<|compte groupe/);
+ b.sendReport();b.sendReport();await vi.advanceTimersByTimeAsync(0);expect(request).toHaveBeenCalledTimes(1);
+ expect(request.mock.calls[0]).toEqual(['/v/'+token+'/report',expect.objectContaining({method:'POST',credentials:'same-origin',cache:'no-store',body:JSON.stringify({reason:'harassment'})})]);
+ expect(b.html()).toContain(VOTE_COPY.fr.reportSent);expect(captureVoteEvent).toHaveBeenCalledExactlyOnceWith('social_reported',{target_kind:'vote',reason:'harassment'});
+});
+it('report failure retains the exact reason, retries and never sends device or ballot requests',async()=>{
+ const b=controlledBallot(null),request=vi.fn().mockRejectedValueOnce(Error('network')).mockResolvedValue(new Response(null,{status:204}));vi.stubGlobal('fetch',request);
+ b.reportOpen();b.sendReport();await vi.advanceTimersByTimeAsync(0);expect(b.html()).toContain(VOTE_COPY.fr.reportFailed);
+ b.sendReport();await vi.advanceTimersByTimeAsync(0);expect(request.mock.calls.map(c=>[c[0],c[1].body])).toEqual([['/v/'+token+'/report',JSON.stringify({reason:'harassment'})],['/v/'+token+'/report',JSON.stringify({reason:'harassment'})]]);
+});
+it('report rights refusal masks the public content and all report controls',async()=>{
+ const b=controlledBallot(null);vi.stubGlobal('fetch',vi.fn(async()=>Response.json({error:'unavailable'},{status:404})));b.reportOpen();b.sendReport();await vi.advanceTimersByTimeAsync(0);
+ const html=b.html();expect(html).toContain(VOTE_COPY.fr.unavailable);expect(html).not.toContain('Élo');expect(html).not.toContain('Dîner');expect(html).not.toContain('<select');
 });

@@ -75,6 +75,10 @@ it('reconfigures an already loaded identified singleton and sends only anonymous
  expect(config).toHaveBeenCalledWith(expect.objectContaining({autocapture:false,capture_pageleave:false,advanced_disable_flags:true,persistence:'memory'}));expect(reset).toHaveBeenCalledWith(true);expect(capture).toHaveBeenCalledTimes(1);
  const event={uuid:'01234567-89ab-4def-8abc-0123456789ac',timestamp:new Date(),event:'social_vote_web_voted',privateField:'secret',properties:{locale:'fr',platform:'ios',result:'ok',token:'/v/secret',distinct_id:'account-id',firstName:'Élo'},$set:{name:'Élo'}};
  const out=provider.strictVoteEvent(event)!;expect(out.properties).toEqual({locale:'fr',platform:'ios',result:'ok',token:'phc_synthetic_project',distinct_id:id});expect(Object.keys(out).sort()).toEqual(['event','properties','timestamp','uuid']);expect(JSON.stringify(out)).not.toMatch(/secret|account-id|Élo/);
- identified=true;expect(provider.strictVoteEvent(event)).toBeNull();identified=false;expect(provider.strictVoteEvent({...event,uuid:'business-id'})).toBeNull();
+ const report={...event,event:'social_reported',properties:{target_kind:'vote',reason:'privacy',locale:'fr',url:'/v/secret',firstName:'Élo',id:'private-id'}};
+ expect(provider.strictVoteEvent(report)?.properties).toEqual({target_kind:'vote',reason:'privacy',token:'phc_synthetic_project',distinct_id:id});
+ for(const reason of ['harassment','hate','sexual','violence','spam','privacy','other'])expect(provider.strictVoteEvent({...report,properties:{target_kind:'vote',reason}})).not.toBeNull();
+ for(const properties of [{target_kind:'profile',reason:'privacy'},{target_kind:'vote',reason:'private text'},{target_kind:'vote'},{reason:'spam'}])expect(provider.strictVoteEvent({...report,properties})).toBeNull();
+ identified=true;expect(provider.strictVoteEvent(report)).toBeNull();expect(provider.strictVoteEvent(event)).toBeNull();identified=false;expect(provider.strictVoteEvent({...event,uuid:'business-id'})).toBeNull();
  ph.__loaded=wasLoaded;vi.restoreAllMocks();vi.unstubAllEnvs();
 });
