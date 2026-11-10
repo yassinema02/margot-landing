@@ -151,6 +151,17 @@ export function voteAccess(backend:VoteBackend,budget=new VoteBudget()) {
     return response({status:'ok',choice:row.choice,closed:false});
    } catch(error) { return failure(error); }
   },
+  async report(token:string,request:Request):Promise<Response> {
+   try {
+    validToken(token);mutation(request);
+    const body=await ballotBody(request,budget);
+    if(Object.keys(body).length!==1 || typeof body.reason!=='string' || !['harassment','hate','sexual','violence','spam','privacy','other'].includes(body.reason)) throw new PublicFailure('invalid');
+    const row=record(await rpc('social_vote_web_report',{p_token_hash:tokenHash(token),p_reason:body.reason,p_keys:quotaKeys(request,budget.now())}));
+    if(row.status==='invalid') throw new PublicFailure('invalid');
+    if(row.status!=='ok') sqlFailure(row);
+    return new Response(null,{status:204,headers:HEADERS});
+   } catch(error) { return failure(error); }
+  },
   async media(token:string,mediaId:string,request:Request):Promise<Response> {
    try {
     validToken(token);if(mediaId.length!==36 || !UUID.test(mediaId)) throw new PublicFailure('unavailable');
@@ -189,4 +200,8 @@ export async function castPublicVote(token:string,request:Request,budget=new Vot
 }
 export async function readPublicVoteMedia(token:string,mediaId:string,request:Request,budget=new VoteBudget(Date.now(),request.signal)):Promise<Response> {
  try { validToken(token);return await voteAccess(voteBackend(),budget).media(token,mediaId,request); } catch(error) { return failure(error); }
+}
+
+export async function reportPublicVote(token:string,request:Request,budget=new VoteBudget(Date.now(),request.signal)):Promise<Response> {
+ try { validToken(token);mutation(request);return await voteAccess(voteBackend(),budget).report(token,request); } catch(error) { return failure(error); }
 }
