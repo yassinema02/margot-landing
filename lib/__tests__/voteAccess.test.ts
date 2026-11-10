@@ -17,7 +17,7 @@ function fixture() {
  const s=snapshot();const row:{status:string;snapshot:unknown;my_choice:unknown}={status:'ok',snapshot:s,my_choice:null};
  const link={vote_id:VOTE,revision:1,state:'ready',token_hash:tokenHash(TOKEN)};
  const media={id:MEDIA,owner_id:OWNER,vote_id:VOTE,revision:1,path:`${OWNER}/votes/${VOTE}/1/${MEDIA}.jpg`,sha256:sha256(JPEG),state:'ready'};
- const io={rpc:vi.fn(async(name:string,_args:Record<string,unknown>):Promise<unknown>=>name==='social_vote_web_access'?row:name==='social_vote_link_read'?s:{status:'ok',choice:'b',closed:false}),rows:vi.fn(async(table:string,_columns:string,_filters:Record<string,unknown>,_limit:number):Promise<unknown[]>=>table==='style_vote_links'?[link]:[media]),download:vi.fn(async()=>({bytes:JPEG,type:'image/jpeg'})),user:vi.fn(),prepareMedia:vi.fn(),upload:vi.fn(),remove:vi.fn(),exists:vi.fn()};
+ const io={rpc:vi.fn(async(name:string,_args:Record<string,unknown>):Promise<unknown>=>name==='social_vote_web_access'?row:name==='social_vote_link_read'?s:{status:'ok',choice:'b',closed:false}),rows:vi.fn(async(table:string,_columns:string,_filters:Record<string,unknown>,_limit:number):Promise<unknown[]>=>table==='style_vote_links'?[link]:[media]),download:vi.fn(async()=>({bytes:JPEG,type:'image/jpeg'})),user:vi.fn(),rpcAsUser:vi.fn(),prepareMedia:vi.fn(),upload:vi.fn(),remove:vi.fn(),exists:vi.fn()};
  return {s,row,link,media,io,service:voteAccess(io as VoteBackend,new VoteBudget(NOW,undefined,()=>NOW))};
 }
 async function device(f:ReturnType<typeof fixture>) {

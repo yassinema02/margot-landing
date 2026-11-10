@@ -34,6 +34,7 @@ function fixture() {
  const media=r.media.map(m=>({id:m.mediaId,owner_id:OWNER,vote_id:VOTE,revision:1,path:m.destinationPath,source_item_id:m.itemId,source_version:m.sourceVersion,source_path:m.sourcePath,sha256:null as string|null,state:'staged',lease_until:r.leaseUntil}));
  const io={
   user:vi.fn(async()=>OWNER),
+  rpcAsUser:vi.fn(async()=>null),
   rpc:vi.fn(async(name:string,args:Record<string,unknown>):Promise<unknown>=>{
    if(name==='social_media_viewer_ok') return true;
    if(name==='social_vote_link_begin') return {status:link.state==='ready'?'ready':link.manifest_hash?'prepared':'reserved',reservation:r};
@@ -211,4 +212,50 @@ it('uses only server config and real SDK wire requests with cancellation and cre
   if(oldUrl===undefined)delete process.env.SUPABASE_URL;else process.env.SUPABASE_URL=oldUrl;
   if(oldKey===undefined)delete process.env.SUPABASE_SERVICE_ROLE_KEY;else process.env.SUPABASE_SERVICE_ROLE_KEY=oldKey;
  }
+});
+
+describe('authenticated creator suggestion',()=>{
+ it('authenticates before the user-JWT RPC; never calls an owner service RPC',async()=>{
+  const f=fixture();
+  const suggestion={user_id:OWNER,username:'creator',display_name:'Créatrice',bio:null,is_private:true,photo_mode:'initials',relationship:'none'};
+  const rpcAsUser=vi.fn(async()=>suggestion);
+  vi.spyOn(backendModule,'voteBackend').mockReturnValue({...f.io,rpcAsUser});
+  const result=await POST(new Request('https://www.margotwardrobe.com/api/social-vote-link',{method:'POST',headers:{authorization:'Bearer reader-jwt','content-type':'application/json'},body:JSON.stringify({action:'suggestion',token:'A'.repeat(43)})}));
+  expect(result.status).toBe(200);expect(await result.json()).toEqual({suggestion});
+  expect(f.io.user).toHaveBeenCalledWith('reader-jwt',expect.any(AbortSignal));
+  expect(rpcAsUser).toHaveBeenCalledWith('reader-jwt','social_vote_link_suggestion',{p_token_hash:tokenHash('A'.repeat(43))},expect.any(AbortSignal));
+  expect(f.io.user.mock.invocationCallOrder[0]).toBeLessThan(rpcAsUser.mock.invocationCallOrder[0]);
+  expect(f.io.rpc).not.toHaveBeenCalled();expect(f.io.rows).not.toHaveBeenCalled();
+ });
+});
+
+it('real server SDK verifies getUser then sends the identical reader JWT to SQL',async()=>{
+ const oldUrl=process.env.SUPABASE_URL,oldKey=process.env.SUPABASE_SERVICE_ROLE_KEY;
+ process.env.SUPABASE_URL='https://synthetic-supabase.invalid';process.env.SUPABASE_SERVICE_ROLE_KEY='synthetic-service-key';
+ try {
+  const wire=vi.spyOn(globalThis,'fetch').mockImplementation(async(input)=>{
+   if(String(input).endsWith('/auth/v1/user')) return Response.json({id:OWNER,is_anonymous:false,app_metadata:{},user_metadata:{},aud:'authenticated',created_at:'2026-11-10T00:00:00Z'});
+   if(String(input).endsWith('/rest/v1/rpc/social_vote_link_suggestion')) return Response.json(null);
+   throw new Error('Unexpected synthetic boundary');
+  });
+  const request=()=>new Request('https://www.margotwardrobe.com/api/social-vote-link',{method:'POST',headers:{authorization:'Bearer synthetic-reader-jwt','content-type':'application/json'},body:JSON.stringify({action:'suggestion',token:'Z'.repeat(43)})});
+  const result=await POST(request());expect(result.status).toBe(200);expect(await result.json()).toEqual({suggestion:null});
+  expect(wire).toHaveBeenCalledTimes(2);
+  expect(String(wire.mock.calls[0][0])).toContain('/auth/v1/user');
+  expect(String(wire.mock.calls[1][0])).toContain('/rpc/social_vote_link_suggestion');
+  for(const [,init] of wire.mock.calls) expect(new Headers(init?.headers).get('authorization')).toBe('Bearer synthetic-reader-jwt');
+  expect(JSON.parse(String(wire.mock.calls[1][1]?.body))).toEqual({p_token_hash:tokenHash('Z'.repeat(43))});
+  wire.mockClear();wire.mockResolvedValue(Response.json({id:OWNER,is_anonymous:true}));
+  expect((await POST(request())).status).toBe(401);expect(wire).toHaveBeenCalledTimes(1);
+ } finally {
+  if(oldUrl===undefined)delete process.env.SUPABASE_URL;else process.env.SUPABASE_URL=oldUrl;
+  if(oldKey===undefined)delete process.env.SUPABASE_SERVICE_ROLE_KEY;else process.env.SUPABASE_SERVICE_ROLE_KEY=oldKey;
+ }
+});
+it('suggestion rejects malformed capabilities and extra owner authority before any backend',async()=>{
+ const factory=vi.spyOn(backendModule,'voteBackend');
+ for(const body of [{action:'suggestion',token:'x'}, {action:'suggestion',token:'A'.repeat(43),voteId:VOTE}]) {
+ const result=await POST(new Request('https://www.margotwardrobe.com/api/social-vote-link',{method:'POST',headers:{authorization:'Bearer jwt','content-type':'application/json'},body:JSON.stringify(body)}));expect(result.status).toBe(400);
+ }
+ expect(factory).not.toHaveBeenCalled();
 });

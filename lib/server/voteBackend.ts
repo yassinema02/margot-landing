@@ -42,6 +42,7 @@ export class VoteBudget {
 }
 export interface VoteBackend {
  user(token:string, signal:AbortSignal): Promise<string>;
+ rpcAsUser(token:string, name:string, args:Record<string,unknown>, signal:AbortSignal): Promise<unknown>;
  rpc(name:string, args:Record<string,unknown>, signal:AbortSignal): Promise<unknown>;
  rows(table:string, columns:string, filters:Record<string,unknown>, limit:number, signal:AbortSignal): Promise<unknown[]>;
  prepareMedia(token:string, owner:string, ids:string[], signal:AbortSignal): Promise<void>;
@@ -58,9 +59,9 @@ export function voteBackend(): VoteBackend {
  let url: URL; try { url = new URL(origin); } catch { throw new VoteError('unavailable'); }
  if (url.username || url.password || url.search || url.hash || url.pathname !== '/' ||
   (url.protocol !== 'https:' && !(url.protocol === 'http:' && ['127.0.0.1','localhost','[::1]'].includes(url.hostname)))) throw new VoteError('unavailable');
- const client = (signal:AbortSignal) => createClient(origin,key,{
+ const client = (signal:AbortSignal, token?:string) => createClient(origin,key,{
   auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},
-  global:{fetch:(input,init) => fetch(input,{...init,signal})},
+  global:{...(token ? {headers:{Authorization:`Bearer ${token}`}} : {}),fetch:(input,init) => fetch(input,{...init,signal})},
  });
  const checked = <T>(result:{data:T;error:unknown}) => { if (result.error) throw new VoteError('unavailable'); return result.data; };
  return {
@@ -69,6 +70,7 @@ export function voteBackend(): VoteBackend {
    if (result.error || !result.data.user || result.data.user.is_anonymous) throw new VoteError('unauthorized');
    return result.data.user.id;
   },
+  async rpcAsUser(token,name,args,signal) { return checked(await client(signal,token).rpc(name,args)); },
   async rpc(name,args,signal) { return checked(await client(signal).rpc(name,args)); },
   async rows(table,columns,filters,limit,signal) {
    let query = client(signal).from(table).select(columns);

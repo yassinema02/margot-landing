@@ -1,5 +1,5 @@
 import { HASH, UUID, VoteBudget, VoteError, record, voteBackend } from '@/lib/server/voteBackend';
-import { votePublication } from '@/lib/server/votePublication';
+import { votePublication, tokenHash } from '@/lib/server/votePublication';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 const HEADERS = {'Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'};
@@ -23,6 +23,14 @@ export async function POST(request:Request):Promise<Response> {
   const bearer = /^Bearer ([^\s]{1,8192})$/.exec(request.headers.get('authorization') ?? '');
   if (!bearer) throw new VoteError('unauthorized');
   const body = await bodyOf(request,budget);
+  // This read has the authenticated reader's SQL identity, never service_role.
+  if (body.action === 'suggestion') {
+   if (Object.keys(body).sort().join(',') !== 'action,token' || typeof body.token !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(body.token)) throw new VoteError('invalid');
+   const backend = voteBackend();
+   await budget.run(signal=>backend.user(bearer[1],signal));
+   const suggestion = await budget.run(signal=>backend.rpcAsUser(bearer[1],'social_vote_link_suggestion',{p_token_hash:tokenHash(body.token as string)},signal));
+   return Response.json({suggestion},{headers:HEADERS});
+  }
   const keys:Record<string,string[]> = {
    prepare:['action','voteId','expectedRevision','firstName'], publish:['action','voteId','revision','manifestHash','consentVersion'],
    preview_media:['action','voteId','revision','manifestHash','mediaId'],revoke:['action','voteId','expectedRevision'],
