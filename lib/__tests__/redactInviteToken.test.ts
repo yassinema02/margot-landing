@@ -105,3 +105,24 @@ describe("redactInviteEvent (PostHog before_send)", () => {
     expect(redactInviteEvent(event)).toEqual(event);
   });
 });
+
+it('redacts vote paths, business media IDs and sensitive query/fragment values',()=>{
+ expect(redactInviteToken('https://www.margotwardrobe.com/v/secret/media/id?firstName=Élo#reason')).toBe('https://www.margotwardrobe.com/v/:token');
+ expect(redactInviteToken('/download?token=secret&c=ig#secret')).not.toContain('secret');
+});
+it('rejects excessive depth and cycles instead of leaking a value after depth six',()=>{
+ let nested:unknown='/v/secret';for(let i=0;i<100;i++)nested={nested};
+ expect(redactInviteEvent({properties:{nested}})).toBeNull();
+ const loop:Record<string,unknown>={};loop.loop=loop;expect(redactInviteEvent({properties:loop})).toBeNull();
+});
+
+it('redacts values and keys deeper than six, including top-level strings, while preserving SDK dates',()=>{
+ let nested:unknown={['https://www.margotwardrobe.com/v/secret/media/id']:'/v/secret'};for(let i=0;i<12;i++)nested={nested};
+ const out=redactInviteEvent({properties:{nested},timestamp:new Date('2026-11-10T00:00:00Z'),custom:'/v/secret'});
+ expect(out).not.toBeNull();expect(JSON.stringify(out)).not.toContain('secret');expect(out?.timestamp).toEqual(new Date('2026-11-10T00:00:00Z'));
+});
+
+it('removes encoded sensitive query keys and sensitive fragment payloads',()=>{
+ for(const value of ['/download?%74oken=secret&c=ig','/download#token=secret','/download?access_token=secret#top'])expect(redactInviteToken(value)).not.toContain('secret');
+ expect(redactInviteToken('/fr#top')).toBe('/fr#top');
+});

@@ -12,10 +12,17 @@ export const INVITE_PATH_PLACEHOLDER = "/i/:token";
 const INVITE_SEGMENT = /(^|\/\/[^/?#\s"'<>]*)\/i\/[^/?#\s"'<>]+/g;
 
 export function redactInviteToken(value: string): string {
-  return value.replace(INVITE_SEGMENT, `$1${INVITE_PATH_PLACEHOLDER}`);
+  return value.replace(INVITE_SEGMENT, `$1${INVITE_PATH_PLACEHOLDER}`)
+    .replace(/(^|\/\/[^/?#\s"'<>]*)\/v\/[^\s"'<>]+/g, '$1/v/:token')
+    .replace(/([?&#])([^=&#\s"'<>]+)=[^&#\s"'<>]*/g, (pair, separator: string, encodedKey: string) => {
+      let key:string;
+      try { key=decodeURIComponent(encodedKey); } catch { return separator+'redacted=1'; }
+      return /%|^(?:access_?token|refresh_?token|token|code|first_?name|reason|name|invite|vote|device|owner|item|authorization|cookie)(?:_?id)?$/i.test(key) ? separator+'redacted=1' : pair;
+    })
+    .replace(/(redacted=1[^#\s"'<>]*)#[^\s"'<>]*/g, '$1');
 }
 
-const MAX_DEPTH = 6;
+const MAX_DEPTH = 64;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   if (value === null || typeof value !== "object") return false;
@@ -25,14 +32,16 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 
 function redactDeep(value: unknown, depth: number): unknown {
   if (typeof value === "string") return redactInviteToken(value);
-  if (depth >= MAX_DEPTH) return value;
+  if (depth >= MAX_DEPTH) throw new Error('event_depth');
   if (Array.isArray(value)) return value.map((item) => redactDeep(item, depth + 1));
   if (isPlainObject(value)) {
     // Keys too: heatmap data ($heatmap_data) is keyed by window.location.href.
-    const out: Record<string, unknown> = {};
+    const out: Record<string, unknown> = Object.create(null);
     for (const [key, item] of Object.entries(value)) out[redactInviteToken(key)] = redactDeep(item, depth + 1);
     return out;
   }
+  if (value instanceof Date && Number.isFinite(value.getTime())) return new Date(value.getTime());
+  if (value !== null && typeof value === 'object') throw new Error('event_shape');
   return value;
 }
 
@@ -51,9 +60,7 @@ type EventLike = {
  */
 export function redactInviteEvent<E extends EventLike>(event: E | null): E | null {
   if (!event) return event;
-  const out = { ...event };
-  if (event.properties) out.properties = redactDeep(event.properties, 0) as E["properties"];
-  if (event.$set) out.$set = redactDeep(event.$set, 0) as E["$set"];
-  if (event.$set_once) out.$set_once = redactDeep(event.$set_once, 0) as E["$set_once"];
-  return out;
+  try {
+    return redactDeep(event, 0) as E;
+  } catch { return null; }
 }

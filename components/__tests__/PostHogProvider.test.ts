@@ -52,3 +52,29 @@ describe("PostHogProvider", () => {
     expect(POSTHOG_OPTIONS.advanced_disable_flags).toBeUndefined();
   });
 });
+
+it('strict vote disables automatic capture and projects only the three safe events',()=>{
+ const options=posthogOptions({disableFlags:false,strictVote:true});expect(options.autocapture).toBe(false);expect(options.capture_pageleave).toBe(false);expect(options.advanced_disable_flags).toBe(true);
+ const hook=options.before_send as (e:unknown)=>unknown;
+ expect(hook({event:'$pageview',properties:{}})).toBeNull();
+ const event=hook({event:'social_vote_web_voted',properties:{locale:'fr',platform:'ios',result:'ok',firstName:'Élo',choice:'a',$current_url:'/v/secret'},$set:{name:'Élo'}});
+ expect(JSON.stringify(event)).not.toContain('Élo');expect(JSON.stringify(event)).not.toContain('secret');expect(JSON.stringify(event)).not.toContain('choice');
+ expect(hook({event:'social_vote_web_voted',properties:{locale:'Élo'}})).toBeNull();
+});
+
+it('reconfigures an already loaded identified singleton and sends only anonymous valid transport envelope',async()=>{
+ const {vi}=await import('vitest');vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY','phc_synthetic_project');vi.resetModules();
+ const ph=(await import('posthog-js')).default;const wasLoaded=ph.__loaded;ph.__loaded=true;
+ const id='01234567-89ab-4def-8abc-0123456789ab';let identified=true;
+ const config=vi.spyOn(ph,'set_config').mockImplementation(()=>{});
+ const reset=vi.spyOn(ph,'reset').mockImplementation(()=>{identified=false;});
+ vi.spyOn(ph,'_isIdentified').mockImplementation(()=>identified);vi.spyOn(ph,'get_distinct_id').mockReturnValue(id);
+ const capture=vi.spyOn(ph,'capture').mockImplementation(()=>undefined);
+ const provider=await import('@/components/PostHogProvider');
+ provider.captureVoteEvent('social_vote_web_voted',{locale:'fr',platform:'ios',result:'ok'});
+ expect(config).toHaveBeenCalledWith(expect.objectContaining({autocapture:false,capture_pageleave:false,advanced_disable_flags:true,persistence:'memory'}));expect(reset).toHaveBeenCalledWith(true);expect(capture).toHaveBeenCalledTimes(1);
+ const event={uuid:'01234567-89ab-4def-8abc-0123456789ac',timestamp:new Date(),event:'social_vote_web_voted',privateField:'secret',properties:{locale:'fr',platform:'ios',result:'ok',token:'/v/secret',distinct_id:'account-id',firstName:'Élo'},$set:{name:'Élo'}};
+ const out=provider.strictVoteEvent(event)!;expect(out.properties).toEqual({locale:'fr',platform:'ios',result:'ok',token:'phc_synthetic_project',distinct_id:id});expect(Object.keys(out).sort()).toEqual(['event','properties','timestamp','uuid']);expect(JSON.stringify(out)).not.toMatch(/secret|account-id|Élo/);
+ identified=true;expect(provider.strictVoteEvent(event)).toBeNull();identified=false;expect(provider.strictVoteEvent({...event,uuid:'business-id'})).toBeNull();
+ ph.__loaded=wasLoaded;vi.restoreAllMocks();vi.unstubAllEnvs();
+});

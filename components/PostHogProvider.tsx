@@ -44,8 +44,44 @@ export const POSTHOG_OPTIONS: Partial<PostHogConfig> = {
 };
 
 /** Init options; `disableFlags` skips /flags and remote config entirely. */
-export function posthogOptions({ disableFlags }: { disableFlags: boolean }): Partial<PostHogConfig> {
+export const VOTE_EVENTS = ['social_vote_web_viewed','social_vote_web_voted','social_vote_web_store_clicked'] as const;
+type VoteEvent = typeof VOTE_EVENTS[number];
+type VoteProps = {locale?: string; platform?: string; result?: string};
+let strictVoteReady=false;
+const TRANSPORT_UUID=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
+const VALUES = {locale:['fr','en','es'],platform:['ios','android','other'],result:['ok','unavailable','limited','service_unavailable','clicked']};
+export function strictVoteEvent(event: unknown) {
+  if (!event || typeof event !== 'object') return null;
+  const e=event as {event?:unknown;properties?:Record<string,unknown>;uuid?:unknown;timestamp?:unknown};
+  if(!POSTHOG_KEY || !strictVoteReady || posthog._isIdentified())return null;
+  const anonymousId=posthog.get_distinct_id();
+  if(typeof anonymousId!=='string'||!TRANSPORT_UUID.test(anonymousId)||typeof e.uuid!=='string'||!TRANSPORT_UUID.test(e.uuid)||!(e.timestamp instanceof Date)||!Number.isFinite(e.timestamp.getTime()))return null;
+  if (!VOTE_EVENTS.includes(e.event as VoteEvent)) return null;
+  const properties:VoteProps={};
+  for(const key of ['locale','platform','result'] as const){
+    const value=e.properties?.[key];
+    if(value!==undefined){if(typeof value!=='string'||!VALUES[key].includes(value))return null;properties[key]=value;}
+  }
+  return {uuid:e.uuid,timestamp:e.timestamp,event:e.event as string,properties:{...properties,token:POSTHOG_KEY,distinct_id:anonymousId}};
+}
+export function captureVoteEvent(event:VoteEvent,props:VoteProps) {
+  configurePostHog({disableFlags:true,strictVote:true});
+  if(POSTHOG_KEY && strictVoteReady && !posthog._isIdentified()) posthog.capture(event,props);
+}
+export function posthogOptions({ disableFlags, strictVote=false }: { disableFlags: boolean; strictVote?: boolean }): Partial<PostHogConfig> {
+  if(strictVote)return {...POSTHOG_OPTIONS,autocapture:false,capture_pageleave:false,advanced_disable_flags:true,disable_external_dependency_loading:true,before_send:strictVoteEvent as PostHogConfig['before_send']};
   return disableFlags ? { ...POSTHOG_OPTIONS, advanced_disable_flags: true } : POSTHOG_OPTIONS;
+}
+
+// Root layouts usually reload the document. Also protect an already loaded
+// singleton: switch config before capture and discard its previous identity.
+export function configurePostHog({disableFlags,strictVote=false}:{disableFlags:boolean;strictVote?:boolean}) {
+  if(!POSTHOG_KEY)return;
+  const options=posthogOptions({disableFlags,strictVote});
+  if(!posthog.__loaded)posthog.init(POSTHOG_KEY,options);
+  else if(strictVote && !strictVoteReady){posthog.set_config(options);posthog.reset(true);}
+  else if(!strictVote && strictVoteReady)posthog.set_config({...options,autocapture:true,capture_pageleave:true,advanced_disable_flags:disableFlags,disable_external_dependency_loading:false});
+  strictVoteReady=strictVote && posthog.__loaded && !posthog._isIdentified();
 }
 
 /** `$current_url` of a manual pageview, invitation token removed. */
@@ -56,15 +92,16 @@ export function pageviewUrl(origin: string, pathname: string, query: string): st
 export function PostHogProvider({
   children,
   disableFlags = false,
+  strictVote = false,
 }: {
   children: React.ReactNode;
   /** Invitation page: no /flags request (see header). */
   disableFlags?: boolean;
+  strictVote?: boolean;
 }) {
   useEffect(() => {
-    if (!POSTHOG_KEY || posthog.__loaded) return;
-    posthog.init(POSTHOG_KEY, posthogOptions({ disableFlags }));
-  }, [disableFlags]);
+    configurePostHog({disableFlags,strictVote});
+  }, [disableFlags, strictVote]);
 
   // Without a key there's no client to provide — render children untouched.
   if (!POSTHOG_KEY) return <>{children}</>;
@@ -72,7 +109,7 @@ export function PostHogProvider({
   return (
     <PHProvider client={posthog}>
       <Suspense fallback={null}>
-        <PageViewTracker />
+        {!strictVote && <PageViewTracker />}
       </Suspense>
       {children}
     </PHProvider>
