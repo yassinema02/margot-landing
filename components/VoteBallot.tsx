@@ -7,7 +7,7 @@ import { APP_STORE_URL, PLAY_STORE_URL } from '@/lib/launch';
 import { captureVoteEvent } from '@/components/PostHogProvider';
 
 type Choice='a'|'b';
-type State='idle'|'submitting'|'voted'|'closed'|'unavailable'|'cookie_required'|'rate_limited'|'service_unavailable'|'invalid';
+type State='social_text_rejected'|'idle'|'submitting'|'voted'|'closed'|'unavailable'|'cookie_required'|'rate_limited'|'service_unavailable'|'invalid';
 const BUTTON='min-h-[44px] rounded-full px-5 py-3 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4';
 
 export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapshot;myChoice:Choice|null;locale:VoteLocale}) {
@@ -64,7 +64,7 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
    if(code==='cookie_required')confirmed.current=false;
    if(code==='closed')closed.current=true;
    if(code==='unavailable')unavailable.current=true;
-   const nextState:State=unavailable.current?'unavailable':closed.current?'closed':code==='cookie_required'?'cookie_required':code==='limited'?'rate_limited':code==='invalid'?'invalid':'service_unavailable';
+   const nextState:State=unavailable.current?'unavailable':closed.current?'closed':code==='cookie_required'?'cookie_required':code==='limited'?'rate_limited':code==='social_text_rejected'?'social_text_rejected':code==='invalid'?'invalid':'service_unavailable';
    setState(nextState);
    if(nextState==='rate_limited'){const delay=Number((error as {retryAfter?:unknown}).retryAfter);setRetryAfter(Number.isSafeInteger(delay)&&delay>0?delay:60);}
   } finally {clearTimeout(timeout);lock.current=false;if(controller.current===abort)controller.current=null;}
@@ -75,7 +75,7 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
   catch {if(alive.current)setCopyState('failed');}
  }
  const terminal=state==='closed'||state==='voted';
- const message=state==='submitting'?c.submitting:state==='voted'?`${c.voted} ${choice?.toUpperCase()}. ${c.change}`:state==='closed'?c.closed:state==='cookie_required'?c.cookie:state==='rate_limited'?`${c.limited} ${retryAfter} ${c.seconds}`:state==='service_unavailable'?c.temporary:state==='invalid'?c.invalid:'';
+ const message=state==='submitting'?c.submitting:state==='voted'?`${c.voted} ${choice?.toUpperCase()}. ${c.change}`:state==='closed'?c.closed:state==='cookie_required'?c.cookie:state==='rate_limited'?`${c.limited} ${retryAfter} ${c.seconds}`:state==='service_unavailable'?c.temporary:state==='social_text_rejected'?c.social_text_rejected:state==='invalid'?c.invalid:'';
  if(state==='unavailable'||expiredView)return <h1 className="font-display text-3xl">{c.unavailable}</h1>;
  return <>
   <header className="mb-6 text-center">
@@ -97,12 +97,12 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
   <p id="vote-status" role="status" aria-live="polite" aria-atomic="true" className="my-5 break-words text-center">{message}</p>
   {state!=='closed' && <form onSubmit={event=>event.preventDefault()} aria-describedby="vote-privacy vote-status">
    <label htmlFor="vote-first-name" className="mb-2 block text-sm">{c.firstName}</label>
-   <input id="vote-first-name" name="firstName" autoComplete="given-name" value={firstName} onChange={event=>setFirstName(event.target.value)} maxLength={40} aria-invalid={state==='invalid'} aria-describedby={state==='invalid'?'vote-status':undefined} className="mb-4 min-h-[44px] w-full rounded-xl border border-ink3 bg-surface p-3"/>
+   <input id="vote-first-name" name="firstName" autoComplete="given-name" value={firstName} onChange={event=>setFirstName(event.target.value)} maxLength={40} aria-invalid={(state==='invalid'||state==='social_text_rejected')} aria-describedby={(state==='invalid'||state==='social_text_rejected')?'vote-status':undefined} className="mb-4 min-h-[44px] w-full rounded-xl border border-ink3 bg-surface p-3"/>
    <label htmlFor="vote-reason" className="mb-2 block text-sm">{c.reason}</label>
-   <textarea id="vote-reason" name="reason" value={reason} onChange={event=>setReason(event.target.value)} maxLength={160} rows={2} aria-invalid={state==='invalid'} aria-describedby={state==='invalid'?'vote-status':undefined} className="min-h-[44px] w-full rounded-xl border border-ink3 bg-surface p-3"/>
+   <textarea id="vote-reason" name="reason" value={reason} onChange={event=>setReason(event.target.value)} maxLength={160} rows={2} aria-invalid={(state==='invalid'||state==='social_text_rejected')} aria-describedby={(state==='invalid'||state==='social_text_rejected')?'vote-status':undefined} className="min-h-[44px] w-full rounded-xl border border-ink3 bg-surface p-3"/>
    <p id="vote-privacy" className="my-3 text-xs leading-relaxed text-ink2">{c.privateNote}</p>
    <div className="grid grid-cols-2 gap-3">{(['a','b'] as const).map(option=><button type="button" key={option} aria-pressed={choice===option} disabled={state==='submitting'} onClick={()=>void submit(option)} className={`${BUTTON} text-surface disabled:opacity-50`} style={{background:choice===option?'#7D3048':'#2D3A33'}}>{option==='a'?c.voteA:c.voteB}</button>)}</div>
-   {(['cookie_required','rate_limited','service_unavailable','invalid'] as State[]).includes(state) && <button type="button" onClick={()=>{if(lastAttempt.current)void submit(lastAttempt.current);}} className={`${BUTTON} mt-3 w-full border border-ink3`}>{c.retry}</button>}
+   {(['cookie_required','rate_limited','service_unavailable','invalid','social_text_rejected'] as State[]).includes(state) && <button type="button" onClick={()=>{if(lastAttempt.current)void submit(lastAttempt.current);}} className={`${BUTTON} mt-3 w-full border border-ink3`}>{c.retry}</button>}
   </form>}
   {terminal && <aside data-vote-invitation="true" className="mt-9 rounded-3xl bg-surface p-5 text-center">
    <p className="font-display text-xl">{c.pitch}</p>

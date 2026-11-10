@@ -16,7 +16,7 @@ export type PublicVoteReadResult =
 const TOKEN = /^[A-Za-z0-9_-]{43}$/;
 const COOKIE = '__Secure-margot_vote_device';
 const HEADERS = {'Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'};
-type FailureCode = 'unavailable'|'limited'|'service_unavailable'|'forbidden'|'cookie_required'|'invalid'|'too_large'|'closed'|'method_not_allowed';
+type FailureCode = 'social_text_rejected'|'unavailable'|'limited'|'service_unavailable'|'forbidden'|'cookie_required'|'invalid'|'too_large'|'closed'|'method_not_allowed';
 class PublicFailure extends Error {
  constructor(readonly code:FailureCode,readonly retryAfter?:number) { super(code); }
 }
@@ -24,8 +24,8 @@ function response(body:unknown,status=200,extra:Record<string,string>={}): Respo
  return Response.json(body,{status,headers:{...HEADERS,...extra}});
 }
 function failure(error:unknown): Response {
- const safe = error instanceof PublicFailure ? error : new PublicFailure('service_unavailable');
- const statuses = {unavailable:404,limited:429,service_unavailable:503,forbidden:403,cookie_required:409,invalid:400,too_large:413,closed:409,method_not_allowed:405};
+ const safe = error instanceof PublicFailure ? error : error instanceof VoteError && error.code==='social_text_rejected' ? new PublicFailure('social_text_rejected') : new PublicFailure('service_unavailable');
+ const statuses = {social_text_rejected:400,unavailable:404,limited:429,service_unavailable:503,forbidden:403,cookie_required:409,invalid:400,too_large:413,closed:409,method_not_allowed:405};
  return response({error:safe.code},statuses[safe.code],safe.retryAfter?{'Retry-After':String(safe.retryAfter)}:{});
 }
 function validToken(token:string) { if (typeof token!=='string' || token.length!==43 || !TOKEN.test(token)) throw new PublicFailure('unavailable'); }
@@ -144,6 +144,7 @@ export function voteAccess(backend:VoteBackend,budget=new VoteBudget()) {
     if(Object.keys(body).some(k=>!['choice','firstName','reason'].includes(k)) || (body.choice!=='a' && body.choice!=='b') || !(body.firstName===undefined || body.firstName===null || text(body.firstName,40)) || !(body.reason===undefined || body.reason===null || text(body.reason,160))) throw new PublicFailure('invalid');
     const row=record(await rpc('social_vote_web_cast',{p_token_hash:tokenHash(token),p_device_hash:deviceHash(nonce,key),p_choice:body.choice,p_first_name:body.firstName??null,p_reason:body.reason??null,p_keys:quotaKeys(request,budget.now())}));
     if(row.status==='closed') throw new PublicFailure('closed');
+    if(row.status==='social_text_rejected') throw new PublicFailure('social_text_rejected');
     if(row.status==='invalid') throw new PublicFailure('invalid');
     if(row.status!=='ok') sqlFailure(row);
     if(row.choice!==body.choice || row.closed!==false) throw new VoteError('unavailable');

@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const HASH = /^[0-9a-f]{64}$/;
-export type VoteErrorCode = 'invalid' | 'unauthorized' | 'unavailable' | 'conflict' | 'closed' | 'selection_changed' | 'limited' | 'pending_media' | 'pending' | 'too_large';
+export type VoteErrorCode = 'social_text_rejected' | 'invalid' | 'unauthorized' | 'unavailable' | 'conflict' | 'closed' | 'selection_changed' | 'limited' | 'pending_media' | 'pending' | 'too_large';
 export class VoteError extends Error {
  constructor(readonly code: VoteErrorCode, readonly retryAfter?: number) { super(code); }
 }
@@ -63,7 +63,10 @@ export function voteBackend(): VoteBackend {
   auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},
   global:{...(token ? {headers:{Authorization:`Bearer ${token}`}} : {}),fetch:(input,init) => fetch(input,{...init,signal})},
  });
- const checked = <T>(result:{data:T;error:unknown}) => { if (result.error) throw new VoteError('unavailable'); return result.data; };
+ const checked = <T>(result:{data:T;error:unknown}) => { if (result.error) {
+   const error = result.error as {code?:unknown;message?:unknown};
+   throw new VoteError(error.code === 'P0001' && error.message === 'social_text_rejected' ? 'social_text_rejected' : 'unavailable');
+  } return result.data; };
  return {
   async user(token,signal) {
    const result = await client(signal).auth.getUser(token);

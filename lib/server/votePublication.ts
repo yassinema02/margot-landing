@@ -47,7 +47,7 @@ function accept(data:unknown,expected:string): Record<string,unknown> {
  const row = record(data);
  if (row.status === expected) return row;
  if (row.status === 'limited' && Number.isSafeInteger(row.retryAfter) && Number(row.retryAfter)>0) throw new VoteError('limited',Number(row.retryAfter));
- if (['invalid','conflict','closed','selection_changed','unavailable'].includes(String(row.status))) throw new VoteError(row.status as 'invalid');
+ if (['social_text_rejected','invalid','conflict','closed','selection_changed','unavailable'].includes(String(row.status))) throw new VoteError(row.status as 'invalid');
  throw new VoteError('unavailable');
 }
 

@@ -279,3 +279,10 @@ it('8b validators reject terminal LF/CR/CRLF on tokens, IDs, hashes and source v
  // Backend construction may precede publish validation; no Auth/DB/I/O is started.
  expect(create).toHaveBeenCalledTimes(3);expect(f.io.user).not.toHaveBeenCalled();expect(f.io.rpc).not.toHaveBeenCalled();
 });
+
+it('lexical preparation refusal does not copy media and survives a lost-response retry',async()=>{
+ const f=fixture();
+ f.io.rpc.mockImplementationOnce(async()=>({status:'social_text_rejected'}));
+ await expect(f.service.prepare('token',{voteId:VOTE,expectedRevision:1,firstName:'Élo'})).rejects.toMatchObject({code:'social_text_rejected'});
+ expect(f.io.upload).not.toHaveBeenCalled();
+});

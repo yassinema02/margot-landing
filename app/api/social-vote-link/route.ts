@@ -55,7 +55,7 @@ export async function POST(request:Request):Promise<Response> {
   return Response.json(result,{headers:HEADERS});
  } catch (error) {
   const safe = error instanceof VoteError ? error : new VoteError('unavailable');
-  const status = {invalid:400,unauthorized:401,unavailable:503,conflict:409,closed:409,selection_changed:409,limited:429,pending_media:202,pending:503,too_large:413}[safe.code];
+  const status = {social_text_rejected:400,invalid:400,unauthorized:401,unavailable:503,conflict:409,closed:409,selection_changed:409,limited:429,pending_media:202,pending:503,too_large:413}[safe.code];
   return Response.json({error:safe.code},{status,headers:{...HEADERS,...(safe.retryAfter?{'Retry-After':String(safe.retryAfter)}:{})}});
  }
 }

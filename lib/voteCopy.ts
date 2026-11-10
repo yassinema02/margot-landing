@@ -1,6 +1,7 @@
 export type VoteLocale = 'fr' | 'en' | 'es';
 export const VOTE_COPY = {
  fr: {
+  social_text_rejected:"Ce texte contient un terme non autorisé. Modifie-le pour continuer",
   title:'Aide à choisir une tenue', question:'Quelle tenue tu préfères pour', voteA:'Je vote A', voteB:'Je vote B',
   firstName:'Ton prénom (facultatif)', reason:'Pourquoi ce choix (facultatif)', privateNote:'Seule la personne qui a créé ce vote verra ton prénom et ta réponse.',
   submitting:'Envoi de ton vote…', voted:'Ton choix est enregistré :', change:'Tu peux encore changer ton choix.', closed:'Le vote est terminé',
@@ -9,6 +10,7 @@ export const VOTE_COPY = {
   pitch:'Margot choisit ta tenue chaque matin. Avec les vêtements que tu as déjà', download:'Découvrir Margot', appStore:'App Store', playStore:'Google Play', copy:'Copier le lien', copied:'Lien copié', copyFailed:'La copie a échoué. Tu peux sélectionner ce lien pour le copier.', piece:'Vêtement',
  },
  en: {
+  social_text_rejected:"This text contains a term that is not allowed. Edit it to continue",
   title:'Help choose an outfit', question:'Which outfit do you prefer for', voteA:'I vote A', voteB:'I vote B',
   firstName:'Your first name (optional)', reason:'Why this choice (optional)', privateNote:'Only the person who created this vote will see your first name and reply.',
   submitting:'Sending your vote…', voted:'Your choice is saved:', change:'You can still change your choice.', closed:'Voting has ended',
@@ -17,6 +19,7 @@ export const VOTE_COPY = {
   pitch:'Margot chooses your outfit every morning. With the clothes you already own', download:'Discover Margot', appStore:'App Store', playStore:'Google Play', copy:'Copy the link', copied:'Link copied', copyFailed:'Copying failed. You can select this link to copy it.', piece:'Garment',
  },
  es: {
+  social_text_rejected:"Este texto contiene un término no permitido. Cámbialo para continuar",
   title:'Ayuda a elegir un conjunto', question:'Qué conjunto prefieres para', voteA:'Voto A', voteB:'Voto B',
   firstName:'Tu nombre (opcional)', reason:'Por qué lo eliges (opcional)', privateNote:'Solo la persona que creó esta votación verá tu nombre y tu respuesta.',
   submitting:'Enviando tu voto…', voted:'Tu elección está guardada:', change:'Todavía puedes cambiar tu elección.', closed:'La votación ha terminado',

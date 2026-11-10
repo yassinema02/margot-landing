@@ -207,3 +207,12 @@ it('piece metadata still rejects values other than string or null on all read su
   expect((await f.service.media(TOKEN,MEDIA,req())).status).toBe(503);expect(f.io.download).not.toHaveBeenCalled();
  }
 });
+
+it('lexical ballot refusal is a fixed 400 and preserves a legitimate retry',async()=>{
+ const f=fixture(),cookie=await device(f);
+ f.io.rpc.mockImplementation(async name=>name==='social_vote_web_cast'?{status:'social_text_rejected'}:f.row);
+ const refused=await f.service.cast(TOKEN,json(cookie,{choice:'b',reason:'synthetic refused'}));
+ expect(refused.status).toBe(400);expect(await refused.json()).toEqual({error:'social_text_rejected'});
+ f.io.rpc.mockImplementation(async name=>name==='social_vote_web_cast'?{status:'ok',choice:'b',closed:false}:f.row);
+ expect((await f.service.cast(TOKEN,json(cookie,{choice:'b',reason:'Margot contacte le support admin'}))).status).toBe(200);
+});
