@@ -16,7 +16,7 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
  const [choice,setChoice]=useState<Choice|null>(myChoice),[firstName,setFirstName]=useState(''),[reason,setReason]=useState(''),[retryAfter,setRetryAfter]=useState(0);
  const [copyState,setCopyState]=useState<'idle'|'copied'|'failed'>('idle'),[copyUrl,setCopyUrl]=useState('');
  const [platform,setPlatform]=useState<'ios'|'android'|'other'>('other');
- const lastAttempt=useRef<Choice|null>(null);
+ const lastAttempt=useRef<Choice|null>(null),recordedChoice=useRef(myChoice),unavailable=useRef(false);
  const lock=useRef(false),confirmed=useRef(false),controller=useRef<AbortController|null>(null),alive=useRef(true),expired=useRef(false),closed=useRef(snapshot.closed);
  const [expiredView,setExpiredView]=useState(false);
  useEffect(()=>{
@@ -25,16 +25,17 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
   // Recheck on focus/visibility as background timers may be throttled.
   let timer:ReturnType<typeof setTimeout>;
   function check(){
-   clearTimeout(timer);const now=Date.now(),end=Date.parse(snapshot.endsAt),expiry=Date.parse(snapshot.expiresAt);
+   clearTimeout(timer);if(unavailable.current)return;
+   const now=Date.now(),end=Date.parse(snapshot.endsAt),expiry=Date.parse(snapshot.expiresAt);
    if(now>=expiry){expired.current=true;controller.current?.abort();setExpiredView(true);setState('unavailable');return;}
-   if(now>=end){closed.current=true;setState('closed');}
+   if(now>=end){closed.current=true;setChoice(recordedChoice.current);setState('closed');}
    timer=setTimeout(check,Math.min(2147483647,Math.max(1,(now<end?end:expiry)-now)));
   }
   check();window.addEventListener('focus',check);document.addEventListener('visibilitychange',check);
   return ()=>{alive.current=false;clearTimeout(timer);controller.current?.abort();window.removeEventListener('focus',check);document.removeEventListener('visibilitychange',check);};
  },[snapshot.endsAt,snapshot.expiresAt]);
  async function submit(next:Choice) {
-  if(lock.current || closed.current || expired.current || state==='unavailable')return;
+  if(lock.current || closed.current || expired.current || unavailable.current)return;
   const previous=choice;lastAttempt.current=next;lock.current=true;setChoice(next);setState('submitting');
   const abort=new AbortController();controller.current=abort;const timeout=setTimeout(()=>abort.abort(),50000);
   async function post(endpoint:string,body?:unknown){
@@ -55,14 +56,15 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
    const {res,data}=await post('ballot',{choice:next,firstName:firstName||null,reason:reason||null});
    if(!res.ok)throw {error:data.error,retryAfter:res.headers.get('retry-after')};
    if(data.status!=='ok' || data.choice!==next || data.closed!==false)throw Error('invalid_response');
-   if(alive.current && !expired.current){setChoice(next);setState(closed.current?'closed':'voted');captureVoteEvent('social_vote_web_voted',{locale,platform,result:'ok'});}
+   if(alive.current && !expired.current){recordedChoice.current=next;setChoice(next);setState(closed.current?'closed':'voted');captureVoteEvent('social_vote_web_voted',{locale,platform,result:'ok'});}
   } catch(error) {
    if(!alive.current || expired.current)return;
    setChoice(previous);
    const code=error && typeof error==='object' && 'error' in error?String(error.error):'service_unavailable';
    if(code==='cookie_required')confirmed.current=false;
    if(code==='closed')closed.current=true;
-   const nextState:State=closed.current?'closed':code==='unavailable'?'unavailable':code==='cookie_required'?'cookie_required':code==='limited'?'rate_limited':code==='invalid'?'invalid':'service_unavailable';
+   if(code==='unavailable')unavailable.current=true;
+   const nextState:State=unavailable.current?'unavailable':closed.current?'closed':code==='cookie_required'?'cookie_required':code==='limited'?'rate_limited':code==='invalid'?'invalid':'service_unavailable';
    setState(nextState);
    if(nextState==='rate_limited'){const delay=Number((error as {retryAfter?:unknown}).retryAfter);setRetryAfter(Number.isSafeInteger(delay)&&delay>0?delay:60);}
   } finally {clearTimeout(timeout);lock.current=false;if(controller.current===abort)controller.current=null;}
