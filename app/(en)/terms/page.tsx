@@ -208,7 +208,7 @@ export default function TermsPage() {
           </P>
           <P>
             When you share a vote through a public link, anyone with the link sees the occasion,
-            the first name you confirm, your initials and the photos of the clothes you approve
+            the first name you confirm and its initial, and the photos of the clothes you approve
             before publishing, with their name and category. The link never shows your avatar or your profile photo. It expires 7 days
             after the vote ends and you can remove it at any time.
           </P>

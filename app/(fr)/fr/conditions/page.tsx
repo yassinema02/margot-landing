@@ -188,7 +188,8 @@ export default function ConditionsPage() {
 
       <Section title="4 bis. Fonctions sociales">
         <P>
-          Les fonctions sociales de Margot (profil social, abonnements, looks, messages et
+          Les fonctions sociales de Margot (profil social, abonnements à d&apos;autres comptes,
+          looks, messages et
           groupes, votes, demandes « Habille-moi », moodboard et wishlist) sont réservées aux
           personnes de 15 ans et plus. Si votre âge ne nous est pas déjà connu, votre mois et
           votre année de naissance vous sont demandés. Ils n&apos;apparaissent pas
@@ -220,7 +221,7 @@ export default function ConditionsPage() {
         </P>
         <P>
           Lorsque vous partagez un vote par lien public, toute personne disposant du lien voit
-          l&apos;occasion, le prénom que vous confirmez, vos initiales et les photos des
+          l&apos;occasion, le prénom que vous confirmez et son initiale, et les photos des
           vêtements que vous validez avant la publication, avec leur nom et leur catégorie. Le
           lien ne montre jamais votre avatar
           ni votre photo de profil. Il expire 7 jours après la fin du vote et vous pouvez le

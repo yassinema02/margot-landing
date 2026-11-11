@@ -176,7 +176,8 @@ export default function ConfidentialitePage() {
             <Li>
               <Strong>Profil social :</Strong> pseudo, nom affiché, bio facultative, compte privé
               ou public, ainsi que la date et l&apos;heure d&apos;acceptation des règles. Votre
-              mois et votre année de naissance peuvent être demandés pour vérifier l&apos;âge ;
+              mois et votre année de naissance peuvent être demandés pour confirmer l&apos;âge que
+              vous déclarez ;
               ils n&apos;apparaissent pas sur votre profil.
             </Li>
             <Li>
@@ -206,12 +207,13 @@ export default function ConfidentialitePage() {
           </P>
           <P>
             <Strong>Liens publics.</Strong> Un vote partagé par lien public montre à toute personne
-            disposant du lien l&apos;occasion, le prénom que vous confirmez, vos initiales et les
+            disposant du lien l&apos;occasion, le prénom que vous confirmez et son initiale, et les
             photos des vêtements que vous validez, avec leur nom et leur catégorie. Il ne montre
             jamais votre avatar ni votre photo
             de profil. Le lien expire 7 jours après la fin du vote et vous pouvez le retirer à tout
             moment. Les personnes qui votent sans compte peuvent laisser un prénom et une courte
-            raison, visibles seulement par la personne qui a créé le vote. Pour n&apos;enregistrer
+            raison, visibles par la personne qui a créé le vote, et par notre équipe si cette
+            personne signale la réponse. Pour n&apos;enregistrer
             qu&apos;un vote par appareil et limiter les abus, la page de vote dépose quand vous
             votez un cookie technique (8 jours) qui identifie l&apos;appareil ; nous gardons avec
             votre bulletin une empreinte hachée de cet identifiant d&apos;appareil, aussi longtemps
@@ -234,7 +236,11 @@ export default function ConfidentialitePage() {
             Une image déjà ouverte peut rester visible un moment : un lien d&apos;image déjà chargé
             reste valable jusqu&apos;à une heure et un téléphone peut la garder en cache. Un lien
             de vote public reste visible jusqu&apos;à son retrait ou son expiration, même si vous
-            masquez ensuite ses pièces. Nous ne pouvons pas effacer une capture d&apos;écran ou une
+            masquez ensuite ses pièces. Il est aussi retiré quand vous supprimez le vote ou votre
+            compte, et quand notre équipe, après un signalement, masque le vote ou votre profil,
+            masque ou retire l&apos;une de ses pièces, ou suspend votre accès aux fonctions
+            sociales. L&apos;aperçu du lien déjà affiché dans une messagerie (occasion, initiale
+            du prénom et photos) peut y rester après le retrait du lien. Nous ne pouvons pas effacer une capture d&apos;écran ou une
             copie faite par quelqu&apos;un d&apos;autre. Les pièces qu&apos;un autre membre a
             ajoutées avec « Je l&apos;ai aussi » restent les siennes.
           </P>

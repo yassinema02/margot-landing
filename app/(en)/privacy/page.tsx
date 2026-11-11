@@ -151,7 +151,7 @@ export default function PrivacyPage() {
               <Li>
                 <Strong>Social profile:</Strong> username, display name, optional bio, private or
                 public account, and the date and time you accepted the rules. Your birth month and
-                year may be asked to check your age; they do not appear on your profile.
+                year may be asked to confirm the age you declare; they do not appear on your profile.
               </Li>
               <Li>
                 <Strong>Connections:</Strong> follows, requests, friends and blocked accounts.
@@ -178,11 +178,11 @@ export default function PrivacyPage() {
             </P>
             <P>
               <Strong>Public links.</Strong> A vote shared through a public link shows anyone with
-              the link the occasion, the first name you confirm, your initials and the photos of
+              the link the occasion, the first name you confirm and its initial, and the photos of
               the clothes you approve, with their name and category. It never shows your avatar or your profile photo. The link expires
               7 days after the vote ends and you can remove it at any time. People who vote without
-              an account may leave a first name and a short reason, visible only to the person who
-              created the vote. To record one vote per device and limit abuse, when you vote, the
+              an account may leave a first name and a short reason, visible to the person who
+              created the vote, and to our team if that person reports the reply. To record one vote per device and limit abuse, when you vote, the
               vote page sets a technical cookie (8 days) that identifies the device; we keep with
               your vote a hashed fingerprint of this device identifier, for as long as the vote is
               kept, and only a hashed fingerprint of the IP address, not the address itself. An invitation page shows only the display
@@ -201,7 +201,12 @@ export default function PrivacyPage() {
               someone or go back to private, new openings are refused. An image already opened may
               stay visible for a while: an image link already loaded stays valid for up to one hour
               and a phone may keep it in its cache. A public vote link stays visible until you
-              remove it or it expires, even if you then hide its pieces. We cannot erase a
+              remove it or it expires, even if you then hide its pieces. It is also removed when you
+              delete the vote or your account, and when our team, after a report, hides the vote or
+              your profile, hides or removes one of its pieces, or suspends your access to the
+              social features. A preview of the link already shown in a messaging app (occasion,
+              initial of the first name and photos) may stay there after the link is removed. We
+              cannot erase a
               screenshot or a copy made by someone else. Pieces another member added with "I have
               it too" stay theirs.
             </P>

@@ -92,6 +92,49 @@ describe("legal pages: social features", () => {
     expect(page(ConfidentialitePage).text).not.toMatch(/événements anonymisés/);
   });
 
+  // T14 final wave (W-I3, T12-M5, T12-M6, T12-M7). Facts checked in the SQL:
+  // initial = upper(left(first_name,1)) (social_vote_links.sql:270); links revoked
+  // by vote deletion (social_votes.sql:173), account erasure
+  // (social_account_erasure.sql:114) and moderation (social_reports.sql:205-213);
+  // a reported ballot shows choice, reason and guest name to the team
+  // (social_reports.sql:119-124); the age is declared (social_profiles.sql:21-28).
+  it("privacy policies give the exact public link limits, who reads a web ballot and the declared age", () => {
+    const en = section(page(PrivacyPage).html, "2.4 Social features");
+    for (const fact of [
+      /the first name you confirm and its initial, and the photos/,
+      /a short reason, visible to the person who created the vote, and to our team if that person reports the reply\./,
+      /stays visible until you remove it or it expires, even if you then hide its pieces\. It is also removed when you delete the vote or your account, and when our team, after a report, hides the vote or your profile, hides or removes one of its pieces, or suspends your access to the social features\./,
+      /A preview of the link already shown in a messaging app \(occasion, initial of the first name and photos\) may stay there after the link is removed\./,
+      /may be asked to confirm the age you declare;/,
+    ]) {
+      expect([fact.source, fact.test(en)]).toEqual([fact.source, true]);
+    }
+    expect(en).not.toMatch(/visible only to the person|your initials and the photos|to check your age/);
+    const fr = section(page(ConfidentialitePage).html, "2.4 Fonctions sociales");
+    for (const fact of [
+      /le prénom que vous confirmez et son initiale, et les photos/,
+      /une courte raison, visibles par la personne qui a créé le vote, et par notre équipe si cette personne signale la réponse\./,
+      /reste visible jusqu'à son retrait ou son expiration, même si vous masquez ensuite ses pièces\. Il est aussi retiré quand vous supprimez le vote ou votre compte, et quand notre équipe, après un signalement, masque le vote ou votre profil, masque ou retire l'une de ses pièces, ou suspend votre accès aux fonctions sociales\./,
+      /L'aperçu du lien déjà affiché dans une messagerie \(occasion, initiale du prénom et photos\) peut y rester après le retrait du lien\./,
+      /peuvent être demandés pour confirmer l'âge que vous déclarez ;/,
+    ]) {
+      expect([fact.source, fact.test(fr)]).toEqual([fact.source, true]);
+    }
+    expect(fr).not.toMatch(/visibles seulement par la personne|vos initiales et les photos|pour vérifier l'âge/);
+    expect([en.match(FORBIDDEN_MARKS), fr.match(FORBIDDEN_MARKS)]).toEqual([null, null]);
+  });
+
+  it("terms name social follows unambiguously and the first-name initial of a public link", () => {
+    const fr = section(page(ConditionsPage).html, "4 bis. Fonctions sociales");
+    expect(fr).toMatch(/\(profil social, abonnements à d'autres comptes, looks,/);
+    expect(fr).toMatch(/le prénom que vous confirmez et son initiale, et les photos/);
+    expect(fr).not.toMatch(/vos initiales/);
+    const en = section(page(TermsPage).html, "4a. Social features");
+    expect(en).toMatch(/\(social profile, follows, looks,/);
+    expect(en).toMatch(/the first name you confirm and its initial, and the photos/);
+    expect(en).not.toMatch(/your initials/);
+  });
+
   it("each page links to its counterpart and to the existing contact", () => {
     expect(page(TermsPage).html).toContain('href="/privacy"');
     expect(page(ConditionsPage).html).toContain('href="/fr/confidentialite"');
