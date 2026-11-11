@@ -43,6 +43,25 @@ it.each(['fr','en','es'] as const)('one_soft_invitation and own-choice announcem
 it.each([{status:'unavailable'},{status:'limited',retryAfter:45},{status:'service_unavailable'}] as const)('preserves denial $status without images or ballot',result=>{
  const html=render(result);expect(html).not.toContain('<img');expect(html).not.toContain('<form');expect(html).not.toContain('data-vote-invitation');if(result.status==='limited')expect(html).toContain('45');
 });
+// W-I3: the vote creator sees the first name and reply; the team only when the
+// creator reports it (social_reports.sql report_projection 'ballot'). The policy exists
+// in French and English only: Spanish visitors get the English page, said so.
+const BALLOT_NOTE={
+ fr:'La personne qui a créé ce vote verra ton prénom et ta réponse. Si elle signale ta réponse, notre équipe de modération les verra aussi.',
+ en:'The person who created this vote will see your first name and reply. If they report your reply, our moderation team will see them too.',
+ es:'La persona que creó esta votación verá tu nombre y tu respuesta. Si denuncia tu respuesta, nuestro equipo de moderación también los verá.',
+} as const;
+const PRIVACY_LINK={fr:['/fr/confidentialite','Politique de confidentialité'],en:['/privacy','Privacy policy'],es:['/privacy','Política de privacidad (en inglés)']} as const;
+it.each(['fr','en','es'] as const)('W-I3 %s: says who reads a ballot and links the privacy policy before any ballot and in every state',locale=>{
+ const idle=render({status:'ok',snapshot:snapshot(),myChoice:null},locale);
+ expect(idle).toContain(`<p id="vote-privacy" class="my-3 text-xs leading-relaxed text-ink2">${BALLOT_NOTE[locale]}</p>`);
+ expect(idle).not.toMatch(/Seule la personne|Only the person|Solo la persona/);
+ const [href,label]=PRIVACY_LINK[locale];
+ for(const html of [idle,render({status:'ok',snapshot:snapshot(),myChoice:'a'},locale),render({status:'ok',snapshot:{...snapshot(),closed:true},myChoice:null},locale),render({status:'unavailable'},locale),render({status:'limited',retryAfter:45},locale),render({status:'service_unavailable'},locale)]){
+  const links=html.match(new RegExp(`<a [^>]*href="${href}"[^>]*>([^<]*)</a>`,'g'))??[];
+  expect(links).toHaveLength(1);expect(links[0]).toContain(`>${label}</a>`);expect(links[0]).toContain('rel="noreferrer"');
+ }
+});
 
 
 function controlledBallot(myChoice:'b'|null){

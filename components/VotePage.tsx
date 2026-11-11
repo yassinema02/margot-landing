@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { PublicVoteReadResult } from '@/lib/server/voteAccess';
-import { VOTE_COPY, type VoteLocale } from '@/lib/voteCopy';
+import { VOTE_COPY, VOTE_PRIVACY_HREF, type VoteLocale } from '@/lib/voteCopy';
 import { MargotMark } from '@/components/MargotMark';
 import { VoteBallot } from '@/components/VoteBallot';
 import { captureVoteEvent } from '@/components/PostHogProvider';
@@ -17,5 +17,7 @@ export function VotePage({result,locale}:{result:PublicVoteReadResult;locale:Vot
    {result.status==='limited' && <p className="mt-4">{result.retryAfter} {c.seconds}</p>}
    {result.status!=='unavailable' && <button type="button" onClick={()=>router.refresh()} className="mt-6 min-h-[44px] rounded-full bg-ink px-6 py-3 text-surface">{c.retry}</button>}
   </section>}
+  {/* Every state, before any ballot is sent; no-referrer keeps the vote token out of the policy page. */}
+  <p className="mt-8 text-center text-xs text-ink2"><a href={VOTE_PRIVACY_HREF[locale]} hrefLang={locale==='fr'?'fr':'en'} rel="noreferrer" className="inline-flex min-h-[44px] items-center underline">{c.privacy}</a></p>
  </main>;
 }
