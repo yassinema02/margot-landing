@@ -4,12 +4,12 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Delete Your Account · Margot",
   description:
-    "How to delete your Margot account and personal data — the steps to request deletion, what data is removed, what is retained and for how long.",
+    "How to delete your Margot account and personal data: the steps to request deletion, what data is removed, what is retained and for how long.",
   alternates: { canonical: "/delete-account" },
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "16 June 2026";
+const LAST_UPDATED = "11 November 2026";
 
 export default function DeleteAccountPage() {
   return (
@@ -37,8 +37,8 @@ export default function DeleteAccountPage() {
             data associated with it. Margot is operated by <Strong>YAVREN</Strong>.
           </P>
           <P>
-            You can request deletion at any time — directly inside the app, or by email if you have
-            already uninstalled it.
+            You can delete your account at any time, directly inside the app, or request deletion
+            by email if you have already uninstalled it or cannot sign in.
           </P>
         </Section>
 
@@ -49,19 +49,22 @@ export default function DeleteAccountPage() {
           <Ol>
             <Li>Open the Margot app and sign in to your account.</Li>
             <Li>
-              Go to the <Strong>Profile</Strong> tab, then tap <Strong>Privacy</Strong>.
+              Open your profile, then <Strong>Settings</Strong>.
             </Li>
             <Li>
-              Tap <Strong>Delete Account</Strong> and confirm.
+              Tap <Strong>Privacy &amp; data</Strong>, then <Strong>Delete Account</Strong>, and
+              confirm twice. You can also use <Strong>Delete account</Strong> at the bottom of
+              Settings.
             </Li>
             <Li>
-              You will be signed out. To finalise removal, send a short confirmation email to{" "}
-              <a href="mailto:margot@margotwardrobe.com?subject=Delete%20my%20account" className="underline hover:text-peach">
-                margot@margotwardrobe.com
-              </a>{" "}
-              from the email address linked to your account.
+              Your account is deleted right away and you are signed out. No email is needed.
             </Li>
           </Ol>
+          <P>
+            Photo files are erased at the same time, then an automatic check runs again at least
+            24 hours later to erase anything left. If the deletion fails, the app tells you: try
+            again, or write to us.
+          </P>
         </Section>
 
         <Section title="2. Delete by email">
@@ -95,13 +98,27 @@ export default function DeleteAccountPage() {
           </P>
           <Ul>
             <Li>Your account and profile information (email, name, style preferences, settings).</Li>
-            <Li>Your wardrobe — uploaded clothing photos and item details (category, color, brand, tags, notes).</Li>
+            <Li>Your wardrobe: uploaded clothing photos and item details (category, color, brand, tags, notes).</Li>
             <Li>Generated outfits, outfit ratings, and saved looks.</Li>
             <Li>Wear logs and your wear history.</Li>
             <Li>Shopping scans, purchase-check results, and resale listings you created.</Li>
             <Li>Trips, planned outfits, and any calendar context stored on your account.</Li>
             <Li>Analytics identifiers tied to your account.</Li>
+            <Li>
+              Your social profile, follows, looks and reactions, votes, "Dress me" requests and
+              suggestions, moodboard, wishlist and the share copies of your photos.
+            </Li>
+            <Li>Your public vote links, which stop working.</Li>
+            <Li>
+              Reports you sent and reports about you. Your messages are replaced by "Message
+              deleted" for the people you wrote to.
+            </Li>
           </Ul>
+          <P>
+            Pieces that other members added to their own closet with "I have it too" are their
+            copies and stay with them. We cannot erase a screenshot or a copy made by someone
+            else, and an image already opened may stay in a phone's cache for a while.
+          </P>
         </Section>
 
         <Section title="4. What is retained, and for how long">
@@ -126,7 +143,7 @@ export default function DeleteAccountPage() {
           </Ul>
           <P>
             We do <Strong>not</Strong> sell your data or share your wardrobe contents with advertisers
-            or data brokers — before or after deletion.
+            or data brokers, before or after deletion.
           </P>
         </Section>
 
