@@ -103,7 +103,6 @@ export default function DeleteAccountPage() {
             <Li>Wear logs and your wear history.</Li>
             <Li>Shopping scans, purchase-check results, and resale listings you created.</Li>
             <Li>Trips, planned outfits, and any calendar context stored on your account.</Li>
-            <Li>Analytics identifiers tied to your account.</Li>
             <Li>
               Your social profile, follows, looks and reactions, votes, "Dress me" requests and
               suggestions, moodboard, wishlist and the share copies of your photos.
@@ -127,6 +126,12 @@ export default function DeleteAccountPage() {
             reasons:
           </P>
           <Ul>
+            <Li>
+              <Strong>Usage analytics events:</Strong> they are linked to the technical identifier
+              of your account, not to your name or email address, and are not deleted when you
+              delete your account. The analytics identifier stored on your device is reset when you
+              are signed out.
+            </Li>
             <Li>
               <Strong>Encrypted backups and operational logs:</Strong> may persist for up to{" "}
               <Strong>30 days</Strong> before they expire and are overwritten.

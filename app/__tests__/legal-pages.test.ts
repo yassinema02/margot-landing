@@ -69,6 +69,29 @@ describe("legal pages: social features", () => {
     expect([fr.match(FORBIDDEN_MARKS), fr.match(FORBIDDEN_PROMISES)]).toEqual([null, null]);
   });
 
+  // T12 fix 1: what the code keeps (device fingerprint with each web ballot,
+  // IP fingerprint with a report sent from the vote page, account uuid on analytics).
+  it("privacy policies describe the fingerprints and analytics the code keeps", () => {
+    const enHtml = page(PrivacyPage).html;
+    const frHtml = page(ConfidentialitePage).html;
+    const en = section(enHtml, "2.4 Social features");
+    const fr = section(frHtml, "2.4 Fonctions sociales");
+    expect(en).toMatch(/hashed fingerprint of this device identifier, for as long as the vote is kept/);
+    expect(en).toMatch(/hashed fingerprint of the IP address for a report sent from the vote page/);
+    expect(fr).toMatch(/empreinte hachée de cet identifiant d'appareil, aussi longtemps que le bulletin/);
+    expect(fr).toMatch(/empreinte hachée de l'adresse IP pour un signalement envoyé depuis la page de vote/);
+    expect(section(enHtml, "6. How long we keep your data")).toMatch(
+      /except the one attached to a report sent from the vote page, which is kept for as long as that report/
+    );
+    expect(section(frHtml, "6. Durée de conservation de vos données")).toMatch(
+      /sauf celle jointe à un signalement envoyé depuis la page de vote, conservée aussi longtemps que ce signalement/
+    );
+    expect(section(enHtml, "2.3 Data collected automatically")).toMatch(/technical identifier of your account/);
+    expect(section(frHtml, "2.3 Données collectées automatiquement")).toMatch(/identifiant technique de votre compte/);
+    expect(page(PrivacyPage).text).not.toMatch(/anonymised events/);
+    expect(page(ConfidentialitePage).text).not.toMatch(/événements anonymisés/);
+  });
+
   it("each page links to its counterpart and to the existing contact", () => {
     expect(page(TermsPage).html).toContain('href="/privacy"');
     expect(page(ConditionsPage).html).toContain('href="/fr/confidentialite"');
@@ -97,6 +120,14 @@ describe("delete-account page", () => {
     expect(text).toMatch(/Margot/);
     expect(text).toMatch(/YAVREN/);
     expect(deleteMetadata.alternates).toEqual({ canonical: "/delete-account" });
+  });
+
+  it("does not claim the analytics identifiers are deleted, and says what stays", () => {
+    const html = page(DeleteAccountPage).html;
+    expect(section(html, "3. What data is deleted")).not.toMatch(/Analytics identifiers/);
+    expect(section(html, "4. What is retained, and for how long")).toMatch(
+      /not deleted when you delete your account/
+    );
   });
 
   it("lists the social data deleted and what stays with other people", () => {

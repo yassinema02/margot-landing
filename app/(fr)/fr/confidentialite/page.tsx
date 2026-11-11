@@ -150,9 +150,10 @@ export default function ConfidentialitePage() {
         <Sub title="2.3 Données collectées automatiquement">
           <Ul>
             <Li>
-              <Strong>Statistiques d&apos;utilisation :</Strong> événements anonymisés (écrans
-              consultés, interactions avec les fonctionnalités, durée des sessions) pour
-              améliorer l&apos;Application. Vous pouvez vous y opposer à tout moment dans
+              <Strong>Statistiques d&apos;utilisation :</Strong> événements rattachés à
+              l&apos;identifiant technique de votre compte, et non à votre nom ni à votre adresse
+              email (écrans consultés, interactions avec les fonctionnalités, durée des sessions),
+              pour améliorer l&apos;Application. Vous pouvez vous y opposer à tout moment dans
               l&apos;Application, sous <em>Réglages → Confidentialité &amp; données</em>.
             </Li>
             <Li>
@@ -186,8 +187,9 @@ export default function ConfidentialitePage() {
               votes, demandes « Habille-moi » et propositions, moodboard et wishlist.
             </Li>
             <Li>
-              <Strong>Signalements :</Strong> compte qui signale, motif choisi, copie du contenu
-              signalé et dates de traitement.
+              <Strong>Signalements :</Strong> compte qui signale, ou empreinte hachée de
+              l&apos;adresse IP pour un signalement envoyé depuis la page de vote, motif choisi,
+              copie du contenu signalé et dates de traitement.
             </Li>
           </Ul>
           <P>
@@ -210,9 +212,11 @@ export default function ConfidentialitePage() {
             de profil. Le lien expire 7 jours après la fin du vote et vous pouvez le retirer à tout
             moment. Les personnes qui votent sans compte peuvent laisser un prénom et une courte
             raison, visibles seulement par la personne qui a créé le vote. Pour n&apos;enregistrer
-            qu&apos;un vote par appareil et limiter les abus, la page de vote dépose un cookie
-            technique (8 jours) quand vous votez, et nous n&apos;enregistrons qu&apos;une empreinte
-            hachée de l&apos;adresse IP, pas l&apos;adresse elle-même. Une page d&apos;invitation
+            qu&apos;un vote par appareil et limiter les abus, la page de vote dépose quand vous
+            votez un cookie technique (8 jours) qui identifie l&apos;appareil ; nous gardons avec
+            votre bulletin une empreinte hachée de cet identifiant d&apos;appareil, aussi longtemps
+            que le bulletin, et seulement une empreinte hachée de l&apos;adresse IP, pas
+            l&apos;adresse elle-même. Une page d&apos;invitation
             montre seulement le nom affiché, le pseudo et l&apos;initiale de la personne qui
             invite.
           </P>
@@ -220,8 +224,8 @@ export default function ConfidentialitePage() {
             <Strong>Signalements et modération.</Strong> Un signalement reste confidentiel. Notre
             équipe l&apos;examine sous 24 heures et n&apos;accède qu&apos;au contenu signalé,
             jamais au reste du placard, aux notes privées ni aux autres conversations. La copie du
-            contenu signalé est effacée dès la décision ; la trace du signalement (motif, statut et
-            dates) est supprimée avec le compte de la personne qui l&apos;a envoyé ou de la
+            contenu signalé est effacée dès la décision ; la trace du signalement (compte qui signale
+            ou empreinte de l&apos;adresse IP, motif, statut et dates) est supprimée avec le compte de la personne qui l&apos;a envoyé ou de la
             personne visée.
           </P>
           <P>
@@ -413,7 +417,8 @@ export default function ConfidentialitePage() {
             fin du vote, ou dès que vous le retirez ; les copies de ses photos sont ensuite
             effacées par le travail automatique. Les empreintes d&apos;adresse IP de la page de
             vote sont effacées au plus tard deux jours après la fin du mois où elles ont été
-            créées.
+            créées, sauf celle jointe à un signalement envoyé depuis la page de vote, conservée
+            aussi longtemps que ce signalement.
           </Li>
           <Li>
             <Strong>Copie d&apos;un contenu signalé :</Strong> effacée dès la décision de

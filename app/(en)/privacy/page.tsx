@@ -127,8 +127,9 @@ export default function PrivacyPage() {
           <Sub title="2.3 Data collected automatically">
             <Ul>
               <Li>
-                <Strong>Usage analytics:</Strong> anonymised events (screen views, feature
-                interactions, session length) to improve the App. You can opt out at any time
+                <Strong>Usage analytics:</Strong> events linked to the technical identifier of
+                your account, not to your name or email address (screen views, feature
+                interactions, session length), to improve the App. You can opt out at any time
                 in the App under <em>Settings → Privacy &amp; data</em>.
               </Li>
               <Li>
@@ -160,7 +161,8 @@ export default function PrivacyPage() {
                 votes, "Dress me" requests and suggestions, moodboard and wishlist.
               </Li>
               <Li>
-                <Strong>Reports:</Strong> the reporting account, the reason chosen, a copy of the
+                <Strong>Reports:</Strong> the reporting account, or a hashed fingerprint of the IP
+                address for a report sent from the vote page, the reason chosen, a copy of the
                 reported content and the handling dates.
               </Li>
             </Ul>
@@ -180,17 +182,18 @@ export default function PrivacyPage() {
               the clothes you approve, with their name and category. It never shows your avatar or your profile photo. The link expires
               7 days after the vote ends and you can remove it at any time. People who vote without
               an account may leave a first name and a short reason, visible only to the person who
-              created the vote. To record one vote per device and limit abuse, the vote page sets a
-              technical cookie (8 days) when you vote, and we only record a hashed fingerprint of
-              the IP address, not the address itself. An invitation page shows only the display
+              created the vote. To record one vote per device and limit abuse, when you vote, the
+              vote page sets a technical cookie (8 days) that identifies the device; we keep with
+              your vote a hashed fingerprint of this device identifier, for as long as the vote is
+              kept, and only a hashed fingerprint of the IP address, not the address itself. An invitation page shows only the display
               name, username and initial of the person who invites.
             </P>
             <P>
               <Strong>Reports and moderation.</Strong> A report stays confidential. Our team
               reviews it within 24 hours and sees only the reported content, never the rest of the
               closet, private notes or other conversations. The copy of the reported content is
-              erased as soon as the decision is made; the record of the report (reason, status and
-              dates) is deleted with the account of the person who sent it or of the person it
+              erased as soon as the decision is made; the record of the report (reporting account or IP
+              address fingerprint, reason, status and dates) is deleted with the account of the person who sent it or of the person it
               concerns.
             </P>
             <P>
@@ -352,7 +355,8 @@ export default function PrivacyPage() {
               <Strong>Vote through a public link:</Strong> the link stops working 7 days after the
               vote ends, or as soon as you remove it; copies of its photos are then erased by the
               automatic job. IP address fingerprints from the vote page are erased at the latest two
-              days after the end of the month in which they were created.
+              days after the end of the month in which they were created, except the one attached
+              to a report sent from the vote page, which is kept for as long as that report.
             </Li>
             <Li>
               <Strong>Copy of reported content:</Strong> erased as soon as the team makes its
