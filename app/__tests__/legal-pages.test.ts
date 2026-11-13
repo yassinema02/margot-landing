@@ -166,11 +166,14 @@ describe("delete-account page", () => {
   });
 
   it("does not claim the analytics identifiers are deleted, and says what stays", () => {
-    const html = page(DeleteAccountPage).html;
+    const { html, text } = page(DeleteAccountPage);
     expect(section(html, "3. What data is deleted")).not.toMatch(/Analytics identifiers/);
-    expect(section(html, "4. What is retained, and for how long")).toMatch(
-      /not deleted when you delete your account/
-    );
+    const retained = section(html, "4. What is retained, and for how long");
+    expect(retained).toMatch(/not deleted when you delete your account/);
+    expect(retained).toMatch(/technical account identifier, usage events and onboarding information remain with PostHog after you delete your account/);
+    expect(retained).toMatch(/Deleting your Margot account does not automatically erase them/);
+    expect(retained).not.toMatch(/Aggregated \/ anonymised analytics|90 days|can no longer be linked back to you/);
+    expect(text).toMatch(/Last updated: 13 November 2026/);
   });
 
   it("lists the social data deleted and what stays with other people", () => {

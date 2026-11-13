@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "11 November 2026";
+const LAST_UPDATED = "13 November 2026";
 
 export default function DeleteAccountPage() {
   return (
@@ -137,8 +137,9 @@ export default function DeleteAccountPage() {
               <Strong>30 days</Strong> before they expire and are overwritten.
             </Li>
             <Li>
-              <Strong>Aggregated / anonymised analytics:</Strong> retained for up to{" "}
-              <Strong>90 days</Strong>. This data can no longer be linked back to you.
+              <Strong>Analytics kept by PostHog:</Strong> your technical account identifier,
+              usage events and onboarding information remain with PostHog after you delete your
+              account. Deleting your Margot account does not automatically erase them.
             </Li>
             <Li>
               <Strong>Subscription and purchase records:</Strong> retained as required by tax and
