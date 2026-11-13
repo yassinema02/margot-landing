@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "20 octobre 2026";
+const LAST_UPDATED = "11 novembre 2026";
 
 export default function ConfidentialitePage() {
   return (
@@ -150,9 +150,10 @@ export default function ConfidentialitePage() {
         <Sub title="2.3 Données collectées automatiquement">
           <Ul>
             <Li>
-              <Strong>Statistiques d&apos;utilisation :</Strong> événements anonymisés (écrans
-              consultés, interactions avec les fonctionnalités, durée des sessions) pour
-              améliorer l&apos;Application. Vous pouvez vous y opposer à tout moment dans
+              <Strong>Statistiques d&apos;utilisation :</Strong> événements rattachés à
+              l&apos;identifiant technique de votre compte, et non à votre nom ni à votre adresse
+              email (écrans consultés, interactions avec les fonctionnalités, durée des sessions),
+              pour améliorer l&apos;Application. Vous pouvez vous y opposer à tout moment dans
               l&apos;Application, sous <em>Réglages → Confidentialité &amp; données</em>.
             </Li>
             <Li>
@@ -164,6 +165,85 @@ export default function ConfidentialitePage() {
               d&apos;exploitation, langue, fuseau horaire.
             </Li>
           </Ul>
+        </Sub>
+
+        <Sub title="2.4 Fonctions sociales">
+          <P>
+            Si vous créez un profil social (réservé aux personnes de 15 ans et plus), nous
+            traitons aussi :
+          </P>
+          <Ul>
+            <Li>
+              <Strong>Profil social :</Strong> pseudo, nom affiché, bio facultative, compte privé
+              ou public, ainsi que la date et l&apos;heure d&apos;acceptation des règles. Votre
+              mois et votre année de naissance peuvent être demandés pour confirmer l&apos;âge que
+              vous déclarez ;
+              ils n&apos;apparaissent pas sur votre profil.
+            </Li>
+            <Li>
+              <Strong>Relations :</Strong> abonnements, demandes, amis et comptes bloqués.
+            </Li>
+            <Li>
+              <Strong>Contenus sociaux :</Strong> looks publiés et réactions, messages et groupes,
+              votes, demandes « Habille-moi » et propositions, moodboard et wishlist.
+            </Li>
+            <Li>
+              <Strong>Signalements :</Strong> compte qui signale, ou empreinte hachée de
+              l&apos;adresse IP pour un signalement envoyé depuis la page de vote, motif choisi,
+              copie du contenu signalé et dates de traitement.
+            </Li>
+          </Ul>
+          <P>
+            <Strong>Qui voit quoi.</Strong> Votre compte est privé par défaut : seules les
+            personnes que vous acceptez voient votre dressing et vos looks. En compte public, tous
+            les membres du social peuvent voir votre dressing et les looks publiés pour tout le
+            monde. Même en compte privé, votre nom affiché, votre pseudo et votre bio restent
+            visibles par les membres du social.
+            Votre photo de profil n&apos;est montrée qu&apos;à vos amis ; les autres voient vos
+            initiales. Personne d&apos;autre que vous ne génère une image de votre visage, et un
+            look ne montre votre avatar que si vous le publiez vous-même. Les découpes de votre
+            moodboard restent visibles seulement par vous, sauf les photos studio redessinées avec
+            Premium, visibles par ceux qui voient votre dressing.
+          </P>
+          <P>
+            <Strong>Liens publics.</Strong> Un vote partagé par lien public montre à toute personne
+            disposant du lien l&apos;occasion, le prénom que vous confirmez et son initiale, et les
+            photos des vêtements que vous validez, avec leur nom et leur catégorie. Il ne montre
+            jamais votre avatar ni votre photo
+            de profil. Le lien expire 7 jours après la fin du vote et vous pouvez le retirer à tout
+            moment. Les personnes qui votent sans compte peuvent laisser un prénom et une courte
+            raison, visibles par la personne qui a créé le vote, et par notre équipe si cette
+            personne signale la réponse. Pour n&apos;enregistrer
+            qu&apos;un vote par appareil et limiter les abus, la page de vote dépose quand vous
+            votez un cookie technique (8 jours) qui identifie l&apos;appareil ; nous gardons avec
+            votre bulletin une empreinte hachée de cet identifiant d&apos;appareil, aussi longtemps
+            que le bulletin, et seulement une empreinte hachée de l&apos;adresse IP, pas
+            l&apos;adresse elle-même. Une page d&apos;invitation
+            montre seulement le nom affiché, le pseudo et l&apos;initiale de la personne qui
+            invite.
+          </P>
+          <P>
+            <Strong>Signalements et modération.</Strong> Un signalement reste confidentiel. Notre
+            équipe l&apos;examine sous 24 heures et n&apos;accède qu&apos;au contenu signalé,
+            jamais au reste du placard, aux notes privées ni aux autres conversations. La copie du
+            contenu signalé est effacée dès la décision ; la trace du signalement (compte qui signale
+            ou empreinte de l&apos;adresse IP, motif, statut et dates) est supprimée avec le compte de la personne qui l&apos;a envoyé ou de la
+            personne visée.
+          </P>
+          <P>
+            <Strong>Retrait et limites.</Strong> Quand vous retirez un contenu, masquez une pièce,
+            bloquez quelqu&apos;un ou repassez en privé, les nouvelles ouvertures sont refusées.
+            Une image déjà ouverte peut rester visible un moment : un lien d&apos;image déjà chargé
+            reste valable jusqu&apos;à une heure et un téléphone peut la garder en cache. Un lien
+            de vote public reste visible jusqu&apos;à son retrait ou son expiration, même si vous
+            masquez ensuite ses pièces. Il est aussi retiré quand vous supprimez le vote ou votre
+            compte, et quand notre équipe, après un signalement, masque le vote ou votre profil,
+            masque ou retire l&apos;une de ses pièces, ou suspend votre accès aux fonctions
+            sociales. L&apos;aperçu du lien déjà affiché dans une messagerie (occasion, initiale
+            du prénom et photos) peut y rester après le retrait du lien. Nous ne pouvons pas effacer une capture d&apos;écran ou une
+            copie faite par quelqu&apos;un d&apos;autre. Les pièces qu&apos;un autre membre a
+            ajoutées avec « Je l&apos;ai aussi » restent les siennes.
+          </P>
         </Sub>
 
         <P>
@@ -328,12 +408,35 @@ export default function ConfidentialitePage() {
             lors de l&apos;import de garde-robe ou de l&apos;inscription) : purgés
             automatiquement après 7 jours.
           </Li>
+          <Li>
+            <Strong>Contenus sociaux :</Strong> conservés jusqu&apos;à leur retrait ou la
+            suppression du compte. Les fichiers de partage retirés sont effacés par un travail
+            automatique, avec une seconde vérification au moins 24 heures plus tard.
+          </Li>
+          <Li>
+            <Strong>Ancien pseudo :</Strong> réservé 30 jours après un changement ou la
+            suppression du compte, pour qu&apos;un ancien lien ne mène pas à quelqu&apos;un
+            d&apos;autre.
+          </Li>
+          <Li>
+            <Strong>Vote par lien public :</Strong> le lien cesse de fonctionner 7 jours après la
+            fin du vote, ou dès que vous le retirez ; les copies de ses photos sont ensuite
+            effacées par le travail automatique. Les empreintes d&apos;adresse IP de la page de
+            vote sont effacées au plus tard deux jours après la fin du mois où elles ont été
+            créées, sauf celle jointe à un signalement envoyé depuis la page de vote, conservée
+            aussi longtemps que ce signalement.
+          </Li>
+          <Li>
+            <Strong>Copie d&apos;un contenu signalé :</Strong> effacée dès la décision de
+            l&apos;équipe.
+          </Li>
         </Ul>
         <P>
           Vous pouvez supprimer votre compte à tout moment depuis les réglages de
           l&apos;Application. Cela supprime immédiatement votre compte actif et vos données
           de garde-robe, sous réserve des délais de sauvegarde, de journalisation et de
-          conservation légale décrits ci-dessus.
+          conservation légale décrits ci-dessus. Les fichiers photo sont effacés dans la
+          foulée, avec une seconde vérification au moins 24 heures plus tard.
         </P>
       </Section>
 

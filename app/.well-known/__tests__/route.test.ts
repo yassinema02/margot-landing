@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { GET as android } from "../assetlinks.json/route";
 import { GET } from "../apple-app-site-association/route";
 
 // Le contenu de ce fichier est vérifié par Apple à l'installation de l'app :
@@ -17,15 +18,15 @@ describe("apple-app-site-association", () => {
     ]);
   });
 
-  it("couvre les chemins d'auth et les invitations, et eux seuls", async () => {
+  it("couvre les chemins d'auth, d'invitations et de votes, et eux seuls", async () => {
     const body = await GET().json();
     const paths = body.applinks.details[0].components.map(
       (c: Record<string, string>) => c["/"],
     );
-    // Doit rester aligné sur les `pathPrefix` '/app/auth' et '/i/' déclarés
+    // Doit rester aligné sur les `pathPrefix` '/app/auth', '/i/' et '/v/' déclarés
     // côté Android dans apps/mobile/app.config.js : les deux plateformes
     // ouvrent les mêmes liens.
-    expect(paths).toEqual(["/app/auth/*", "/i/*"]);
+    expect(paths).toEqual(["/v/*", "/app/auth/*", "/i/*"]);
   });
 
   it("ouvre les invitations sociales dans l'app", async () => {
@@ -44,4 +45,14 @@ describe("apple-app-site-association", () => {
     expect(paths).not.toContain("*");
     expect(paths).not.toContain("/*");
   });
+});
+
+
+it("Android reste vide sans empreinte Play valide", async () => {
+  vi.stubEnv("ANDROID_SHA256_CERT_FINGERPRINTS", "");
+  try {
+    expect(await android().json()).toEqual([]);
+  } finally {
+    vi.unstubAllEnvs();
+  }
 });

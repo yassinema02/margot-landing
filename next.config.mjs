@@ -1,6 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // The optimizer caches fetched bytes. Only fixed public assets are eligible;
+  // bearer-token vote routes must never reach it, including encoded aliases.
+  images: {
+    localPatterns: [
+      "/download-icon.png",
+      "/app-qr.svg",
+      "/mascot/mascot-{welcome,thinking}.png",
+      "/screens/{en,fr}/{tryon-result,travel-packing,add-photo,outfit-collection,chat-conversation,styles,shopping,home}.webp",
+      "/editorial/avant-apres/{jeans,before,sneakers,after,tank,blazer}.webp",
+      "/video/margot-15s-{en,fr}-poster.webp",
+      "/press/margot-{wordmark,mark}.svg",
+    ].map((pathname) => ({ pathname, search: "" })),
+  },
 
   // Next 15 streams <title>/<meta>/<link rel=canonical> into the <body> on
   // dynamic routes unless the user agent matches this list. The default list
@@ -75,6 +88,14 @@ const nextConfig = {
             // doubleclick whitelisted, or Consent Mode + GA4 are silently blocked.
             value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://eu-assets.i.posthog.com https://connect.facebook.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://api.beehiiv.com https://eu.i.posthog.com https://eu-assets.i.posthog.com https://www.facebook.com https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://www.google.com https://googleads.g.doubleclick.net; frame-ancestors 'none';",
           },
+        ],
+      },
+      {
+        source: "/v/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Referrer-Policy", value: "no-referrer" },
         ],
       },
       {

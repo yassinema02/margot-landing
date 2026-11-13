@@ -34,6 +34,7 @@ const AASA = {
       {
         appIDs: ["H5H5T938YD.com.vestiaire.app"],
         components: [
+          { "/": "/v/*", comment: "Votes partagés" },
           {
             "/": "/app/auth/*",
             comment:

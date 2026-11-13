@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "4 octobre 2026";
+const LAST_UPDATED = "11 novembre 2026";
 
 export default function ConditionsPage() {
   return (
@@ -90,8 +90,8 @@ export default function ConditionsPage() {
         </P>
         <P>
           Vous pouvez vous connecter par email, Google ou Apple. Vous pouvez fermer votre compte à
-          tout moment depuis <em>Réglages → Confidentialité → Supprimer le compte</em>. La
-          suppression est définitive et irréversible — voir la section 8 ci-dessous.
+          tout moment depuis <em>Réglages → Confidentialité &amp; données → Supprimer le compte</em>.
+          La suppression est définitive et irréversible : voir la section 8 ci-dessous.
         </P>
       </Section>
 
@@ -186,6 +186,54 @@ export default function ConditionsPage() {
         </P>
       </Section>
 
+      <Section title="4 bis. Fonctions sociales">
+        <P>
+          Les fonctions sociales de Margot (profil social, abonnements à d&apos;autres comptes,
+          looks, messages et
+          groupes, votes, demandes « Habille-moi », moodboard et wishlist) sont réservées aux
+          personnes de 15 ans et plus. Si votre âge ne nous est pas déjà connu, votre mois et
+          votre année de naissance vous sont demandés. Ils n&apos;apparaissent pas
+          sur votre profil et ne se modifient plus ensuite dans l&apos;Application : en cas
+          d&apos;erreur, écrivez à{" "}
+          <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+            margot@margotwardrobe.com
+          </a>
+          .
+        </P>
+        <P>
+          En créant votre profil social, vous acceptez les règles de la communauté, consultables
+          depuis l&apos;écran de création du profil avant votre acceptation. Nous enregistrons la
+          date et l&apos;heure de cette acceptation.
+        </P>
+        <P>
+          Ces règles interdisent notamment les moqueries, le harcèlement, les insultes, les
+          menaces et la violence, les contenus haineux, discriminatoires ou sexuels, le spam et
+          les arnaques, ainsi que le partage d&apos;informations sur une personne sans son
+          accord. Un filtre automatique refuse certains termes dans les textes, sans tout
+          détecter. Aucune photo libre ne peut être publiée dans le fil ni envoyée en message.
+        </P>
+        <P>
+          Vous pouvez signaler un contenu ou un compte et bloquer un compte à tout moment depuis
+          le menu « … ». Notre équipe examine les signalements sous 24 heures et n&apos;accède
+          qu&apos;au contenu signalé lui-même. Selon le cas, elle peut classer le signalement,
+          masquer le contenu, retirer une pièce du social ou suspendre l&apos;accès de son auteur
+          aux fonctions sociales. Une suspension ne touche ni votre placard privé ni vos achats.
+        </P>
+        <P>
+          Lorsque vous partagez un vote par lien public, toute personne disposant du lien voit
+          l&apos;occasion, le prénom que vous confirmez et son initiale, et les photos des
+          vêtements que vous validez avant la publication, avec leur nom et leur catégorie. Le
+          lien ne montre jamais votre avatar
+          ni votre photo de profil. Il expire 7 jours après la fin du vote et vous pouvez le
+          retirer à tout moment.
+        </P>
+        <P>
+          Les pièces qu&apos;un autre membre a ajoutées à son placard avec « Je l&apos;ai aussi »
+          deviennent les siennes : elles restent chez lui si vous retirez la vôtre ou supprimez
+          votre compte.
+        </P>
+      </Section>
+
       <Section title="5. Utilisation acceptable">
         <P>Vous vous engagez à ne pas utiliser Margot pour :</P>
         <Ul>
@@ -247,10 +295,16 @@ export default function ConditionsPage() {
       <Section title="8. Suppression du compte et conservation des données">
         <P>
           Vous pouvez supprimer définitivement votre compte Margot depuis{" "}
-          <em>Réglages → Confidentialité → Supprimer le compte</em>. La suppression retire
-          immédiatement votre profil, vos vêtements, tenues, données de calendrier, publications
-          OOTD, scans et photos associées. Cette action est{" "}
-          <Strong>irréversible</Strong>.
+          <em>Réglages → Confidentialité &amp; données → Supprimer le compte</em>. Votre compte et
+          les données qui y sont rattachées sont supprimés immédiatement : profil, vêtements,
+          tenues, données de calendrier, scans, profil social, looks, votes, moodboard et
+          wishlist. Vos liens publics de vote cessent de fonctionner. Les fichiers photo sont
+          effacés dans la foulée, puis un contrôle automatique repasse au moins 24 heures plus
+          tard pour effacer ce qui resterait. Cette action est <Strong>irréversible</Strong>.
+        </P>
+        <P>
+          Vos messages sont remplacés par « Message supprimé » chez vos correspondants. Les pièces
+          qu&apos;un autre membre a ajoutées avec « Je l&apos;ai aussi » restent les siennes.
         </P>
         <P>
           Nous pouvons conserver des statistiques d&apos;usage anonymisées et agrégées qui ne

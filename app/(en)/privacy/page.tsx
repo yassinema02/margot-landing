@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "20 October 2026";
+const LAST_UPDATED = "11 November 2026";
 
 export default function PrivacyPage() {
   return (
@@ -127,8 +127,9 @@ export default function PrivacyPage() {
           <Sub title="2.3 Data collected automatically">
             <Ul>
               <Li>
-                <Strong>Usage analytics:</Strong> anonymised events (screen views, feature
-                interactions, session length) to improve the App. You can opt out at any time
+                <Strong>Usage analytics:</Strong> events linked to the technical identifier of
+                your account, not to your name or email address (screen views, feature
+                interactions, session length), to improve the App. You can opt out at any time
                 in the App under <em>Settings → Privacy &amp; data</em>.
               </Li>
               <Li>
@@ -140,6 +141,75 @@ export default function PrivacyPage() {
                 time zone.
               </Li>
             </Ul>
+          </Sub>
+
+          <Sub title="2.4 Social features">
+            <P>
+              If you create a social profile (for people aged 15 and over), we also process:
+            </P>
+            <Ul>
+              <Li>
+                <Strong>Social profile:</Strong> username, display name, optional bio, private or
+                public account, and the date and time you accepted the rules. Your birth month and
+                year may be asked to confirm the age you declare; they do not appear on your profile.
+              </Li>
+              <Li>
+                <Strong>Connections:</Strong> follows, requests, friends and blocked accounts.
+              </Li>
+              <Li>
+                <Strong>Social content:</Strong> posted looks and reactions, messages and groups,
+                votes, "Dress me" requests and suggestions, moodboard and wishlist.
+              </Li>
+              <Li>
+                <Strong>Reports:</Strong> the reporting account, or a hashed fingerprint of the IP
+                address for a report sent from the vote page, the reason chosen, a copy of the
+                reported content and the handling dates.
+              </Li>
+            </Ul>
+            <P>
+              <Strong>Who sees what.</Strong> Your account is private by default: only the people
+              you accept see your closet and your looks. With a public account, every social member
+              can see your closet and the looks posted for everyone. Even with a private account,
+              your display name, username and bio stay visible to social members. Your profile photo is only shown to your friends;
+              others see your initials. No one but you generates an image of your face, and a look
+              shows your avatar only if you post it yourself. Your moodboard cut-outs stay visible
+              only to you, except studio photos redrawn with Premium, which people who see your
+              closet can see.
+            </P>
+            <P>
+              <Strong>Public links.</Strong> A vote shared through a public link shows anyone with
+              the link the occasion, the first name you confirm and its initial, and the photos of
+              the clothes you approve, with their name and category. It never shows your avatar or your profile photo. The link expires
+              7 days after the vote ends and you can remove it at any time. People who vote without
+              an account may leave a first name and a short reason, visible to the person who
+              created the vote, and to our team if that person reports the reply. To record one vote per device and limit abuse, when you vote, the
+              vote page sets a technical cookie (8 days) that identifies the device; we keep with
+              your vote a hashed fingerprint of this device identifier, for as long as the vote is
+              kept, and only a hashed fingerprint of the IP address, not the address itself. An invitation page shows only the display
+              name, username and initial of the person who invites.
+            </P>
+            <P>
+              <Strong>Reports and moderation.</Strong> A report stays confidential. Our team
+              reviews it within 24 hours and sees only the reported content, never the rest of the
+              closet, private notes or other conversations. The copy of the reported content is
+              erased as soon as the decision is made; the record of the report (reporting account or IP
+              address fingerprint, reason, status and dates) is deleted with the account of the person who sent it or of the person it
+              concerns.
+            </P>
+            <P>
+              <Strong>Removal and limits.</Strong> When you remove content, hide a piece, block
+              someone or go back to private, new openings are refused. An image already opened may
+              stay visible for a while: an image link already loaded stays valid for up to one hour
+              and a phone may keep it in its cache. A public vote link stays visible until you
+              remove it or it expires, even if you then hide its pieces. It is also removed when you
+              delete the vote or your account, and when our team, after a report, hides the vote or
+              your profile, hides or removes one of its pieces, or suspends your access to the
+              social features. A preview of the link already shown in a messaging app (occasion,
+              initial of the first name and photos) may stay there after the link is removed. We
+              cannot erase a
+              screenshot or a copy made by someone else. Pieces another member added with "I have
+              it too" stay theirs.
+            </P>
           </Sub>
 
           <P>
@@ -277,11 +347,32 @@ export default function PrivacyPage() {
               <Strong>Transient import files</Strong> (temporary photos used during wardrobe
               import or onboarding): automatically purged after 7 days.
             </Li>
+            <Li>
+              <Strong>Social content:</Strong> kept until you remove it or delete your account.
+              Removed share files are erased by an automatic job, with a second check at least 24
+              hours later.
+            </Li>
+            <Li>
+              <Strong>Previous username:</Strong> reserved for 30 days after a change or after the
+              account is deleted, so that an old link does not lead to someone else.
+            </Li>
+            <Li>
+              <Strong>Vote through a public link:</Strong> the link stops working 7 days after the
+              vote ends, or as soon as you remove it; copies of its photos are then erased by the
+              automatic job. IP address fingerprints from the vote page are erased at the latest two
+              days after the end of the month in which they were created, except the one attached
+              to a report sent from the vote page, which is kept for as long as that report.
+            </Li>
+            <Li>
+              <Strong>Copy of reported content:</Strong> erased as soon as the team makes its
+              decision.
+            </Li>
           </Ul>
           <P>
             You can delete your account at any time from the App's Settings screen. This removes
             your active account and wardrobe data immediately, subject to the backup, log, and legal
-            retention periods described above.
+            retention periods described above. Photo files are erased right after, with a second
+            check at least 24 hours later.
           </P>
         </Section>
 

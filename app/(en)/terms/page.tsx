@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "4 October 2026";
+const LAST_UPDATED = "11 November 2026";
 
 export default function TermsPage() {
   return (
@@ -83,8 +83,8 @@ export default function TermsPage() {
           </P>
           <P>
             You may sign in with email, Google, or Apple. You may close your account at any
-            time from <em>Settings → Privacy → Delete account</em>. Deletion is permanent
-            and irreversible — see Section 8 below.
+            time from <em>Settings → Privacy &amp; data → Delete Account</em>. Deletion is
+            permanent and irreversible: see Section 8 below.
           </P>
         </Section>
 
@@ -175,6 +175,49 @@ export default function TermsPage() {
           </P>
         </Section>
 
+        <Section title="4a. Social features">
+          <P>
+            Margot's social features (social profile, follows, looks, messages and groups, votes,
+            "Dress me" requests, moodboard and wishlist) are for people aged 15 and over. If we do
+            not already know your age, we ask for your birth month and year. They do not
+            appear on your profile and cannot be changed afterwards in the App: if they are wrong,
+            email{" "}
+            <a href="mailto:margot@margotwardrobe.com" className="underline hover:text-peach">
+              margot@margotwardrobe.com
+            </a>
+            .
+          </P>
+          <P>
+            By creating your social profile, you accept the community rules, which you can read
+            from the profile creation screen before accepting. We record the date and time of this
+            acceptance.
+          </P>
+          <P>
+            These rules prohibit, among other things, mocking, harassment, insults, threats and
+            violence, hateful, discriminatory or sexual content, spam and scams, and sharing
+            information about a person without their consent. An automatic filter refuses some
+            terms in texts, without catching everything. No free photo can be posted to the feed
+            or sent in a message.
+          </P>
+          <P>
+            You can report content or an account and block an account at any time from the "…"
+            menu. Our team reviews reports within 24 hours and sees only the reported content
+            itself. Depending on the case, it may dismiss the report, hide the content, remove a
+            piece from social or suspend its author's access to the social features. A suspension
+            affects neither your private closet nor your purchases.
+          </P>
+          <P>
+            When you share a vote through a public link, anyone with the link sees the occasion,
+            the first name you confirm and its initial, and the photos of the clothes you approve
+            before publishing, with their name and category. The link never shows your avatar or your profile photo. It expires 7 days
+            after the vote ends and you can remove it at any time.
+          </P>
+          <P>
+            Pieces another member added to their closet with "I have it too" become theirs: they
+            stay with them if you remove yours or delete your account.
+          </P>
+        </Section>
+
         <Section title="5. Acceptable use">
           <P>You agree not to use Margot to:</P>
           <Ul>
@@ -232,9 +275,16 @@ export default function TermsPage() {
         <Section title="8. Account deletion and data retention">
           <P>
             You can permanently delete your Margot account from{" "}
-            <em>Settings → Privacy → Delete account</em>. Deletion immediately removes
-            your profile, wardrobe items, outfits, calendar data, OOTD posts, scans, and
-            associated photos. This action <Strong>cannot be undone</Strong>.
+            <em>Settings → Privacy &amp; data → Delete Account</em>. Your account and the data
+            attached to it are deleted immediately: profile, wardrobe items, outfits, calendar
+            data, scans, social profile, looks, votes, moodboard and wishlist. Your public vote
+            links stop working. Photo files are erased right after, then an automatic check runs
+            again at least 24 hours later to erase anything left. This action{" "}
+            <Strong>cannot be undone</Strong>.
+          </P>
+          <P>
+            Your messages are replaced by "Message deleted" for the people you wrote to. Pieces
+            another member added with "I have it too" stay theirs.
           </P>
           <P>
             We may retain anonymised, aggregated usage statistics that no longer identify
