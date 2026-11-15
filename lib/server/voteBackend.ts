@@ -3,9 +3,11 @@ import { createClient } from '@supabase/supabase-js';
 
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const HASH = /^[0-9a-f]{64}$/;
-export type VoteErrorCode = 'social_text_rejected' | 'invalid' | 'unauthorized' | 'unavailable' | 'conflict' | 'closed' | 'selection_changed' | 'limited' | 'pending_media' | 'pending' | 'too_large';
+export type VoteErrorCode = 'social_text_rejected' | 'invalid' | 'unauthorized' | 'unavailable' | 'conflict' | 'closed' | 'selection_changed' | 'limited' | 'media_unavailable' | 'pending_media' | 'pending' | 'too_large';
+export type VoteProgress = {phase:'sources'|'copies';completed:number;total:number};
+export type PreparedMediaItem = {itemId:string;version:string|null;state:'ready'|'pending'|'unavailable'};
 export class VoteError extends Error {
- constructor(readonly code: VoteErrorCode, readonly retryAfter?: number) { super(code); }
+ constructor(readonly code: VoteErrorCode, readonly retryAfter?: number, readonly progress?: VoteProgress) { super(code); }
 }
 export function record(value: unknown): Record<string, unknown> {
  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new VoteError('unavailable');
@@ -45,7 +47,7 @@ export interface VoteBackend {
  rpcAsUser(token:string, name:string, args:Record<string,unknown>, signal:AbortSignal): Promise<unknown>;
  rpc(name:string, args:Record<string,unknown>, signal:AbortSignal): Promise<unknown>;
  rows(table:string, columns:string, filters:Record<string,unknown>, limit:number, signal:AbortSignal): Promise<unknown[]>;
- prepareMedia(token:string, owner:string, ids:string[], signal:AbortSignal): Promise<void>;
+ prepareMedia(token:string, owner:string, ids:string[], signal:AbortSignal): Promise<PreparedMediaItem[]>;
  download(bucket:string,path:string,signal:AbortSignal): Promise<{bytes:Uint8Array;type:string}>;
  upload(bucket:string,path:string,bytes:Uint8Array,signal:AbortSignal): Promise<void>;
  remove(bucket:string,path:string,signal:AbortSignal): Promise<void>;
@@ -84,7 +86,17 @@ export function voteBackend(): VoteBackend {
    // Existing authenticated derivation endpoint. Signed URLs in its response are discarded.
    const result = await client(signal).functions.invoke('social-media',{
     headers:{Authorization:`Bearer ${token}`},body:{action:'items',ownerId:owner,itemIds:ids,size:'large'},
-   }); checked(result);
+   });
+   const data=record(checked(result));
+   if (!ids.length || ids.length>18 || new Set(ids).size!==ids.length || !Array.isArray(data.items) || data.items.length!==ids.length) throw new VoteError('unavailable');
+   const seen=new Set<string>();
+   return data.items.map(value=>{
+    const item=record(value);
+    if (typeof item.itemId!=='string' || !ids.includes(item.itemId) || seen.has(item.itemId) || !['ready','pending','unavailable'].includes(String(item.state)) ||
+     (item.state==='unavailable' ? item.version!==null : typeof item.version!=='string'||!/^[a-f0-9]{12}$/.test(item.version))) throw new VoteError('unavailable');
+    seen.add(item.itemId);
+    return {itemId:item.itemId,version:item.version,state:item.state} as PreparedMediaItem;
+   });
   },
   async download(bucket,path,signal) {
    const result = await client(signal).storage.from(bucket).download(path);

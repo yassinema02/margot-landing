@@ -2,7 +2,7 @@ import 'server-only';
 import { createHmac, createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { HASH, UUID, VoteBackend, VoteBudget, VoteError, record, sameHash, signingSecret, voteBackend } from './voteBackend';
-import { copyVoteImage, readVoteImage, sha256, jpegResponse } from './voteImages';
+import { copyVoteImages, readVoteImage, sha256, jpegResponse } from './voteImages';
 
 export type ReservedMedia = { mediaId:string;choice:'a'|'b';ordinal:number;position:string;itemId:string;ownerId:string;sourceKind:'item';sourceVersion:string;sourceBucket:'social-media';sourcePath:string;destinationBucket:'social-media';destinationPath:string;name:string|null;category:string|null };
 export type VoteLinkReservation = {voteId:string;ownerId:string;revision:number;leaseUntil:string;occasion:string;firstName:string;initials:string;endsAt:string;expiresAt:string;media:ReservedMedia[]};
@@ -51,63 +51,88 @@ function accept(data:unknown,expected:string): Record<string,unknown> {
  throw new VoteError('unavailable');
 }
 
-type Authority = {reservation:VoteLinkReservation;link:Record<string,unknown>;media:Record<string,unknown>[]};
+type Sources = Record<string,unknown>[];
+type Authority = {reservation:VoteLinkReservation;link:Record<string,unknown>;media:Record<string,unknown>[];sources:Sources|null};
+type Unreserved = {status:'unreserved';sources:Sources};
+function sourceRows(value:unknown,uid:string): Sources {
+ if (!Array.isArray(value) || value.length<4 || value.length>18) throw new VoteError('selection_changed');
+ const rows=value.map(record);
+ for(const choice of ['a','b']) {
+  const pieces=rows.filter(x=>x.choice===choice);
+  if(pieces.length<2||pieces.length>9) throw new VoteError('selection_changed');
+  pieces.forEach((m,i)=>{
+   if(m.ordinal!==i+1 || m.ownerId!==uid || m.sourceKind!=='item' || m.sourceBucket!=='social-media' || m.admissible!==true || typeof m.itemId!=='string' || !UUID.test(m.itemId) || typeof m.sourceVersion!=='string' || !/^[a-f0-9]{12}$/.test(m.sourceVersion) ||
+    (m.sourcePath!==null && (typeof m.sourcePath!=='string'||!m.sourcePath.startsWith(`${uid}/items/`)||m.sourcePath.includes('..')||/[?#\\]/.test(m.sourcePath)))) throw new VoteError('selection_changed');
+  });
+ }
+ if(rows.some(m=>m.choice!=='a'&&m.choice!=='b')) throw new VoteError('selection_changed');
+ return rows;
+}
+function sameSources(before:Sources,after:Sources,allowMissing=false) {
+ if(before.length!==after.length || before.some((m,i)=>!isDeepStrictEqual(allowMissing&&m.sourcePath===null?{...m,sourcePath:after[i].sourcePath}:m,after[i]))) throw new VoteError('selection_changed');
+}
+async function settled<T>(operations:Promise<T>[]):Promise<T[]> {
+ const results=await Promise.allSettled(operations);
+ for(const result of results) if(result.status==='rejected') throw result.reason;
+ return results.map(result=>(result as PromiseFulfilledResult<T>).value);
+}
 export function votePublication(backend:VoteBackend,budget = new VoteBudget(),secret:()=>string = signingSecret) {
  async function owner(token:string): Promise<string> {
   if (!token || token.length > 8192 || /\s/.test(token)) throw new VoteError('unauthorized');
   return budget.run(signal=>backend.user(token,signal));
  }
  const rpc = (name:string,args:Record<string,unknown>)=>budget.run(signal=>backend.rpc(name,args,signal));
- async function authority(token:string,uid:string,vote:string,revision:number): Promise<Authority> {
-  if (await owner(token) !== uid) throw new VoteError('unauthorized');
-  const votes = await budget.run(signal=>backend.rows('style_votes','id,owner_id,link_revision,link_state,deleted_at,closed_at,ends_at',{id:vote,owner_id:uid},1,signal));
-  const v = record(votes[0]);
-  if (v.id !== vote || v.owner_id !== uid || v.deleted_at !== null || v.link_state === 'revoked' || v.link_revision !== revision) throw new VoteError('conflict');
-  if ((await rpc('social_media_viewer_ok',{p_viewer:uid})) !== true) throw new VoteError('unavailable');
-  const links = await budget.run(signal=>backend.rows('style_vote_links','state,preparation,manifest_hash,token_hash,consent_version,consent_revision,consent_manifest_hash,snapshot',{vote_id:vote,revision},1,signal));
-  const link = record(links[0]);
-  if (!['pending','ready'].includes(String(link.state)) || v.link_state !== link.state) throw new VoteError('conflict');
-  const reservation = parseReservation(link.preparation,uid,vote,revision);
-  const stamp = budget.now();
-  if (!date(v.ends_at)) throw new VoteError('unavailable');
-  if (link.state === 'pending') {
-   budget.leaseUntil = Date.parse(reservation.leaseUntil);
-   if (stamp >= budget.leaseUntil) throw new VoteError('conflict');
-   if (v.closed_at !== null || stamp >= Date.parse(v.ends_at)) throw new VoteError('closed');
-  } else {
-   budget.leaseUntil = undefined;
-   if (v.closed_at !== null && !date(v.closed_at)) throw new VoteError('unavailable');
-   if (stamp >= Date.parse((v.closed_at as string|null) ?? v.ends_at) + 7*86400_000) throw new VoteError('unavailable');
+ async function projection(uid:string,vote:string,revision:number):Promise<Authority|Unreserved> {
+  const data=record(await rpc('social_vote_link_preparation_state',{p_owner:uid,p_vote:vote,p_revision:revision}));
+  if(data.status==='unreserved') {
+   if(data.ownerId!==uid||data.voteId!==vote||data.revision!==revision||!date(data.endsAt)||budget.now()>=Date.parse(data.endsAt)) throw new VoteError('conflict');
+   return {status:'unreserved',sources:structuredClone(sourceRows(data.sources,uid))};
   }
-  const media = (await budget.run(signal=>backend.rows('style_vote_link_media','id,owner_id,vote_id,revision,path,source_item_id,source_version,source_path,sha256,state,lease_until',{owner_id:uid,vote_id:vote,revision},19,signal))).map(record);
-  if (media.length !== reservation.media.length || new Set(media.map(m=>m.id)).size !== media.length) throw new VoteError('conflict');
-  for (const m of reservation.media) {
-   const row = media.find(row=>row.id===m.mediaId);
-   if (!row || row.path !== m.destinationPath || row.source_item_id !== m.itemId || row.source_version !== m.sourceVersion || row.source_path !== m.sourcePath || row.state !== (link.state === 'ready'?'ready':'staged') || !date(row.lease_until)) throw new VoteError('conflict');
-   if (link.state === 'pending') budget.leaseUntil = Math.min(budget.leaseUntil ?? Infinity,Date.parse(row.lease_until));
+  if(!['reserved','prepared','ready'].includes(String(data.status))) accept(data,'reserved');
+  const reservation=parseReservation(data.reservation,uid,vote,revision),link=record(data.link);
+  if(!Array.isArray(data.media)) throw new VoteError('conflict');
+  const media=data.media.map(record);
+  if(link.state!==(data.status==='ready'?'ready':'pending') || media.length!==reservation.media.length || new Set(media.map(m=>m.id)).size!==media.length) throw new VoteError('conflict');
+  budget.leaseUntil=link.state==='pending'?Date.parse(reservation.leaseUntil):undefined;
+  for(const m of reservation.media) {
+   const row=media.find(row=>row.id===m.mediaId);
+   if(!row || row.owner_id!==uid || row.vote_id!==vote || row.revision!==revision || row.path!==m.destinationPath || row.source_item_id!==m.itemId || row.source_version!==m.sourceVersion || row.source_path!==m.sourcePath || row.state!==(link.state==='ready'?'ready':'staged') || !date(row.lease_until)) throw new VoteError('conflict');
+   if(link.state==='pending') budget.leaseUntil=Math.min(budget.leaseUntil??Infinity,Date.parse(row.lease_until));
   }
-  if (budget.signal?.aborted || budget.now() >= budget.deadline || (budget.leaseUntil !== undefined && budget.now() >= budget.leaseUntil-5000)) throw new VoteError('pending');
-  return {reservation,link,media};
+  const sources=link.state==='ready'?null:sourceRows(data.sources,uid);
+  if(sources) sameSources(reservation.media.map(({mediaId: _id,destinationBucket: _bucket,destinationPath: _path,...m})=>({...m,admissible:true})),sources);
+  if(budget.signal?.aborted||budget.now()>=budget.deadline||(budget.leaseUntil!==undefined&&budget.now()>=budget.leaseUntil-5000)) throw new VoteError('pending');
+  return structuredClone({reservation,link,media,sources});
  }
- async function source(uid:string,m:ReservedMedia) {
-  const resolved = await rpc('social_media_resolve_items',{p_viewer:uid,p_item_ids:[m.itemId]});
-  if (!Array.isArray(resolved) || resolved.length !== 1) throw new VoteError('selection_changed');
-  const item = record(resolved[0]);
-  if (item.item_id !== m.itemId || item.owner_id !== uid || item.version !== m.sourceVersion) throw new VoteError('selection_changed');
-  const rows = await budget.run(signal=>backend.rows('social_media_copies','source_kind,source_id,owner_id,version,large_path,encrypted',{source_kind:'item',source_id:m.itemId,owner_id:uid},1,signal));
-  if (rows.length === 0) throw new VoteError('pending_media');
-  const copy = record(rows[0]);
-  if (copy.source_kind !== 'item' || copy.source_id !== m.itemId || copy.owner_id !== uid || copy.version !== m.sourceVersion || copy.large_path !== m.sourcePath || copy.encrypted !== false) throw new VoteError('selection_changed');
+ async function state(token:string,uid:string,vote:string,revision:number):Promise<Authority|Unreserved> {
+  if(await owner(token)!==uid) throw new VoteError('unauthorized');
+  return projection(uid,vote,revision);
+ }
+ async function authority(token:string,uid:string,vote:string,revision:number):Promise<Authority> {
+  const result=await state(token,uid,vote,revision);
+  if('status' in result) throw new VoteError('conflict');
+  return result;
+ }
+ function sameAuthority(before:Authority,after:Authority) {
+  if(!isDeepStrictEqual(before.reservation,after.reservation)) throw new VoteError('selection_changed');
+  if(before.link.manifest_hash!==null && !sameHash(after.link.manifest_hash,String(before.link.manifest_hash))) throw new VoteError('conflict');
  }
  async function verifiedCopies(token:string,uid:string,vote:string,revision:number,initial:Authority) {
-  const receipts:Array<{mediaId:string;sha256:string}> = [];
-  for (const m of initial.reservation.media) {
-   const current = await authority(token,uid,vote,revision);
-   const hash = current.media.find(row=>row.id===m.mediaId)?.sha256;
-   if (typeof hash !== 'string' || !HASH.test(hash)) throw new VoteError('conflict');
-   const bytes = await readVoteImage(backend,budget,m.destinationBucket,m.destinationPath,hash);
-   await authority(token,uid,vote,revision);
-   receipts.push({mediaId:m.mediaId,sha256:sha256(bytes)});
+  let current=initial;
+  const receipts:Array<{mediaId:string;sha256:string}>=[];
+  for(let i=0;i<initial.reservation.media.length;i+=2) {
+   const batch=initial.reservation.media.slice(i,i+2);
+   const hashes=batch.map(m=>{
+    const hash=current.media.find(row=>row.id===m.mediaId)?.sha256;
+    if(typeof hash!=='string'||!HASH.test(hash)) throw new VoteError('conflict');
+    return hash;
+   });
+   const bytes=await settled(batch.map((m,j)=>readVoteImage(backend,budget,m.destinationBucket,m.destinationPath,hashes[j])));
+   current=await authority(token,uid,vote,revision);sameAuthority(initial,current);
+   batch.forEach((m,j)=>{
+    if(!sameHash(current.media.find(row=>row.id===m.mediaId)?.sha256,hashes[j])) throw new VoteError('conflict');
+    receipts.push({mediaId:m.mediaId,sha256:sha256(bytes[j])});
+   });
   }
   return receipts;
  }
@@ -116,43 +141,80 @@ export function votePublication(backend:VoteBackend,budget = new VoteBudget(),se
    validVoteInput(input.voteId,input.expectedRevision);
    if (!text(input.firstName,40) || input.firstName !== input.firstName.trim()) throw new VoteError('invalid');
    const uid = await owner(token);
-   const begin = record(await rpc('social_vote_link_begin',{p_owner:uid,p_vote:input.voteId,p_expected_revision:input.expectedRevision,p_first_name:input.firstName}));
-   if (begin.status === 'pending_media') {
-    if (begin.voteId !== input.voteId || begin.revision !== input.expectedRevision || !Array.isArray(begin.missingItemIds) || begin.missingItemIds.length < 1 || begin.missingItemIds.length > 18 || begin.missingItemIds.some(id=>typeof id!=='string'||!UUID.test(id))) throw new VoteError('unavailable');
-    if (await owner(token) !== uid) throw new VoteError('unauthorized');
-    await budget.run(signal=>backend.prepareMedia(token,uid,begin.missingItemIds as string[],signal));
-    if (await owner(token) !== uid) throw new VoteError('unauthorized');
-    throw new VoteError('pending_media');
-   }
-   if (!['reserved','prepared','ready'].includes(String(begin.status))) accept(begin,'reserved');
-   const check = ()=>authority(token,uid,input.voteId,input.expectedRevision);
-   const current = await check(); const r = current.reservation;
-   if (r.firstName !== input.firstName) throw new VoteError('selection_changed');
-   if (begin.status === 'reserved' && !isDeepStrictEqual(parseReservation(begin.reservation,uid,input.voteId,input.expectedRevision),r)) throw new VoteError('conflict');
-   if (current.link.manifest_hash !== null) {
-    if (typeof current.link.manifest_hash !== 'string' || !HASH.test(current.link.manifest_hash)) throw new VoteError('unavailable');
-    await verifiedCopies(token,uid,input.voteId,input.expectedRevision,current);
-    await check(); return prepared(r,current.link.manifest_hash);
-   }
-   const receipts:Array<{mediaId:string;sha256:string}> = [];
-   for (const m of r.media) {
-    await check();
-    let bytes:Uint8Array;
-    try { await source(uid,m); bytes = await readVoteImage(backend,budget,m.sourceBucket,m.sourcePath); }
-    catch (error) {
-     if (!(error instanceof VoteError) || error.code !== 'pending_media') throw error;
-     await check();
-     await budget.run(signal=>backend.prepareMedia(token,uid,[m.itemId],signal));
-     await check(); throw new VoteError('pending_media');
+   const beginArgs={p_owner:uid,p_vote:input.voteId,p_expected_revision:input.expectedRevision,p_first_name:input.firstName};
+   let begin=record(await rpc('social_vote_link_begin',beginArgs));
+   if(!['reserved','prepared','ready','pending_media'].includes(String(begin.status))) accept(begin,'reserved');
+   let current=await state(token,uid,input.voteId,input.expectedRevision);
+   let warms=0;
+   const pending=(phase:'sources'|'copies',completed:number,total:number)=>new VoteError('pending_media',undefined,{phase,completed,total});
+   const warm=async(ids:string[],sources:Sources)=>{
+    if(warms>=3) return false;
+    warms++;
+    const results=await budget.run(signal=>backend.prepareMedia(token,uid,[...new Set(ids)],signal));
+    // Never use F's status as authority. Discarded signed URLs never enter this service.
+    const after=await state(token,uid,input.voteId,input.expectedRevision);
+    if(!after.sources) throw new VoteError('conflict');
+    sameSources(sources,after.sources,true);
+    if(!Array.isArray(results)||results.length!==new Set(ids).size||new Set(results.map(x=>x.itemId)).size!==results.length||results.some(x=>!ids.includes(x.itemId)||!['ready','pending','unavailable'].includes(x.state))) throw new VoteError('unavailable');
+    if(results.some(x=>x.state==='unavailable')) throw new VoteError('media_unavailable');
+    if(results.some(x=>x.version!==sources.find(m=>m.itemId===x.itemId)?.sourceVersion)) throw new VoteError('selection_changed');
+    current=after;return true;
+   };
+   if(begin.status==='pending_media') {
+    if(begin.voteId!==input.voteId||begin.revision!==input.expectedRevision||!Array.isArray(begin.missingItemIds)||!begin.missingItemIds.length||begin.missingItemIds.length>18||begin.missingItemIds.some(id=>typeof id!=='string'||!UUID.test(id))) throw new VoteError('unavailable');
+    let frozen=current.sources;
+    if(!frozen) throw new VoteError('conflict');
+    while('status' in current) {
+     const missing=current.sources.filter(m=>m.sourcePath===null);
+     if(!missing.length) break;
+     if(!await warm(missing.map(m=>String(m.itemId)),frozen)) throw pending('sources',current.sources.length-missing.length,current.sources.length);
+     if(!current.sources) throw new VoteError('conflict');
+     frozen=current.sources;
     }
-    await check(); await source(uid,m);
-    receipts.push({mediaId:m.mediaId,sha256:await copyVoteImage(backend,budget,m,bytes,check)});
+    if('status' in current) {
+     // All sources ready: only this second admission can reserve. Never begin per photo.
+     begin=record(await rpc('social_vote_link_begin',beginArgs));
+     current=await state(token,uid,input.voteId,input.expectedRevision);
+     if(current.sources) sameSources(frozen,current.sources,true);
+    } else {
+     // Another admitted request may already have reserved while warming.
+     begin={status:'reserved',reservation:current.reservation};
+    }
    }
-   // No receipt can be staged before every physical destination has been read back.
-   await check();
-   const staged = accept(await rpc('social_vote_link_stage',{p_owner:uid,p_vote:input.voteId,p_revision:r.revision,p_snapshot:snapshot(r),p_media:receipts}),'prepared');
-   const final = await check(); const hash = record(staged.prepared).manifestHash;
-   if (typeof hash !== 'string' || !sameHash(final.link.manifest_hash,hash)) throw new VoteError('conflict');
+   if(!['reserved','prepared','ready'].includes(String(begin.status))) accept(begin,'reserved');
+   if('status' in current) throw new VoteError('conflict');
+   const initial=current; const r=initial.reservation;
+   const check=async()=>{
+    const next=await authority(token,uid,input.voteId,input.expectedRevision);sameAuthority(initial,next);current=next;return next;
+   };
+   if(r.firstName!==input.firstName) throw new VoteError('selection_changed');
+   if(begin.status==='reserved'&&!isDeepStrictEqual(parseReservation(begin.reservation,uid,input.voteId,input.expectedRevision),r)) throw new VoteError('conflict');
+   if(initial.link.manifest_hash!==null) {
+    if(typeof initial.link.manifest_hash!=='string'||!HASH.test(initial.link.manifest_hash)) throw new VoteError('unavailable');
+    await verifiedCopies(token,uid,input.voteId,input.expectedRevision,initial);
+    return prepared(r,initial.link.manifest_hash);
+   }
+   const receipts:Array<{mediaId:string;sha256:string}>=[];
+   for(let i=0;i<r.media.length;i+=2) {
+    const batch=r.media.slice(i,i+2);
+    let bytes:Uint8Array[];
+    for(;;) {
+     const reads=await Promise.allSettled(batch.map(m=>readVoteImage(backend,budget,m.sourceBucket,m.sourcePath)));
+     const missing=batch.filter((_,j)=>reads[j].status==='rejected'&&(reads[j] as PromiseRejectedResult).reason instanceof VoteError&&(reads[j] as PromiseRejectedResult).reason.code==='pending_media');
+     const other=reads.find(x=>x.status==='rejected'&&(!(x.reason instanceof VoteError)||x.reason.code!=='pending_media'));
+     if(other?.status==='rejected') throw other.reason;
+     if(!missing.length) {bytes=reads.map(x=>(x as PromiseFulfilledResult<Uint8Array>).value);break;}
+     const before=await check();
+     if(!before.sources||!await warm(missing.map(m=>m.itemId),before.sources)) throw pending('copies',receipts.length,r.media.length);
+     if('status' in current) throw new VoteError('conflict');
+     sameAuthority(initial,current);
+    }
+    receipts.push(...await copyVoteImages(backend,budget,batch,bytes,check));
+   }
+   // Last post-readback authority is also the pre-stage gate: no intervening await.
+   const staged=accept(await rpc('social_vote_link_stage',{p_owner:uid,p_vote:input.voteId,p_revision:r.revision,p_snapshot:snapshot(r),p_media:receipts}),'prepared');
+   const final=await check();const hash=record(staged.prepared).manifestHash;
+   if(typeof hash!=='string'||!sameHash(final.link.manifest_hash,hash)) throw new VoteError('conflict');
    return prepared(r,hash);
   },
   async publish(token:string,input:{voteId:string;revision:number;manifestHash:string;consentVersion:1}):Promise<ReadyVoteLink> {
@@ -181,7 +243,8 @@ export function votePublication(backend:VoteBackend,budget = new VoteBudget(),se
    validVoteInput(input.voteId,input.revision);
    if (!HASH.test(input.manifestHash) || !UUID.test(input.mediaId)) throw new VoteError('invalid');
    const uid = await owner(token); const check = ()=>authority(token,uid,input.voteId,input.revision);
-   const current = await check();
+   const current = await projection(uid,input.voteId,input.revision);
+   if('status' in current) throw new VoteError('conflict');
    if (!sameHash(current.link.manifest_hash,input.manifestHash)) throw new VoteError('conflict');
    const m = current.reservation.media.find(m=>m.mediaId===input.mediaId); const row = current.media.find(m=>m.id===input.mediaId);
    if (!m || !row || typeof row.sha256 !== 'string' || !HASH.test(row.sha256)) throw new VoteError('unavailable');

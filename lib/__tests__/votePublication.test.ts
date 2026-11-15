@@ -36,6 +36,11 @@ function fixture() {
   user:vi.fn(async()=>OWNER),
   rpcAsUser:vi.fn(async()=>null),
   rpc:vi.fn(async(name:string,args:Record<string,unknown>):Promise<unknown>=>{
+   if(name==='social_vote_link_preparation_state') {
+    if(vote.link_revision!==1||vote.link_state==='revoked')return {status:'conflict'};
+    if(link.state!=='ready'&&(vote.closed_at!==null||Date.parse(String(vote.ends_at))<=Date.now()))return {status:'closed'};
+    return {status:link.state==='ready'?'ready':link.manifest_hash?'prepared':'reserved',reservation:r,link,media,sources:r.media.map(({mediaId:_id,destinationBucket:_bucket,destinationPath:_path,...source})=>({...source,admissible:true}))};
+   }
    if(name==='social_media_viewer_ok') return true;
    if(name==='social_vote_link_begin') return {status:link.state==='ready'?'ready':link.manifest_hash?'prepared':'reserved',reservation:r};
    if(name==='social_media_resolve_items') return (args.p_item_ids as string[]).map(item_id=>({item_id,owner_id:OWNER,version:'abcdef123456'}));
@@ -61,7 +66,7 @@ function fixture() {
    if(table==='social_media_copies') { const m=r.media.find(m=>m.itemId===filters.source_id)!;return [{source_kind:'item',source_id:m.itemId,owner_id:OWNER,version:m.sourceVersion,large_path:m.sourcePath,encrypted:false}]; }
    throw Error('unexpected table');
   }),
-  prepareMedia:vi.fn(async()=>undefined),
+  prepareMedia:vi.fn(async(_token:string,_owner:string,ids:string[])=>ids.map(itemId=>({itemId,version:'abcdef123456',state:'ready' as const}))),
   download:vi.fn(async(_bucket:string,path:string)=>{
    const bytes=files.get(path);if(!bytes) throw Error('missing');return {bytes,type:'image/jpeg'};
   }),
@@ -69,6 +74,9 @@ function fixture() {
   remove:vi.fn(async(_bucket:string,path:string)=>{files.delete(path);}),exists:vi.fn(async(_bucket:string,path:string)=>files.has(path)),
  };
  return {r,files,link,vote,media,io,service:votePublication(io,new VoteBudget(),()=>SECRET)};
+}
+function unreserved(f:ReturnType<typeof fixture>,missing:string[]) {
+ return {status:'unreserved',ownerId:OWNER,voteId:VOTE,revision:1,endsAt:f.r.endsAt,sources:f.r.media.map(({mediaId:_id,destinationBucket:_bucket,destinationPath:_path,...m})=>({...m,admissible:true,sourcePath:missing.includes(m.itemId)?null:m.sourcePath}))};
 }
 const prepareInput={voteId:VOTE,expectedRevision:1,firstName:'Élo'};
 const confirmed=(manifestHash:string)=>({voteId:VOTE,revision:1,manifestHash,consentVersion:1 as const});
@@ -80,7 +88,9 @@ describe('private publication with simulated transports',()=>{
   expect(prepared).not.toHaveProperty('url');expect(JSON.stringify(prepared)).not.toMatch(/sourcePath|destinationPath|token|storage/);
   expect(f.io.rpc.mock.calls.filter(([name])=>name==='social_vote_link_begin')).toHaveLength(1);
   for(const m of f.r.media) {
+   const authCalls=f.io.user.mock.calls.length,rpcCalls=f.io.rpc.mock.calls.length;
    const response=await f.service.preview('jwt',{voteId:VOTE,revision:1,manifestHash:prepared.manifestHash,mediaId:m.mediaId});
+   expect(f.io.user.mock.calls.length-authCalls).toBe(2);expect(f.io.rpc.mock.calls.length-rpcCalls).toBe(2);
    const previewedBytes=new Uint8Array(await response.arrayBuffer());const publishedBytes=f.files.get(m.destinationPath);
    expect(publishedBytes).toEqual(Buffer.from(previewedBytes));expect(sha256(previewedBytes)).toBe(sha256(JPEG));
    expect(f.media.find(row=>row.id===m.mediaId)?.sha256).toBe(sha256(JPEG));
@@ -122,8 +132,8 @@ describe('private publication with simulated transports',()=>{
   for(const patch of [{ownerId:id(90)},{sourceKind:'portrait'},{sourceKind:'avatar'},{sourceKind:'render'},{sourceVersion:'bad'},{sourcePath:`${OWNER}/portraits/private.jpg`}]) {
    const f=fixture();Object.assign(f.r.media[0],patch);await expect(f.service.prepare('jwt',prepareInput)).rejects.toThrow();expect(f.io.upload).not.toHaveBeenCalled();
   }
-  for(const patch of [{owner_id:id(90)},{version:'000000000000'},{source_kind:'portrait'},{encrypted:true}]) {
-   const f=fixture();const real=f.io.rows.getMockImplementation()!;f.io.rows.mockImplementation(async(t,c,args)=>{const rows=await real(t,c,args);if(t==='social_media_copies')Object.assign(rows[0] as object,patch);return rows;});
+  for(const patch of [{ownerId:id(90)},{sourceVersion:'000000000000'},{sourceKind:'portrait'},{admissible:false}]) {
+   const f=fixture();const real=f.io.rpc.getMockImplementation()!;f.io.rpc.mockImplementation(async(n,args)=>{const value=await real(n,args);if(n==='social_vote_link_preparation_state')Object.assign((value as {sources:object[]}).sources[0],patch);return value;});
    await expect(f.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:'selection_changed'});expect(f.io.upload).not.toHaveBeenCalled();
   }
  });
@@ -133,10 +143,15 @@ describe('private publication with simulated transports',()=>{
    await expect(f.service.prepare('jwt',prepareInput)).rejects.toThrow();expect(f.files.has(f.r.media[0].destinationPath)).toBe(true);expect(f.io.remove).not.toHaveBeenCalled();expect(f.io.rpc.mock.calls.some(([n])=>n==='social_vote_link_stage')).toBe(false);
   }
  });
- it('pending_media derives once, never loops begin or exposes signed URLs',async()=>{
-  const f=fixture();f.io.rpc.mockResolvedValue({status:'pending_media',voteId:VOTE,revision:1,missingItemIds:[id(20)]});
-  await expect(f.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:'pending_media'});
-  expect(f.io.prepareMedia).toHaveBeenCalledTimes(1);expect(f.io.rpc).toHaveBeenCalledTimes(1);expect(f.io.upload).not.toHaveBeenCalled();
+ it('pending sources warm at most three times without another begin until all copies exist',async()=>{
+  const f=fixture();const real=f.io.rpc.getMockImplementation()!;
+  f.io.rpc.mockImplementation(async(n,args)=>{
+   if(n==='social_vote_link_begin')return {status:'pending_media',voteId:VOTE,revision:1,missingItemIds:[id(20)]};
+   if(n==='social_vote_link_preparation_state')return unreserved(f,[id(20)]);
+   return real(n,args);
+  });
+  await expect(f.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:'pending_media',progress:{phase:'sources',completed:3,total:4}});
+  expect(f.io.prepareMedia).toHaveBeenCalledTimes(3);expect(f.io.rpc.mock.calls.filter(([n])=>n==='social_vote_link_begin')).toHaveLength(1);expect(f.io.upload).not.toHaveBeenCalled();
  });
  it('begin quota is typed and stage refusal never promotes a partial result',async()=>{
   const f=fixture();f.io.rpc.mockResolvedValue({status:'limited',retryAfter:61});await expect(f.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:'limited',retryAfter:61});expect(f.io.upload).not.toHaveBeenCalled();
@@ -161,7 +176,7 @@ describe('route boundaries',()=>{
   const f=fixture();vi.spyOn(backendModule,'voteBackend').mockReturnValue(f.io);
   f.io.rpc.mockRejectedValue(Error('private-path secret'));const make=()=>new Request('http://local/api/social-vote-link',{method:'POST',headers:{'Content-Type':'application/json',authorization:'Bearer jwt'},body:JSON.stringify({action:'prepare',...prepareInput})});
   const bad=await POST(make());expect(bad.status).toBe(503);expect(await bad.json()).toEqual({error:'unavailable'});
-  f.io.rpc.mockResolvedValue({status:'pending_media',voteId:VOTE,revision:1,missingItemIds:[id(20)]});const pending=await POST(make());expect(pending.status).toBe(202);expect(await pending.json()).toEqual({error:'pending_media'});
+  f.io.rpc.mockRejectedValue(new VoteError('pending_media',undefined,{phase:'sources',completed:3,total:4}));const pending=await POST(make());expect(pending.status).toBe(202);expect(await pending.json()).toEqual({error:'pending_media',progress:{phase:'sources',completed:3,total:4}});
  });
 });
 
@@ -170,10 +185,10 @@ it('stale revoke does not claim that a newer ready revision was withdrawn',async
  await expect(f.service.revoke('jwt',{voteId:VOTE,expectedRevision:1})).rejects.toMatchObject({code:'conflict'});
  expect(f.io.rpc.mock.calls.some(([n])=>n==='social_vote_link_revoke')).toBe(false);
 });
-it('closed or expired lease prevents uploads, and a missing physical copy requests one explicit retry',async()=>{
+it('closed or expired lease prevents uploads, and a transient missing physical copy warms then completes',async()=>{
  const closed=fixture();closed.vote.closed_at=new Date().toISOString();await expect(closed.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:'closed'});expect(closed.io.upload).not.toHaveBeenCalled();
  const expired=fixture();expired.r.leaseUntil=new Date(Date.now()-1).toISOString();await expect(expired.service.prepare('jwt',prepareInput)).rejects.toThrow();expect(expired.io.upload).not.toHaveBeenCalled();
- const missing=fixture();missing.io.download.mockRejectedValueOnce(new VoteError('pending_media'));await expect(missing.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:'pending_media'});expect(missing.io.prepareMedia).toHaveBeenCalledTimes(1);expect(missing.io.upload).not.toHaveBeenCalled();
+ const missing=fixture();missing.io.download.mockRejectedValueOnce(new VoteError('pending_media'));await expect(missing.service.prepare('jwt',prepareInput)).resolves.toMatchObject({state:'prepared'});expect(missing.io.prepareMedia).toHaveBeenCalledTimes(1);expect(missing.io.upload).toHaveBeenCalledTimes(4);
 });
 it('ready recovery reads all independent bytes without requiring source visibility',async()=>{
  const f=fixture();const p=await f.service.prepare('jwt',prepareInput);await f.service.publish('jwt',confirmed(p.manifestHash));
@@ -286,4 +301,77 @@ it('lexical preparation refusal stops copying and allows a later legitimate retr
  await expect(f.service.prepare('token',{voteId:VOTE,expectedRevision:1,firstName:'Élo'})).rejects.toMatchObject({code:'social_text_rejected'});
  expect(f.io.upload).not.toHaveBeenCalled();
  await expect(f.service.prepare('token',{voteId:VOTE,expectedRevision:1,firstName:'Élo'})).resolves.toMatchObject({state:'prepared'});
+});
+
+it('last missing source becomes ready in the first warm and second begin reserves once',async()=>{
+ const f=fixture(),real=f.io.rpc.getMockImplementation()!;let warmed=false;
+ f.io.prepareMedia.mockImplementation(async(_t,_o,ids)=>{warmed=true;return ids.map(itemId=>({itemId,version:'abcdef123456',state:'ready'}));});
+ f.io.rpc.mockImplementation(async(n,args)=>{
+  if(!warmed&&n==='social_vote_link_begin')return {status:'pending_media',voteId:VOTE,revision:1,missingItemIds:[id(20)]};
+  if(n==='social_vote_link_preparation_state'&&!f.io.rpc.mock.calls.filter(([n])=>n==='social_vote_link_begin').slice(1).length)return unreserved(f,warmed?[]:[id(20)]);
+  return real(n,args);
+ });
+ await expect(f.service.prepare('jwt',prepareInput)).resolves.toMatchObject({state:'prepared'});
+ expect(f.io.prepareMedia).toHaveBeenCalledTimes(1);expect(f.io.rpc.mock.calls.filter(([n])=>n==='social_vote_link_begin')).toHaveLength(2);
+});
+it.each(['sourceVersion','sourcePath','admissible'])('source %s changes during download: no old-authority upload',async(field)=>{
+ const f=fixture(),read=f.io.download.getMockImplementation()!,rpc=f.io.rpc.getMockImplementation()!;let changed=false;
+ f.io.download.mockImplementation(async(...args)=>{const bytes=await read(...args);changed=true;return bytes;});
+ f.io.rpc.mockImplementation(async(n,args)=>{const value=await rpc(n,args);if(changed&&n==='social_vote_link_preparation_state'){
+  const source=(value as {sources:Record<string,unknown>[]}).sources[0];source[field]=field==='admissible'?false:field==='sourceVersion'?'000000000000':`${OWNER}/items/changed.jpg`;
+ }return value;});
+ await expect(f.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:'selection_changed'});
+ expect(f.io.upload).not.toHaveBeenCalled();
+});
+it.each(['upload','readback'])('revocation during %s does not stage or erase reserved inventory',async(phase)=>{
+ const f=fixture();
+ if(phase==='upload') {const real=f.io.upload.getMockImplementation()!;f.io.upload.mockImplementation(async(...args)=>{await real(...args);f.vote.link_state='revoked';});}
+ else {const real=f.io.download.getMockImplementation()!;f.io.download.mockImplementation(async(...args)=>{const bytes=await real(...args);if(args[1].includes('/votes/'))f.vote.link_state='revoked';return bytes;});}
+ await expect(f.service.prepare('jwt',prepareInput)).rejects.toThrow();
+ expect(f.io.rpc.mock.calls.some(([n])=>n==='social_vote_link_stage')).toBe(false);expect(f.io.remove).not.toHaveBeenCalled();
+});
+it('a rejected sibling waits for the whole upload group, never stages partial receipts',async()=>{
+ const f=fixture();let finish!:()=>void;const held=new Promise<void>(resolve=>{finish=resolve;});
+ f.io.upload.mockImplementationOnce(async()=>{throw Error('failed');}).mockImplementationOnce(async()=>held);
+ let ended=false;const result=f.service.prepare('jwt',prepareInput).catch(()=>{ended=true;});
+ await vi.waitFor(()=>expect(f.io.upload).toHaveBeenCalledTimes(2));
+ expect(ended).toBe(false);expect(f.io.download).toHaveBeenCalledTimes(2);expect(f.io.rpc.mock.calls.some(([n])=>n==='social_vote_link_stage')).toBe(false);
+ finish();await result;expect(ended).toBe(true);
+});
+it('storage concurrency never exceeds two and ambiguous writes only pass with exact readback',async()=>{
+ const f=fixture();const real=f.io.upload.getMockImplementation()!;let active=0,peak=0;
+ f.io.upload.mockImplementation(async(...args)=>{active++;peak=Math.max(peak,active);await Promise.resolve();await real(...args);active--;throw Error('response lost');});
+ await expect(f.service.prepare('jwt',prepareInput)).resolves.toMatchObject({state:'prepared'});expect(peak).toBe(2);expect(f.io.remove).not.toHaveBeenCalled();
+});
+it('unavailable F item stops warming and source mutation during warm cannot reserve',async()=>{
+ for(const mode of ['unavailable','changed']) {
+  const f=fixture(),real=f.io.rpc.getMockImplementation()!;let warmed=false;
+  f.io.rpc.mockImplementation(async(n,args)=>{
+   if(n==='social_vote_link_begin')return {status:'pending_media',voteId:VOTE,revision:1,missingItemIds:[id(20)]};
+   if(n==='social_vote_link_preparation_state') {const value=unreserved(f,[id(20)]);if(warmed&&mode==='changed')value.sources[0].sourceVersion='000000000000';return value;}
+   return real(n,args);
+  });
+  f.io.prepareMedia.mockImplementation(async()=>{warmed=true;return [{itemId:id(20),version:null,state:'unavailable'}] as never;});
+  await expect(f.service.prepare('jwt',prepareInput)).rejects.toMatchObject({code:mode==='unavailable'?'media_unavailable':'selection_changed'});
+  expect(f.io.prepareMedia).toHaveBeenCalledTimes(1);expect(f.io.upload).not.toHaveBeenCalled();expect(f.io.rpc.mock.calls.filter(([n])=>n==='social_vote_link_begin')).toHaveLength(1);
+ }
+});
+it('SDK warm validates complete unique requested items and discards signed URLs',async()=>{
+ vi.stubEnv('SUPABASE_URL','http://127.0.0.1:50021');vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY','synthetic-key');
+ const wire=vi.spyOn(globalThis,'fetch').mockResolvedValue(Response.json({items:[{itemId:id(20),version:'abcdef123456',state:'ready',url:'synthetic-private-signed-url'}]}));
+ try {
+  const io=backendModule.voteBackend();
+  expect(await io.prepareMedia('jwt',OWNER,[id(20)],new AbortController().signal)).toEqual([{itemId:id(20),version:'abcdef123456',state:'ready'}]);
+  for(const items of [[],[{itemId:id(21),version:'abcdef123456',state:'ready'}],[{itemId:id(20),version:null,state:'ready'}]]) {
+   wire.mockResolvedValue(Response.json({items}));await expect(io.prepareMedia('jwt',OWNER,[id(20)],new AbortController().signal)).rejects.toThrow();
+  }
+ }finally{vi.unstubAllEnvs();}
+});
+it('lost stage response resumes the same prepared inventory without another upload',async()=>{
+ const f=fixture(),real=f.io.rpc.getMockImplementation()!;let lost=true;
+ f.io.rpc.mockImplementation(async(n,args)=>{const result=await real(n,args);if(n==='social_vote_link_stage'&&lost){lost=false;throw Error('lost response');}return result;});
+ await expect(f.service.prepare('jwt',prepareInput)).rejects.toThrow('lost response');
+ const hash=f.link.manifest_hash,paths=f.media.map(m=>m.path);
+ const result=await f.service.prepare('jwt',prepareInput);
+ expect(result.manifestHash).toBe(hash);expect(f.media.map(m=>m.path)).toEqual(paths);expect(f.io.upload).toHaveBeenCalledTimes(4);expect(f.io.remove).not.toHaveBeenCalled();
 });

@@ -81,6 +81,28 @@ describe.skipIf(process.env.VOTE_SQL_CONTRACT!=='1')('isolated live SQL to serve
   expect(Date.parse(current.expiresAt)).toBeLessThanOrEqual(Date.parse(f.published.expiresAt));
   await sql(`DELETE FROM style_votes WHERE id=${literal(f.vote)}`);
  });
+ it('preparation projection rejects a source hidden by real SQL during download, before upload',async()=>{
+  const f=await fixture();
+  await sql('DELETE FROM social_vote_web_limits');
+  const vote=JSON.parse(await sql(`SELECT social_create_vote(gen_random_uuid(),'Projection boundary',(SELECT options FROM social_vote_web_test_fixture),true)`,'authenticated')).id as string;
+  const item=await sql(`SELECT source_id FROM social_media_copies WHERE owner_id=${literal(owner)} LIMIT 1`);
+  const download=vi.mocked(f.io.download),upload=vi.mocked(f.io.upload);upload.mockClear();
+  const original=download.getMockImplementation()!;
+  download.mockImplementation(async(...args)=>{
+   const bytes=await original(...args);
+   if(args[1].includes('/items/'))await sql(`INSERT INTO social_private.content_hides VALUES('item',${literal(item)}) ON CONFLICT DO NOTHING`);
+   return bytes;
+  });
+  try {
+   await expect(votePublication(f.io,new backend.VoteBudget(),()=>SECRET).prepare('synthetic-jwt',{voteId:vote,expectedRevision:1,firstName:'Éva'})).rejects.toMatchObject({code:'selection_changed'});
+   expect(upload).not.toHaveBeenCalled();
+   expect(await sql(`SELECT manifest_hash IS NULL FROM style_vote_links WHERE vote_id=${literal(vote)}`)).toBe('t');
+   // A consented ready snapshot has a different rule from the pending source.
+   expect((await rpc('social_vote_link_preparation_state',{p_owner:owner,p_vote:f.vote,p_revision:1}) as {status:string}).status).toBe('ready');
+  }finally{
+   await sql(`DELETE FROM social_private.content_hides WHERE kind='item' AND target_id=${literal(item)};DELETE FROM style_votes WHERE id IN (${literal(vote)},${literal(f.vote)})`);
+  }
+ });
  it('stale minute/day/month RPC errors propagate through actual SDK to retryable HTTP503 with no counters',async()=>{
   const f=await fixture(),context={params:Promise.resolve({token:f.token})};
   vi.stubEnv('VERCEL','1');vi.stubEnv('SOCIAL_VOTE_COOKIE_SECRET',SECRET);vi.stubEnv('SOCIAL_VOTE_IP_SECRET',SECRET);

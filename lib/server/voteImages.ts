@@ -16,21 +16,18 @@ export async function readVoteImage(backend:VoteBackend,budget:VoteBudget,bucket
  if (expected !== undefined && !sameHash(sha256(bytes),expected)) throw new VoteError('conflict');
  return bytes;
 }
-export async function copyVoteImage(backend:VoteBackend,budget:VoteBudget,media:ReservedMedia,bytes:Uint8Array,authority:()=>Promise<unknown>): Promise<string> {
- const hash = sha256(bytes);
+/** Mandatory group gates: no caller can opt out of revalidation around writes/readback. */
+export async function copyVoteImages(backend:VoteBackend,budget:VoteBudget,media:ReservedMedia[],bytes:Uint8Array[],authority:()=>Promise<unknown>): Promise<Array<{mediaId:string;sha256:string}>> {
+ if (!media.length || media.length>2 || bytes.length!==media.length) throw new VoteError('invalid');
+ const receipts=media.map((m,i)=>({mediaId:m.mediaId,sha256:sha256(bytes[i])}));
+ await authority(); // Post-download gate immediately before the first mutation.
+ // A collision or lost response is accepted only by exact readback. Never overwrite/delete.
+ await Promise.allSettled(media.map((m,i)=>budget.run(signal=>backend.upload(m.destinationBucket,m.destinationPath,bytes[i],signal))));
  await authority();
- try { await budget.run(signal => backend.upload(media.destinationBucket,media.destinationPath,bytes,signal)); }
- catch {
-  // Collision or ambiguous response: never overwrite or delete. Readback must prove equality.
-  await authority();
-  await readVoteImage(backend,budget,media.destinationBucket,media.destinationPath,hash);
-  await authority();
-  return hash;
- }
+ const reads=await Promise.allSettled(media.map((m,i)=>readVoteImage(backend,budget,m.destinationBucket,m.destinationPath,receipts[i].sha256)));
  await authority();
- await readVoteImage(backend,budget,media.destinationBucket,media.destinationPath,hash);
- await authority();
- return hash;
+ for (const read of reads) if(read.status==='rejected') throw read.reason;
+ return receipts;
 }
 /** Streaming starts only after complete hash validation and the caller's final authority read. */
 export function jpegResponse(bytes:Uint8Array): Response {
