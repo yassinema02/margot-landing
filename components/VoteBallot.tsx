@@ -12,6 +12,17 @@ const REPORT_REASONS:ReportReason[]=['harassment','hate','sexual','violence','sp
 type State='social_text_rejected'|'idle'|'submitting'|'voted'|'closed'|'unavailable'|'cookie_required'|'rate_limited'|'service_unavailable'|'invalid';
 const BUTTON='min-h-[44px] rounded-full px-5 py-3 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4';
 
+function VoteImage({ src, alt, avatar = false, copy }: { src: string; alt: string; avatar?: boolean; copy: typeof VOTE_COPY[VoteLocale] }) {
+ const [failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0);
+ const image=useRef<HTMLImageElement|null>(null);
+ return failed ? <div className="py-4 text-sm" role="status"><p>{copy.imageFailed}</p><button type="button" className={`${BUTTON} mt-2 border border-ink3`} onClick={()=>{setFailed(false);setAttempt(value=>value+1);}}>{copy.retryImage}</button></div> :
+  <img key={`${src}:${attempt}`} src={src} alt={alt} referrerPolicy="no-referrer" ref={node=>{
+   image.current=node;
+   // The error event may have fired before hydration attached its handler.
+   if(node?.complete && node.naturalWidth===0)setFailed(true);
+  }} onError={event=>{if(image.current===event.currentTarget)setFailed(true);}} className={avatar?'block h-auto w-full object-contain':'aspect-square w-full bg-white object-contain'}/>;
+}
+
 export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapshot;myChoice:Choice|null;locale:VoteLocale}) {
  const c=VOTE_COPY[locale],path=usePathname();
  const [state,setState]=useState<State>(snapshot.closed?'closed':myChoice?'voted':'idle');
@@ -96,32 +107,36 @@ export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapsh
  const message=state==='submitting'?c.submitting:state==='voted'?`${c.voted} ${choice?.toUpperCase()}. ${c.change}`:state==='closed'?c.closed:state==='cookie_required'?c.cookie:state==='rate_limited'?`${c.limited} ${retryAfter} ${c.seconds}`:state==='service_unavailable'?c.temporary:state==='social_text_rejected'?c.social_text_rejected:state==='invalid'?c.invalid:'';
  if(state==='unavailable'||expiredView)return <h1 className="font-display text-3xl">{c.unavailable}</h1>;
  return <>
-  <header className="mb-6 text-center">
-   <div aria-hidden="true" className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-ink font-display text-2xl text-surface"><bdi>{snapshot.initials}</bdi></div>
-   <h1 className="break-words font-display text-3xl"><bdi>{snapshot.firstName}</bdi></h1>
-   <p className="mt-3 break-words text-ink2">{c.question} <bdi>{snapshot.occasion}</bdi> ?</p>
+  <header className="mb-6">
+   <p className="mb-2 break-words text-ink2"><bdi>{snapshot.firstName}</bdi> {c.asks}</p>
+   <h1 className="break-words font-display text-3xl"><bdi>{snapshot.occasion}</bdi></h1>
   </header>
-  <div className="grid grid-cols-2 gap-3">
-   {snapshot.options.map(option=><section key={option.choice} aria-label={option.choice.toUpperCase()} className="min-w-0 rounded-2xl bg-surface p-3" style={{border:choice===option.choice?'2px solid #7D3048':'2px solid transparent'}}>
-    <h2 className="mb-3 font-display text-2xl">{option.choice.toUpperCase()}</h2>
-    <div className="grid gap-3">{option.pieces.map((piece,index)=><figure key={index} className="min-w-0">
-     {/* Exact authorized copy: deliberately no Next optimizer or source fallback. */}
-     <img src={piece.imageUrl} alt={piece.name||piece.category||c.piece} referrerPolicy="no-referrer" className="aspect-square w-full rounded-xl bg-white object-contain"/>
-     <figcaption className="mt-1 break-words text-xs text-ink2"><bdi>{piece.name||piece.category||c.piece}</bdi></figcaption>
-    </figure>)}</div>
-    {state==='closed' && choice && <p className="mt-3 text-sm" aria-label={choice===option.choice?`${c.voted} ${choice.toUpperCase()}`:undefined}>{choice===option.choice?c.voted+' '+choice.toUpperCase():''}</p>}
-   </section>)}
-  </div>
-  <p id="vote-status" role="status" aria-live="polite" aria-atomic="true" className="my-5 break-words text-center">{message}</p>
   {state!=='closed' && <form onSubmit={event=>event.preventDefault()} aria-describedby="vote-privacy vote-status">
    <label htmlFor="vote-first-name" className="mb-2 block text-sm">{c.firstName}</label>
    <input id="vote-first-name" name="firstName" autoComplete="given-name" value={firstName} onChange={event=>setFirstName(event.target.value)} maxLength={40} aria-invalid={(state==='invalid'||state==='social_text_rejected')} aria-describedby={(state==='invalid'||state==='social_text_rejected')?'vote-status':undefined} className="mb-4 min-h-[44px] w-full rounded-xl border border-ink3 bg-surface p-3"/>
    <label htmlFor="vote-reason" className="mb-2 block text-sm">{c.reason}</label>
    <textarea id="vote-reason" name="reason" value={reason} onChange={event=>setReason(event.target.value)} maxLength={160} rows={2} aria-invalid={(state==='invalid'||state==='social_text_rejected')} aria-describedby={(state==='invalid'||state==='social_text_rejected')?'vote-status':undefined} className="min-h-[44px] w-full rounded-xl border border-ink3 bg-surface p-3"/>
    <p id="vote-privacy" className="my-3 text-xs leading-relaxed text-ink2">{c.privateNote}</p>
-   <div className="grid grid-cols-2 gap-3">{(['a','b'] as const).map(option=><button type="button" key={option} aria-pressed={choice===option} disabled={state==='submitting'} onClick={()=>void submit(option)} className={`${BUTTON} text-surface disabled:opacity-50`} style={{background:choice===option?'#7D3048':'#2D3A33'}}>{option==='a'?c.voteA:c.voteB}</button>)}</div>
-   {(['cookie_required','rate_limited','service_unavailable','invalid','social_text_rejected'] as State[]).includes(state) && <button type="button" onClick={()=>{if(lastAttempt.current)void submit(lastAttempt.current);}} className={`${BUTTON} mt-3 w-full border border-ink3`}>{c.retry}</button>}
   </form>}
+  <div className="grid items-start gap-3" style={{gridTemplateColumns:'repeat(auto-fit, minmax(min(100%, 14rem), 1fr))'}}>
+   {snapshot.options.map(option=>{
+    const visual='visual' in option?option.visual:undefined;
+    const avatar=visual?.kind==='render';
+    return <section key={option.choice} aria-label={option.choice.toUpperCase()} className="min-w-0">
+     <div className="mb-3 flex flex-wrap items-center gap-2"><h2 className="font-display text-2xl">{option.choice.toUpperCase()}</h2><span className="text-sm text-ink2">{avatar?c.onAvatar:c.flat}</span></div>
+     {avatar && <VoteImage key={visual.imageUrl} src={visual.imageUrl} alt={c.imageAlt.replace('{{choice}}',option.choice.toUpperCase())} avatar copy={c}/>}
+     <div className={`grid grid-cols-2 gap-2 ${avatar?'mt-3':''}`}>
+      {option.pieces.map((piece,index)=><figure key={index} className="min-w-0">
+       <VoteImage key={piece.imageUrl} src={piece.imageUrl} alt={piece.name||piece.category||c.piece} copy={c}/>
+       <figcaption className="mt-1 break-words text-xs text-ink2"><bdi>{piece.name||piece.category||c.piece}</bdi>{avatar && !visual.renderedOrdinals.includes(index+1) && <span className="mt-1 block">{c.notShown}</span>}</figcaption>
+      </figure>)}
+     </div>
+     {state!=='closed' ? <button type="button" aria-describedby="vote-privacy vote-status" aria-pressed={choice===option.choice} disabled={state==='submitting'} onClick={()=>void submit(option.choice)} className={`${BUTTON} mt-4 w-full text-surface disabled:opacity-50`} style={{background:choice===option.choice?'#7D3048':'#232326'}}>{option.choice==='a'?c.voteA:c.voteB}</button> : choice===option.choice ? <p className="mt-3 text-sm">{c.voted} {choice.toUpperCase()}</p> : null}
+    </section>;
+   })}
+  </div>
+  <p id="vote-status" role="status" aria-live="polite" aria-atomic="true" className="my-5 break-words">{message}</p>
+   {(['cookie_required','rate_limited','service_unavailable','invalid','social_text_rejected'] as State[]).includes(state) && <button type="button" onClick={()=>{if(lastAttempt.current)void submit(lastAttempt.current);}} className={`${BUTTON} mt-3 w-full border border-ink3`}>{c.retry}</button>}
   <section className="mt-6 break-words" aria-label={c.reportTitle}>
    {!reportOpen ? <button type="button" className={`${BUTTON} underline`} onClick={()=>{reportAttempt.current=null;setReportState('idle');setReportOpen(true);}}>{c.report}</button> : <>
     <h2 className="font-display text-xl">{c.reportTitle}</h2>

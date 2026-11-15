@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "11 novembre 2026";
+const LAST_UPDATED = "15 novembre 2026";
 
 export default function ConditionsPage() {
   return (
@@ -220,12 +220,7 @@ export default function ConditionsPage() {
           aux fonctions sociales. Une suspension ne touche ni votre placard privé ni vos achats.
         </P>
         <P>
-          Lorsque vous partagez un vote par lien public, toute personne disposant du lien voit
-          l&apos;occasion, le prénom que vous confirmez et son initiale, et les photos des
-          vêtements que vous validez avant la publication, avec leur nom et leur catégorie. Le
-          lien ne montre jamais votre avatar
-          ni votre photo de profil. Il expire 7 jours après la fin du vote et vous pouvez le
-          retirer à tout moment.
+          Lorsque vous partagez un vote par lien public, toute personne disposant du lien voit l&apos;occasion, le prénom que vous confirmez et son initiale, et les photos des vêtements que vous validez avant la publication, avec leur nom et leur catégorie. Une tenue sur votre avatar apparaît uniquement si vous choisissez cet aperçu, le prévisualisez et le confirmez avant la publication du lien. Le lien ne montre jamais votre photo de profil. Il expire 7 jours après la fin du vote et vous pouvez le retirer à tout moment.
         </P>
         <P>
           Les pièces qu&apos;un autre membre a ajoutées à son placard avec « Je l&apos;ai aussi »

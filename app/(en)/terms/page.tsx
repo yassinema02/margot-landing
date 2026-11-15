@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "11 November 2026";
+const LAST_UPDATED = "15 November 2026";
 
 export default function TermsPage() {
   return (
@@ -207,10 +207,7 @@ export default function TermsPage() {
             affects neither your private closet nor your purchases.
           </P>
           <P>
-            When you share a vote through a public link, anyone with the link sees the occasion,
-            the first name you confirm and its initial, and the photos of the clothes you approve
-            before publishing, with their name and category. The link never shows your avatar or your profile photo. It expires 7 days
-            after the vote ends and you can remove it at any time.
+            When you share a vote through a public link, anyone with the link sees the occasion, the first name you confirm and its initial, and the photos of the clothes you approve before publishing, with their name and category. An outfit on your avatar is shown only if you select that preview, view it and confirm it before publishing the link. The link never shows your profile photo. It expires 7 days after the vote ends and you can remove it at any time.
           </P>
           <P>
             Pieces another member added to their closet with "I have it too" become theirs: they

@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "11 novembre 2026";
+const LAST_UPDATED = "15 novembre 2026";
 
 export default function ConfidentialitePage() {
   return (
@@ -206,12 +206,7 @@ export default function ConfidentialitePage() {
             Premium, visibles par ceux qui voient votre dressing.
           </P>
           <P>
-            <Strong>Liens publics.</Strong> Un vote partagé par lien public montre à toute personne
-            disposant du lien l&apos;occasion, le prénom que vous confirmez et son initiale, et les
-            photos des vêtements que vous validez, avec leur nom et leur catégorie. Il ne montre
-            jamais votre avatar ni votre photo
-            de profil. Le lien expire 7 jours après la fin du vote et vous pouvez le retirer à tout
-            moment. Les personnes qui votent sans compte peuvent laisser un prénom et une courte
+            <Strong>Liens publics.</Strong> Un vote partagé par lien public montre à toute personne disposant du lien l&apos;occasion, le prénom que vous confirmez et son initiale, et les photos des vêtements que vous validez, avec leur nom et leur catégorie. Une tenue sur votre avatar apparaît uniquement si vous choisissez cet aperçu, le prévisualisez et le confirmez avant la publication du lien. Le lien ne montre jamais votre photo de profil. Le lien expire 7 jours après la fin du vote et vous pouvez le retirer à tout moment. Les personnes qui votent sans compte peuvent laisser un prénom et une courte
             raison, visibles par la personne qui a créé le vote, et par notre équipe si cette
             personne signale la réponse. Pour n&apos;enregistrer
             qu&apos;un vote par appareil et limiter les abus, la page de vote dépose quand vous

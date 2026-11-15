@@ -3,9 +3,11 @@ import { createClient } from '@supabase/supabase-js';
 
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const HASH = /^[0-9a-f]{64}$/;
-export type VoteErrorCode = 'social_text_rejected' | 'invalid' | 'unauthorized' | 'unavailable' | 'conflict' | 'closed' | 'selection_changed' | 'limited' | 'pending_media' | 'pending' | 'too_large';
+export type VoteErrorCode = 'social_text_rejected' | 'invalid' | 'unauthorized' | 'unavailable' | 'conflict' | 'closed' | 'selection_changed' | 'limited' | 'render_unavailable' | 'media_unavailable' | 'pending_media' | 'pending' | 'too_large';
+export type VoteProgress = {phase:'sources'|'copies';completed:number;total:number};
+export type PreparedMediaItem = {itemId:string;version:string|null;state:'ready'|'pending'|'unavailable'};
 export class VoteError extends Error {
- constructor(readonly code: VoteErrorCode, readonly retryAfter?: number) { super(code); }
+ constructor(readonly code: VoteErrorCode, readonly retryAfter?: number, readonly progress?: VoteProgress) { super(code); }
 }
 export function record(value: unknown): Record<string, unknown> {
  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new VoteError('unavailable');
@@ -40,12 +42,18 @@ export class VoteBudget {
   finally { clearTimeout(timer); if (abort) this.signal?.removeEventListener('abort', abort); }
  }
 }
+export type VoteRenderRequest =
+ | {operation:'copy';ownerId:string;voteId:string;revision:number;mediaId:string}
+ | {operation:'preview';ownerId:string;voteId:string;revision:number;mediaId:string;manifestHash:string}
+ | {operation:'public';tokenHash:string;mediaId:string};
 export interface VoteBackend {
+ prepareVoteRender(token:string,vote:string,choice:'a'|'b',signal:AbortSignal):Promise<{state:'ready'|'pending'|'unavailable';version?:string}>;
+ voteRender(request:VoteRenderRequest,signal:AbortSignal):Promise<{mediaId:string;sha256:string}|{bytes:Uint8Array;type:string}>;
  user(token:string, signal:AbortSignal): Promise<string>;
  rpcAsUser(token:string, name:string, args:Record<string,unknown>, signal:AbortSignal): Promise<unknown>;
  rpc(name:string, args:Record<string,unknown>, signal:AbortSignal): Promise<unknown>;
  rows(table:string, columns:string, filters:Record<string,unknown>, limit:number, signal:AbortSignal): Promise<unknown[]>;
- prepareMedia(token:string, owner:string, ids:string[], signal:AbortSignal): Promise<void>;
+ prepareMedia(token:string, owner:string, ids:string[], signal:AbortSignal): Promise<PreparedMediaItem[]>;
  download(bucket:string,path:string,signal:AbortSignal): Promise<{bytes:Uint8Array;type:string}>;
  upload(bucket:string,path:string,bytes:Uint8Array,signal:AbortSignal): Promise<void>;
  remove(bucket:string,path:string,signal:AbortSignal): Promise<void>;
@@ -84,7 +92,37 @@ export function voteBackend(): VoteBackend {
    // Existing authenticated derivation endpoint. Signed URLs in its response are discarded.
    const result = await client(signal).functions.invoke('social-media',{
     headers:{Authorization:`Bearer ${token}`},body:{action:'items',ownerId:owner,itemIds:ids,size:'large'},
-   }); checked(result);
+   });
+   const data=record(checked(result));
+   if (!ids.length || ids.length>18 || new Set(ids).size!==ids.length || !Array.isArray(data.items) || data.items.length!==ids.length) throw new VoteError('unavailable');
+   const seen=new Set<string>();
+   return data.items.map(value=>{
+    const item=record(value);
+    if (typeof item.itemId!=='string' || !ids.includes(item.itemId) || seen.has(item.itemId) || !['ready','pending','unavailable'].includes(String(item.state)) ||
+     (item.state==='unavailable' ? item.version!==null : typeof item.version!=='string'||!/^[a-f0-9]{12}$/.test(item.version))) throw new VoteError('unavailable');
+    seen.add(item.itemId);
+    return {itemId:item.itemId,version:item.version,state:item.state} as PreparedMediaItem;
+   });
+  },
+  async prepareVoteRender(token,vote,choice,signal) {
+   const data=record(checked(await client(signal).functions.invoke('social-media',{headers:{Authorization:`Bearer ${token}`},body:{action:'vote_render',voteId:vote,choice}})));
+   if(!['ready','pending','unavailable'].includes(String(data.state))||(data.state==='ready'&&(typeof data.version!=='string'||!/^[a-f0-9]{12}$/.test(data.version)))) throw new VoteError('unavailable');
+   return data as {state:'ready'|'pending'|'unavailable';version?:string};
+  },
+  async voteRender(request,signal) {
+   const response=await fetch(`${origin}/functions/v1/social-media`,{method:'POST',signal,
+    headers:{apikey:key,Authorization:`Bearer ${key}`,'x-margot-internal-token':key,'Content-Type':'application/json'},body:JSON.stringify({action:'vote_link_render',...request})});
+   if(!response.ok||!response.body) throw new VoteError(response.status===404?'pending_media':'pending');
+   const limit=request.operation==='copy'?4096:5_242_880;
+   const reader=response.body.getReader(),chunks:Uint8Array[]=[];let size=0;
+   try {for(;;){const {value,done}=await reader.read();if(done) break;size+=value.length;if(size>limit) throw new VoteError('too_large');chunks.push(value);}}
+   catch(error){await reader.cancel().catch(()=>console.warn('[social-vote] render cancellation pending'));throw error;}
+   finally{reader.releaseLock();}
+   const bytes=new Uint8Array(Buffer.concat(chunks));
+   if(request.operation!=='copy') return {bytes,type:response.headers.get('Content-Type')??''};
+   let data:Record<string,unknown>;try{data=record(JSON.parse(new TextDecoder().decode(bytes)));}catch{throw new VoteError('unavailable');}
+   if(data.mediaId!==request.mediaId||typeof data.sha256!=='string'||!HASH.test(data.sha256)) throw new VoteError('unavailable');
+   return {mediaId:request.mediaId,sha256:data.sha256};
   },
   async download(bucket,path,signal) {
    const result = await client(signal).storage.from(bucket).download(path);

@@ -43,8 +43,8 @@ export async function POST(request:Request):Promise<Response> {
     if (typeof body.firstName !== 'string' || typeof body.expectedRevision !== 'number') throw new VoteError('invalid');
     result = await publication.prepare(bearer[1],{voteId:body.voteId,expectedRevision:body.expectedRevision,firstName:body.firstName}); break;
    case 'publish':
-    if (body.consentVersion !== 1 || typeof body.revision !== 'number' || typeof body.manifestHash !== 'string' || !HASH.test(body.manifestHash)) throw new VoteError('invalid');
-    result = await publication.publish(bearer[1],{voteId:body.voteId,revision:body.revision,manifestHash:body.manifestHash,consentVersion:1}); break;
+    if ((body.consentVersion !== 1 && body.consentVersion !== 2) || typeof body.revision !== 'number' || typeof body.manifestHash !== 'string' || !HASH.test(body.manifestHash)) throw new VoteError('invalid');
+    result = await publication.publish(bearer[1],{voteId:body.voteId,revision:body.revision,manifestHash:body.manifestHash,consentVersion:body.consentVersion as 1|2}); break;
    case 'preview_media':
     if (typeof body.revision !== 'number' || typeof body.manifestHash !== 'string' || typeof body.mediaId !== 'string') throw new VoteError('invalid');
     return await publication.preview(bearer[1],{voteId:body.voteId,revision:body.revision,manifestHash:body.manifestHash,mediaId:body.mediaId});
@@ -55,7 +55,7 @@ export async function POST(request:Request):Promise<Response> {
   return Response.json(result,{headers:HEADERS});
  } catch (error) {
   const safe = error instanceof VoteError ? error : new VoteError('unavailable');
-  const status = {social_text_rejected:400,invalid:400,unauthorized:401,unavailable:503,conflict:409,closed:409,selection_changed:409,limited:429,pending_media:202,pending:503,too_large:413}[safe.code];
-  return Response.json({error:safe.code},{status,headers:{...HEADERS,...(safe.retryAfter?{'Retry-After':String(safe.retryAfter)}:{})}});
+  const status = {social_text_rejected:400,invalid:400,unauthorized:401,unavailable:503,conflict:409,closed:409,selection_changed:409,limited:429,render_unavailable:422,media_unavailable:422,pending_media:202,pending:503,too_large:413}[safe.code];
+  return Response.json({error:safe.code,...(safe.progress?{progress:safe.progress}:{})},{status,headers:{...HEADERS,...(safe.retryAfter?{'Retry-After':String(safe.retryAfter)}:{})}});
  }
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 vi.mock('server-only', () => ({}));
-import { validateJpeg, sha256, copyVoteImage } from '../server/voteImages';
+import { validateJpeg, sha256, copyVoteImages } from '../server/voteImages';
 import { VoteBudget } from '../server/voteBackend';
 
 describe('canonical bytes', () => {
@@ -16,9 +16,9 @@ describe('canonical bytes', () => {
   const io = { download: vi.fn().mockResolvedValue({ bytes, type:'image/jpeg' }), upload: vi.fn().mockRejectedValue(new Error('lost')) };
   const check = vi.fn().mockResolvedValue(undefined);
   const media = { destinationBucket:'social-media', destinationPath:'reserved' };
-  expect(await copyVoteImage(io as never, new VoteBudget(), media as never, bytes, check)).toBe(sha256(bytes));
+  expect(await copyVoteImages(io as never, new VoteBudget(), [media] as never, [bytes], check)).toEqual([{mediaId:undefined,sha256:sha256(bytes)}]);
   io.download.mockResolvedValue({ bytes:Buffer.from([255,216,255,224,0,2,1,3,255,217]),type:'image/jpeg' });
-  await expect(copyVoteImage(io as never, new VoteBudget(), media as never, bytes, check)).rejects.toThrow();
+  await expect(copyVoteImages(io as never, new VoteBudget(), [media] as never, [bytes], check)).rejects.toThrow();
  });
 });
 

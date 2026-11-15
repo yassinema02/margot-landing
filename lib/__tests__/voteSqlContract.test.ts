@@ -10,6 +10,7 @@ import { POST as prepareRoute } from '../../app/api/social-vote-link/route';
 import { POST as deviceRoute } from '../../app/(vote)/v/[token]/device/route';
 import { POST as ballotRoute } from '../../app/(vote)/v/[token]/ballot/route';
 const execFile=promisify(execFileCallback), JPEG=Buffer.from([255,216,255,224,0,2,7,8,255,217]);
+import {sha256} from '../server/voteImages';
 const SECRET='local-contract-signing-secret-'.repeat(2);
 const literal=(v:unknown):string=>v===null?'NULL':typeof v==='number'||typeof v==='boolean'?String(v):`'${(typeof v==='object'?JSON.stringify(v):String(v)).replaceAll("'","''")}'${typeof v==='object'?'::jsonb':''}`;
 let owner:string;
@@ -21,9 +22,10 @@ async function rpc(name:string,args:Record<string,unknown>):Promise<unknown>{
  const call=`${name}(${Object.entries(args).map(([k,v])=>`${k} => ${k==='p_item_ids'?`ARRAY[${(v as string[]).map(literal).join(',')}]::uuid[]`:literal(v)}`).join(',')})`;
  return JSON.parse(await sql(name==='social_media_resolve_items'?`SELECT coalesce(jsonb_agg(x),'[]') FROM ${call} x`:`SELECT coalesce(to_jsonb(${call}),'null'::jsonb)`));
 }
-async function fixture(){
+async function fixture(render=false){
  await sql('DELETE FROM social_vote_web_limits');
- const vote=JSON.parse(await sql(`SELECT social_create_vote(gen_random_uuid(),'Final contract',(SELECT options FROM social_vote_web_test_fixture),true)`,'authenticated')).id as string;
+ const vote=JSON.parse(await sql(`SELECT social_create_vote(gen_random_uuid(),'Final contract',(SELECT options FROM ${render?'social_vote_render_test_fixture':'social_vote_web_test_fixture'}),true)`,'authenticated')).id as string;
+ if(render)await sql(`SELECT social_media_record_copy('vote_render',o.id,v.owner_id,o.render_version,NULL,v.owner_id::text||'/vote-renders/'||o.id::text||'/'||o.render_version||'.enc',true) FROM style_vote_options o JOIN style_votes v ON v.id=o.vote_id WHERE o.vote_id=${literal(vote)} AND o.render_tryon_id IS NOT NULL`);
  const files=new Map<string,Buffer>();
  for(const row of JSON.parse(await sql(`SELECT jsonb_agg(jsonb_build_object('path',large_path)) FROM social_media_copies WHERE owner_id=${literal(owner)}`))) files.set(row.path,JPEG);
  const io:backend.VoteBackend={
@@ -31,12 +33,20 @@ async function fixture(){
   rows:async(table,columns,filters,limit)=>JSON.parse(await sql(`SELECT coalesce(jsonb_agg(x),'[]') FROM (SELECT ${columns} FROM ${table} WHERE ${Object.entries(filters).map(([k,v])=>`${k}=${literal(v)}`).join(' AND ')} LIMIT ${limit}) x`)),
   download:vi.fn(async(_bucket,path)=>{const bytes=files.get(path);if(!bytes)throw new backend.VoteError('pending_media');return {bytes,type:'image/jpeg'};}),
   upload:vi.fn(async(_bucket,path,bytes)=>{expect(files.has(path)).toBe(false);files.set(path,Buffer.from(bytes));}),
-  remove:vi.fn(async(_bucket,path)=>{files.delete(path);}),exists:vi.fn(async(_bucket,path)=>files.has(path)),prepareMedia:vi.fn(async()=>{throw Error('unexpected derivation');}),
+  remove:vi.fn(async(_bucket,path)=>{files.delete(path);}),exists:vi.fn(async(_bucket,path)=>files.has(path)),prepareVoteRender:vi.fn(async()=>({state:'pending' as const})),voteRender:vi.fn(async request=>{
+   const args={p_operation:request.operation,p_media:request.mediaId,...(request.operation==='public'?{p_token_hash:request.tokenHash}:{p_owner:request.ownerId,p_vote:request.voteId,p_revision:request.revision,...(request.operation==='preview'?{p_manifest_hash:request.manifestHash}:{})})};
+   const authority=await rpc('social_vote_link_render_authority',args) as {source_path:string;destination_path:string;sha256:string}|null;
+   if(!authority)throw new backend.VoteError('pending_media');
+   if(request.operation==='copy')files.set(authority.destination_path,files.get(authority.source_path)!);
+   const bytes=files.get(authority.destination_path);if(!bytes)throw new backend.VoteError('pending_media');
+   expect(await rpc('social_vote_link_render_authority',args)).toEqual(authority);
+   return request.operation==='copy'?{mediaId:request.mediaId,sha256:sha256(bytes)}:{bytes,type:'image/jpeg'};
+  }),prepareMedia:vi.fn(async()=>{throw Error('unexpected derivation');}),
  };
  const service=votePublication(io,new backend.VoteBudget(),()=>SECRET);
  const input={voteId:vote,expectedRevision:1,firstName:'Éva'};
  const prepared=await service.prepare('synthetic-jwt',input);
- const published=await service.publish('synthetic-jwt',{voteId:vote,revision:1,manifestHash:prepared.manifestHash,consentVersion:1});
+ const published=await service.publish('synthetic-jwt',{voteId:vote,revision:1,manifestHash:prepared.manifestHash,consentVersion:render?2:1});
  const token=published.url.split('/').at(-1)!;
  return {vote,io,service,input,prepared,published,token};
 }
@@ -60,12 +70,26 @@ function wireRpc(staleWindow?:'minute'|'day'|'month'){
 }
 describe.skipIf(process.env.VOTE_SQL_CONTRACT!=='1')('isolated live SQL to server contracts',()=>{
  beforeAll(async()=>{
-  expect(process.env.PGHOST).toBe('127.0.0.1');expect(process.env.PGDATABASE).toBe('social_vote_web');
+  expect(process.env.PGHOST).toBe('127.0.0.1');expect(['social_vote_web','social_vote_renders']).toContain(process.env.PGDATABASE);
   owner=await sql('SELECT owner_id FROM social_vote_web_test_fixture');
   // Existing fixture copies get the canonical path expected by the server parser.
-  await sql(`UPDATE social_media_copies SET large_path=owner_id::text||'/items/'||source_id::text||'/'||version||'/large.jpg' WHERE source_kind='item'`);
+  await sql(`UPDATE social_media_copies SET large_path=owner_id::text||'/items/'||source_id::text||'/'||version||'-l.jpg' WHERE source_kind='item'`);
  });
  afterEach(()=>{vi.restoreAllMocks();vi.unstubAllEnvs();});
+ it.skipIf(process.env.PGDATABASE!=='social_vote_renders')('real v2 projection and consent match server transport, including ready source independence',async()=>{
+  const f=await fixture(true);expect(f.prepared.consentVersion).toBe(2);
+  const prepared=JSON.parse(await sql(`SELECT social_private.vote_link_prepared(l) FROM style_vote_links l WHERE vote_id=${literal(f.vote)}`));
+  expect(prepared).toEqual(f.prepared);
+  const render=f.prepared.options.find(o=>o.visual?.kind==='render')!.visual!;
+  if(render.kind!=='render')throw Error('render expected');
+  const preview=await f.service.preview('synthetic-jwt',{voteId:f.vote,revision:1,manifestHash:f.prepared.manifestHash,mediaId:render.mediaId});
+  expect(sha256(new Uint8Array(await preview.arrayBuffer()))).toBe(sha256(JPEG));
+  const item=await sql(`SELECT source_item_id FROM style_vote_link_media WHERE vote_id=${literal(f.vote)} AND source_kind='item' LIMIT 1`);
+  try{
+   await sql(`INSERT INTO social_private.content_hides VALUES('item',${literal(item)}) ON CONFLICT DO NOTHING`);
+   expect(await f.service.prepare('synthetic-jwt',f.input)).toEqual(f.prepared);
+  }finally{await sql(`DELETE FROM social_private.content_hides WHERE kind='item' AND target_id=${literal(item)};DELETE FROM style_votes WHERE id=${literal(f.vote)}`);}
+ });
  it.each(['explicit','natural'])('real ready RPC resumes through prepare HTTP after %s end',async(mode)=>{
   const f=await fixture();
   if(mode==='explicit')await sql(`SELECT social_close_vote(${literal(f.vote)})`,'authenticated');
@@ -80,6 +104,28 @@ describe.skipIf(process.env.VOTE_SQL_CONTRACT!=='1')('isolated live SQL to serve
   expect(current.url).toBe(f.published.url);
   expect(Date.parse(current.expiresAt)).toBeLessThanOrEqual(Date.parse(f.published.expiresAt));
   await sql(`DELETE FROM style_votes WHERE id=${literal(f.vote)}`);
+ });
+ it('preparation projection rejects a source hidden by real SQL during download, before upload',async()=>{
+  const f=await fixture();
+  await sql('DELETE FROM social_vote_web_limits');
+  const vote=JSON.parse(await sql(`SELECT social_create_vote(gen_random_uuid(),'Projection boundary',(SELECT options FROM social_vote_web_test_fixture),true)`,'authenticated')).id as string;
+  const item=await sql(`SELECT source_id FROM social_media_copies WHERE owner_id=${literal(owner)} LIMIT 1`);
+  const download=vi.mocked(f.io.download),upload=vi.mocked(f.io.upload);upload.mockClear();
+  const original=download.getMockImplementation()!;
+  download.mockImplementation(async(...args)=>{
+   const bytes=await original(...args);
+   if(args[1].includes('/items/'))await sql(`INSERT INTO social_private.content_hides VALUES('item',${literal(item)}) ON CONFLICT DO NOTHING`);
+   return bytes;
+  });
+  try {
+   await expect(votePublication(f.io,new backend.VoteBudget(),()=>SECRET).prepare('synthetic-jwt',{voteId:vote,expectedRevision:1,firstName:'Éva'})).rejects.toMatchObject({code:'selection_changed'});
+   expect(upload).not.toHaveBeenCalled();
+   expect(await sql(`SELECT manifest_hash IS NULL FROM style_vote_links WHERE vote_id=${literal(vote)}`)).toBe('t');
+   // A consented ready snapshot has a different rule from the pending source.
+   expect((await rpc('social_vote_link_preparation_state',{p_owner:owner,p_vote:f.vote,p_revision:1}) as {status:string}).status).toBe('ready');
+  }finally{
+   await sql(`DELETE FROM social_private.content_hides WHERE kind='item' AND target_id=${literal(item)};DELETE FROM style_votes WHERE id IN (${literal(vote)},${literal(f.vote)})`);
+  }
  });
  it('stale minute/day/month RPC errors propagate through actual SDK to retryable HTTP503 with no counters',async()=>{
   const f=await fixture(),context={params:Promise.resolve({token:f.token})};

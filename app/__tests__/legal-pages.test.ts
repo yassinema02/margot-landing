@@ -184,3 +184,18 @@ describe("delete-account page", () => {
     expect([deleted.match(FORBIDDEN_MARKS), deleted.match(FORBIDDEN_PROMISES)]).toEqual([null, null]);
   });
 });
+
+it('selected avatar wording and dates match the reviewed public-link behavior in all four legal pages',()=>{
+ for(const component of [ConfidentialitePage,ConditionsPage]) {
+  const text=page(component).html.replace(/&#x27;|&apos;/g,"'").replace(/<[^>]*>/g,' ').replace(/\s+/g,' ');
+  expect(text).toContain('15 novembre 2026');
+  expect(text).toContain('Une tenue sur votre avatar apparaît uniquement si vous choisissez cet aperçu, le prévisualisez et le confirmez avant la publication du lien. Le lien ne montre jamais votre photo de profil.');
+  expect(text).toContain('7 jours après la fin du vote');expect(text).toContain('retirer à tout moment');
+ }
+ for(const component of [PrivacyPage,TermsPage]) {
+  const text=page(component).html.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ');
+  expect(text).toContain('15 November 2026');
+  expect(text).toContain('An outfit on your avatar is shown only if you select that preview, view it and confirm it before publishing the link. The link never shows your profile photo.');
+  expect(text).toContain('7 days after the vote ends');expect(text).toContain('remove it at any time');
+ }
+});

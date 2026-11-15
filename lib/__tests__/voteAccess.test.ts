@@ -17,7 +17,7 @@ function fixture() {
  const s=snapshot();const row:{status:string;snapshot:unknown;my_choice:unknown}={status:'ok',snapshot:s,my_choice:null};
  const link={vote_id:VOTE,revision:1,state:'ready',token_hash:tokenHash(TOKEN)};
  const media={id:MEDIA,owner_id:OWNER,vote_id:VOTE,revision:1,path:`${OWNER}/votes/${VOTE}/1/${MEDIA}.jpg`,sha256:sha256(JPEG),state:'ready'};
- const io={rpc:vi.fn(async(name:string,_args:Record<string,unknown>):Promise<unknown>=>name==='social_vote_web_access'?row:name==='social_vote_link_read'?s:{status:'ok',choice:'b',closed:false}),rows:vi.fn(async(table:string,_columns:string,_filters:Record<string,unknown>,_limit:number):Promise<unknown[]>=>table==='style_vote_links'?[link]:[media]),download:vi.fn(async()=>({bytes:JPEG,type:'image/jpeg'})),user:vi.fn(),rpcAsUser:vi.fn(),prepareMedia:vi.fn(),upload:vi.fn(),remove:vi.fn(),exists:vi.fn()};
+ const io={rpc:vi.fn(async(name:string,_args:Record<string,unknown>):Promise<unknown>=>name==='social_vote_web_access'?row:name==='social_vote_link_read'?s:{status:'ok',choice:'b',closed:false}),rows:vi.fn(async(table:string,_columns:string,_filters:Record<string,unknown>,_limit:number):Promise<unknown[]>=>table==='style_vote_links'?[link]:[media]),download:vi.fn(async()=>({bytes:JPEG,type:'image/jpeg'})),user:vi.fn(),rpcAsUser:vi.fn(),prepareVoteRender:vi.fn(async()=>({state:'pending' as const})),voteRender:vi.fn(async():Promise<{bytes:Uint8Array;type:string}>=>{throw new Error('unexpected render');}),prepareMedia:vi.fn(),upload:vi.fn(),remove:vi.fn(),exists:vi.fn()};
  return {s,row,link,media,io,service:voteAccess(io as VoteBackend,new VoteBudget(NOW,undefined,()=>NOW))};
 }
 async function device(f:ReturnType<typeof fixture>) {
@@ -215,4 +215,22 @@ it('lexical ballot refusal is a fixed 400 and preserves a legitimate retry',asyn
  expect(refused.status).toBe(400);expect(await refused.json()).toEqual({error:'social_text_rejected'});
  f.io.rpc.mockImplementation(async name=>name==='social_vote_web_cast'?{status:'ok',choice:'b',closed:false}:f.row);
  expect((await f.service.cast(TOKEN,json(cookie,{choice:'b',reason:'Margot contacte le support admin'}))).status).toBe(200);
+});
+it('v2 public DTO strips private paths and encrypted media passes only F with final token revalidation',async()=>{
+ const f=fixture(),renderId=id(30);
+ const s={...f.s,version:2,options:f.s.options.map((o,i)=>({...o,visual:i?{kind:'pieces'}:{kind:'render',media_id:renderId,rendered_ordinals:[1],ownerId:OWNER,source_path:'private'}}))};
+ f.row.snapshot=s;
+ const original=f.io.rpc.getMockImplementation()!;f.io.rpc.mockImplementation((name,args)=>name==='social_vote_link_read'?Promise.resolve(s):original(name,args));
+ const rendered={...f.media,id:renderId,path:`${OWNER}/votes/${VOTE}/1/${renderId}.enc`,source_kind:'vote_render'};
+ f.io.rows.mockImplementation(async table=>table==='style_vote_links'?[f.link]:[rendered]);f.io.voteRender.mockResolvedValue({bytes:JPEG,type:'image/jpeg'});
+ const read=await f.service.read(TOKEN,req());expect(read.status).toBe('ok');expect(JSON.stringify(read)).not.toContain('source_path');expect(JSON.stringify(read)).not.toContain(OWNER);
+ const response=await f.service.media(TOKEN,renderId,req());expect(response.status).toBe(200);expect(sha256(new Uint8Array(await response.arrayBuffer()))).toBe(sha256(JPEG));expect(f.io.download).not.toHaveBeenCalled();
+ f.io.voteRender.mockImplementation(async()=>{f.io.rpc.mockImplementation((name,args)=>name==='social_vote_link_read'?Promise.resolve(null):original(name,args));return {bytes:JPEG,type:'image/jpeg'};});
+ expect((await f.service.media(TOKEN,renderId,req())).status).toBe(404);
+});
+it('v2 rejects render IDs reused by a piece and indices outside its own complete option',async()=>{
+ for(const visual of [{kind:'render',media_id:MEDIA,rendered_ordinals:[1]},{kind:'render',media_id:id(30),rendered_ordinals:[3]},{kind:'render',media_id:id(30),rendered_ordinals:[1,1]}]){
+  const f=fixture();f.row.snapshot={...f.s,version:2,options:f.s.options.map((o,i)=>({...o,visual:i?{kind:'pieces'}:visual}))};
+  expect((await f.service.read(TOKEN,req())).status).not.toBe('ok');expect(f.io.download).not.toHaveBeenCalled();expect(f.io.voteRender).not.toHaveBeenCalled();
+ }
 });

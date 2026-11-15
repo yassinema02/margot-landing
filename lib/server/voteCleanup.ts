@@ -6,7 +6,8 @@ export async function purgeVoteCopiesWith(backend:VoteBackend,budget:VoteBudget,
  if (!Array.isArray(result) || result.length > limit) throw new VoteError('unavailable');
  const candidates = result.map(value=>{
   const c = record(value);
-  if (typeof c.mediaId !== 'string' || !UUID.test(c.mediaId) || typeof c.sweepAt !== 'string' || !Number.isFinite(Date.parse(c.sweepAt)) || c.bucket !== 'social-media' || typeof c.path !== 'string' || !new RegExp(`^[a-f0-9-]{36}/votes/[a-f0-9-]{36}/[1-9][0-9]*/${c.mediaId}\\.jpg$`).test(c.path) || typeof c.leaseUntil !== 'string' || !Number.isFinite(Date.parse(c.leaseUntil))) throw new VoteError('unavailable');
+  if(c.sourceKind!==undefined&&c.sourceKind!=='item'&&c.sourceKind!=='vote_render') throw new VoteError('unavailable');
+  if (typeof c.mediaId !== 'string' || !UUID.test(c.mediaId) || typeof c.sweepAt !== 'string' || !Number.isFinite(Date.parse(c.sweepAt)) || c.bucket !== 'social-media' || typeof c.path !== 'string' || !new RegExp(`^[a-f0-9-]{36}/votes/[a-f0-9-]{36}/[1-9][0-9]*/${c.mediaId}\\.${c.sourceKind==='vote_render'?'enc':'jpg'}$`).test(c.path) || typeof c.leaseUntil !== 'string' || !Number.isFinite(Date.parse(c.leaseUntil))) throw new VoteError('unavailable');
   const segments = c.path.split('/'); if (!UUID.test(segments[0]) || !UUID.test(segments[2])) throw new VoteError('unavailable');
   return {mediaId:c.mediaId,sweepAt:c.sweepAt,bucket:c.bucket,path:c.path};
  });

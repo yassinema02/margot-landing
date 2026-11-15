@@ -8,7 +8,7 @@ const hooks=vi.hoisted(()=>({active:false,cursor:0,values:[] as unknown[],effect
 vi.mock('react',async importOriginal=>{
  const react=await importOriginal<typeof import('react')>();
  return {...react,
-  useState:(initial:unknown)=>{if(!hooks.active)return react.useState(initial);const i=hooks.cursor++;if(!(i in hooks.values))hooks.values[i]=typeof initial==='function'?initial():initial;return [hooks.values[i],(next:unknown)=>{hooks.values[i]=typeof next==='function'?next(hooks.values[i]):next;}];},
+  useState:(initial:unknown)=>{if(!hooks.active)return react.useState(initial);const i=hooks.cursor++,values=hooks.values;if(!(i in values))values[i]=typeof initial==='function'?initial():initial;return [values[i],(next:unknown)=>{values[i]=typeof next==='function'?next(values[i]):next;}];},
   useRef:(initial:unknown)=>{if(!hooks.active)return react.useRef(initial);const i=hooks.cursor++;if(!(i in hooks.values))hooks.values[i]={current:initial};return hooks.values[i];},
   useEffect:(effect:()=>void|(()=>void),deps:unknown[])=>{if(!hooks.active)return react.useEffect(effect,deps);const i=hooks.cursor++;if(!hooks.mounted.has(i)){hooks.mounted.add(i);hooks.effects.push(effect);}},
  };
@@ -122,4 +122,68 @@ it('report failure retains the exact reason, retries and never sends device or b
 it('report rights refusal masks the public content and all report controls',async()=>{
  const b=controlledBallot(null);vi.stubGlobal('fetch',vi.fn(async()=>Response.json({error:'unavailable'},{status:404})));b.reportOpen();b.sendReport();await vi.advanceTimersByTimeAsync(0);
  const html=b.html();expect(html).toContain(VOTE_COPY.fr.unavailable);expect(html).not.toContain('Élo');expect(html).not.toContain('Dîner');expect(html).not.toContain('<select');
+});
+
+it.each(['fr','en','es'] as const)('v2 %s shows each complete photo and all pieces with per-option actions after the common fields',locale=>{
+ const base=snapshot();
+ const s:PublicVoteSnapshot={...base,version:2,options:base.options.map((option,index)=>({...option,visual:index===0?{kind:'render',imageUrl:`/v/${token}/media/avatar`,renderedOrdinals:[1]}:{kind:'pieces'}})) as Extract<PublicVoteSnapshot,{version:2}>['options']};
+ const html=render({status:'ok',snapshot:s,myChoice:null},locale);
+ expect(html).toContain('h-auto w-full object-contain');expect(html).toContain('referrerPolicy="no-referrer"');
+ expect(html.replace(/&#x27;/g,"'")).toContain(VOTE_COPY[locale].notShown);expect(html).toContain('minmax(min(100%, 14rem), 1fr)');
+ expect(html.indexOf('vote-first-name')).toBeLessThan(html.indexOf('<section aria-label="A"'));
+ const a=html.slice(html.indexOf('<section aria-label="A"'),html.indexOf('<section aria-label="B"'));
+ expect(a).toContain(VOTE_COPY[locale].voteA);expect(a).not.toContain(VOTE_COPY[locale].voteB);
+ expect((html.match(/<img /g)||[]).length).toBe(5);
+ expect(html).not.toContain('Créer un vote');expect(html).not.toContain('srcSet');
+});
+
+type VoteImageProps={src:string;alt:string;avatar?:boolean;copy:typeof VOTE_COPY.fr};
+function controlledImage(avatar:boolean){
+ hooks.active=true;hooks.cursor=0;hooks.values=[];hooks.effects=[];hooks.mounted.clear();
+ const s=snapshot();
+ const imageUrl='/v/'+token+'/media/avatar';
+ const view:PublicVoteSnapshot=avatar?{...s,version:2,options:s.options.map(option=>({...option,visual:{kind:'render',imageUrl,renderedOrdinals:[1]}})) as Extract<PublicVoteSnapshot,{version:2}>['options']}:s;
+ function images(node:ReactNode):ReactElement<VoteImageProps>[]{
+  if(Array.isArray(node))return node.flatMap(images);if(!isValidElement<{children?:ReactNode;src?:string}>(node))return [];
+  return [...(typeof node.type==='function' && node.props.src?[node as ReactElement<VoteImageProps>]:[]),...images(node.props.children)];
+ }
+ const element=images(VoteBallot({snapshot:view,myChoice:null,locale:'fr'}))[0];
+ const Image=element.type as (props:VoteImageProps)=>ReactElement;
+ hooks.values=[];hooks.effects=[];hooks.mounted.clear();
+ let source=element.props.src,mounted:ReturnType<typeof draw>|null=null;
+ function draw(){hooks.cursor=0;return Image({...element.props,src:source}) as ReactElement<{children?:ReactNode;src?:string;className?:string;referrerPolicy?:string;onError:(event:{currentTarget:HTMLImageElement})=>void}> & {ref?:((node:HTMLImageElement|null)=>void)|null};}
+ function attach(state:{complete:boolean;naturalWidth:number}){
+  const output=draw(),node=state as HTMLImageElement;output.ref?.(node);mounted=output;
+  return {node,error:()=>output.props.onError({currentTarget:node})};
+ }
+ function html(){return renderToStaticMarkup(draw()).replace(/&#x27;/g,"'");}
+ function retry(){const output=draw(),children=output.props.children as ReactElement[];(children.find(child=>child.type==='button')!.props as {onClick:()=>void}).onClick();}
+ function changeSource(next:string){mounted?.ref?.(null);source=next;hooks.values=[];hooks.effects=[];hooks.mounted.clear();}
+ return {draw,attach,html,retry,changeSource,source:()=>source,element};
+}
+
+it.each([true,false])('W1: an already failed image (avatar=%s) exposes an explicit same-source retry',avatar=>{
+ const image=controlledImage(avatar),first=image.draw();
+ const failed=image.attach({complete:true,naturalWidth:0});
+ expect(image.html()).toContain('role="status"');expect(image.html()).toContain(VOTE_COPY.fr.imageFailed);expect(image.html()).toContain(VOTE_COPY.fr.retryImage);
+ image.retry();const retry=image.draw();
+ expect(retry.type).toBe('img');expect(retry.props.src).toBe(first.props.src);expect(retry.key).not.toBe(first.key);
+ expect(retry.props.referrerPolicy).toBe('no-referrer');expect(retry.props.className).toContain(avatar?'h-auto w-full object-contain':'aspect-square');
+ image.attach({complete:false,naturalWidth:0});failed.error();expect(image.draw().type).toBe('img');expect(image.html()).not.toContain(VOTE_COPY.fr.imageFailed);
+});
+
+it.each([{complete:false,naturalWidth:0},{complete:true,naturalWidth:373}])('W1: pending/loaded $complete/$naturalWidth stays visible, later errors still allow retry',state=>{
+ const image=controlledImage(true),current=image.attach(state);
+ expect(image.draw().type).toBe('img');expect(image.html()).not.toContain(VOTE_COPY.fr.retryImage);
+ current.error();expect(image.html()).toContain(VOTE_COPY.fr.retryImage);
+ image.retry();image.attach({complete:true,naturalWidth:373});expect(image.draw().type).toBe('img');
+});
+
+it.each([true,false])('W1: source-key remount isolates failed state and old errors (avatar=%s)',avatar=>{
+ const image=controlledImage(avatar),original=image.source(),old=image.attach({complete:true,naturalWidth:0});
+ expect(image.element.key).toBe(original);expect(image.html()).toContain(VOTE_COPY.fr.retryImage);
+ image.changeSource(original+'-new');image.attach({complete:true,naturalWidth:373});old.error();
+ expect(image.draw().type).toBe('img');expect(image.draw().props.src).toBe(original+'-new');
+ image.changeSource(original);image.attach({complete:false,naturalWidth:0});
+ expect(image.draw().type).toBe('img');expect(image.html()).not.toContain(VOTE_COPY.fr.retryImage);
 });

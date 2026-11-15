@@ -64,3 +64,10 @@ it('keeps a closed unexpired snapshot readable when voting closes during renderi
  const s=snapshot();io.read.mockResolvedValueOnce({status:'ok',snapshot:s,myChoice:null}).mockResolvedValueOnce({status:'ok',snapshot:{...s,closed:true},myChoice:null});
  expect((await GET(req,ctx)).status).toBe(200);
 });
+it('v2 OG fetches only clothing pieces, never either consented avatar',async()=>{
+ const s=snapshot();s.version=2;
+ s.options.forEach(o=>o.visual={kind:'render',imageUrl:`https://www.margotwardrobe.com/v/${token}/media/00000000-0000-0000-0000-000000000099`,renderedOrdinals:[1]});
+ io.read.mockResolvedValue({status:'ok',snapshot:s,myChoice:null});
+ expect((await GET(req,ctx)).status).toBe(200);expect(io.media).toHaveBeenCalledTimes(4);
+ expect(io.media.mock.calls.every(([,mediaId])=>mediaId!=='00000000-0000-0000-0000-000000000099')).toBe(true);
+});
