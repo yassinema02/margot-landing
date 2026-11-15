@@ -27,11 +27,11 @@ const id = (n:number)=>`00000000-0000-0000-0000-${String(n).padStart(12,'0')}`;
 const OWNER=id(1), VOTE=id(2), SECRET='synthetic-private-vote-secret-'.repeat(2);
 const JPEG=Buffer.from([255,216,255,224,0,2,7,8,255,217]);
 function fixture() {
- const r:VoteLinkReservation={ownerId:OWNER,voteId:VOTE,revision:1,leaseUntil:new Date(Date.now()+600_000).toISOString(),endsAt:new Date(Date.now()+3600_000).toISOString(),expiresAt:new Date(Date.now()+8*86400_000).toISOString(),occasion:'Dîner',firstName:'Élo',initials:'É',media:[0,1,2,3].map((n)=>({mediaId:id(10+n),itemId:id(20+n),ownerId:OWNER,choice:n<2?'a':'b',ordinal:n%2+1,position:n%2?'bottom':'top',sourceKind:'item',sourceVersion:'abcdef123456',sourceBucket:'social-media',sourcePath:`${OWNER}/items/${id(20+n)}/abcdef123456/large.jpg`,destinationBucket:'social-media',destinationPath:`${OWNER}/votes/${VOTE}/1/${id(10+n)}.jpg`,name:'Vêtement imprimé',category:n%2?'bottoms':'tops'}))};
+ const r:Omit<VoteLinkReservation,'media'> & {media:import('../server/votePublication').ReservedItem[] }={ownerId:OWNER,voteId:VOTE,revision:1,leaseUntil:new Date(Date.now()+600_000).toISOString(),endsAt:new Date(Date.now()+3600_000).toISOString(),expiresAt:new Date(Date.now()+8*86400_000).toISOString(),occasion:'Dîner',firstName:'Élo',initials:'É',media:[0,1,2,3].map((n)=>({mediaId:id(10+n),itemId:id(20+n),ownerId:OWNER,choice:n<2?'a':'b',ordinal:n%2+1,position:n%2?'bottom':'top',sourceKind:'item',sourceVersion:'abcdef123456',sourceBucket:'social-media',sourcePath:`${OWNER}/items/${id(20+n)}/abcdef123456/large.jpg`,destinationBucket:'social-media',destinationPath:`${OWNER}/votes/${VOTE}/1/${id(10+n)}.jpg`,name:'Vêtement imprimé',category:n%2?'bottoms':'tops'}))};
  const files=new Map(r.media.map(m=>[m.sourcePath,JPEG]));
  const link:Record<string,unknown>={state:'pending',preparation:r,manifest_hash:null,token_hash:null};
  const vote:Record<string,unknown>={id:VOTE,owner_id:OWNER,link_revision:1,link_state:'pending',deleted_at:null,closed_at:null,ends_at:r.endsAt};
- const media=r.media.map(m=>({id:m.mediaId,owner_id:OWNER,vote_id:VOTE,revision:1,path:m.destinationPath,source_item_id:m.itemId,source_version:m.sourceVersion,source_path:m.sourcePath,sha256:null as string|null,state:'staged',lease_until:r.leaseUntil}));
+ const media:Record<string,unknown>[]=r.media.map(m=>({id:m.mediaId,owner_id:OWNER,vote_id:VOTE,revision:1,path:m.destinationPath,source_item_id:m.itemId,source_version:m.sourceVersion,source_path:m.sourcePath,sha256:null as string|null,state:'staged',lease_until:r.leaseUntil}));
  const io={
   user:vi.fn(async()=>OWNER),
   rpcAsUser:vi.fn(async()=>null),
@@ -52,7 +52,7 @@ function fixture() {
     return {status:'prepared',prepared:{manifestHash:link.manifest_hash}};
    }
    if(name==='social_vote_link_commit') {
-    link.state='ready';vote.link_state='ready';link.token_hash=args.p_token_hash;link.consent_version=1;link.consent_revision=1;link.consent_manifest_hash=args.p_manifest_hash;
+    link.state='ready';vote.link_state='ready';link.token_hash=args.p_token_hash;link.consent_version=args.p_consent_version;link.consent_revision=1;link.consent_manifest_hash=args.p_manifest_hash;
     media.forEach(m=>m.state='ready');return {status:'ready'};
    }
    if(name==='social_vote_link_read') return {expiresAt:r.expiresAt};
@@ -66,7 +66,7 @@ function fixture() {
    if(table==='social_media_copies') { const m=r.media.find(m=>m.itemId===filters.source_id)!;return [{source_kind:'item',source_id:m.itemId,owner_id:OWNER,version:m.sourceVersion,large_path:m.sourcePath,encrypted:false}]; }
    throw Error('unexpected table');
   }),
-  prepareMedia:vi.fn(async(_token:string,_owner:string,ids:string[])=>ids.map(itemId=>({itemId,version:'abcdef123456',state:'ready' as const}))),
+  prepareVoteRender:vi.fn(async():Promise<{state:'ready'|'pending'|'unavailable';version?:string}>=>({state:'pending'})),voteRender:vi.fn(async(_request:backendModule.VoteRenderRequest):Promise<{mediaId:string;sha256:string}|{bytes:Uint8Array;type:string}>=>{throw new Error('unexpected render');}),prepareMedia:vi.fn(async(_token:string,_owner:string,ids:string[])=>ids.map(itemId=>({itemId,version:'abcdef123456',state:'ready' as const}))),
   download:vi.fn(async(_bucket:string,path:string)=>{
    const bytes=files.get(path);if(!bytes) throw Error('missing');return {bytes,type:'image/jpeg'};
   }),
@@ -374,4 +374,69 @@ it('lost stage response resumes the same prepared inventory without another uplo
  const hash=f.link.manifest_hash,paths=f.media.map(m=>m.path);
  const result=await f.service.prepare('jwt',prepareInput);
  expect(result.manifestHash).toBe(hash);expect(f.media.map(m=>m.path)).toEqual(paths);expect(f.io.upload).toHaveBeenCalledTimes(4);expect(f.io.remove).not.toHaveBeenCalled();
+});
+
+function withRenders(count=2,pieces=4) {
+ const f=fixture(),r=f.r as VoteLinkReservation;
+ if(pieces===18) {
+  const template=f.r.media[0];r.media=['a','b'].flatMap((choice,c)=>Array.from({length:9},(_,n)=>{
+   const mediaId=id(100+c*9+n),itemId=id(200+c*9+n);
+   return {...template,choice:choice as 'a'|'b',ordinal:n+1,mediaId,itemId,sourcePath:`${OWNER}/items/${itemId}/abcdef123456/large.jpg`,destinationPath:`${OWNER}/votes/${VOTE}/1/${mediaId}.jpg`};
+  }));
+  f.media.splice(0,f.media.length,...r.media.map(m=>({id:m.mediaId,owner_id:OWNER,vote_id:VOTE,revision:1,path:m.destinationPath,source_kind:'item',source_item_id:'itemId' in m?m.itemId:null,source_version:m.sourceVersion,source_path:m.sourcePath,sha256:null,state:'staged',lease_until:r.leaseUntil})));
+  for(const m of r.media)f.files.set(m.sourcePath,JPEG);
+ }
+ for(let i=0;i<count;i++){
+  const m:import('../server/votePublication').ReservedRender={mediaId:id(300+i),optionId:id(310+i),choice:i?'b':'a',ordinal:0,ownerId:OWNER,sourceKind:'vote_render',sourceVersion:'abcdef123456',sourceBucket:'social-media',sourcePath:`${OWNER}/vote-renders/${id(310+i)}/abcdef123456.enc`,destinationBucket:'social-media',destinationPath:`${OWNER}/votes/${VOTE}/1/${id(300+i)}.enc`,renderedOrdinals:[1]};
+  r.media.push(m);f.media.push({id:m.mediaId,owner_id:OWNER,vote_id:VOTE,revision:1,path:m.destinationPath,source_kind:'vote_render',source_option_id:m.optionId,source_item_id:null,source_version:m.sourceVersion,source_path:m.sourcePath,sha256:null,state:'staged',lease_until:r.leaseUntil});
+ }
+ r.media.sort((a,b)=>a.choice.localeCompare(b.choice)||a.ordinal-b.ordinal);
+ f.io.voteRender.mockImplementation(async request=>{
+  const m=r.media.find(m=>m.mediaId===request.mediaId)!;
+  if(request.operation==='copy'){f.files.set(m.destinationPath,JPEG);return {mediaId:m.mediaId,sha256:sha256(JPEG)};}
+  if(!f.files.has(m.destinationPath))throw new VoteError('pending_media');
+  return {bytes:f.files.get(m.destinationPath)!,type:'image/jpeg'};
+ });
+ return {...f,r};
+}
+it('v2 reserves 0/1/2 independent renders; twenty-media manifest keeps eighteen complete pieces',async()=>{
+ for(const count of [1,2]){
+  const f=withRenders(count,18),p=await f.service.prepare('jwt',prepareInput);
+  expect(p).toMatchObject({snapshotVersion:2,consentVersion:2});expect(p.options.map(o=>o.pieces.length)).toEqual([9,9]);
+  expect(p.options.filter(o=>o.visual?.kind==='render')).toHaveLength(count);
+  const stage=f.io.rpc.mock.calls.find(([n])=>n==='social_vote_link_stage')![1];
+  expect((stage.p_media as unknown[]).length).toBe(18+count);expect(stage.p_snapshot).toMatchObject({version:2});
+  expect(f.io.upload).toHaveBeenCalledTimes(18);expect(f.io.download.mock.calls.every(([,path])=>!path.endsWith('.enc'))).toBe(true);
+  await expect(f.service.publish('jwt',confirmed(p.manifestHash))).rejects.toMatchObject({code:'invalid'});
+  expect((await f.service.publish('jwt',{...confirmed(p.manifestHash),consentVersion:2})).state).toBe('ready');
+  expect(await f.service.prepare('jwt',prepareInput)).toEqual(p);
+ }
+});
+it('v2 render preview verifies plaintext receipt and final projection; changed bytes refuse',async()=>{
+ const f=withRenders(1),p=await f.service.prepare('jwt',prepareInput),render=f.r.media.find(m=>m.sourceKind==='vote_render')!;
+ const response=await f.service.preview('jwt',{voteId:VOTE,revision:1,manifestHash:p.manifestHash,mediaId:render.mediaId});
+ expect(sha256(new Uint8Array(await response.arrayBuffer()))).toBe(sha256(JPEG));
+ f.io.voteRender.mockResolvedValue({bytes:Buffer.from([255,216,255,2,255,217]),type:'image/jpeg'});
+ await expect(f.service.preview('jwt',{voteId:VOTE,revision:1,manifestHash:p.manifestHash,mediaId:render.mediaId})).rejects.toMatchObject({code:'conflict'});
+});
+it('v2 missing render alone warms owner endpoint and is terminal if unavailable, never stages partial consent',async()=>{
+ for(const outcome of ['ready','unavailable','pending'] as const){
+  const f=withRenders(1),original=f.io.rpc.getMockImplementation()!;let warmed=false;
+  f.io.rpc.mockImplementation(async(n,args)=>{
+   if(n==='social_vote_link_begin'&&!warmed)return {status:'pending_media',voteId:VOTE,revision:1,missingItemIds:[],missingRenderChoices:['a']};
+   if(n==='social_vote_link_preparation_state'&&!warmed)return {status:'unreserved',ownerId:OWNER,voteId:VOTE,revision:1,endsAt:f.r.endsAt,sources:f.r.media.map(({mediaId:_id,destinationBucket:_b,destinationPath:_p,...m})=>({...m,admissible:true,sourcePath:m.sourceKind==='vote_render'?null:m.sourcePath}))};
+   return original(n,args);
+  });
+  f.io.prepareVoteRender.mockImplementation(async()=>{warmed=outcome==='ready';return {state:outcome,...(outcome==='ready'?{version:'abcdef123456'}:{})};});
+  const pending=f.service.prepare('jwt',prepareInput);
+  if(outcome==='ready')expect((await pending).consentVersion).toBe(2);
+  else await expect(pending).rejects.toMatchObject({code:outcome==='unavailable'?'render_unavailable':'pending_media',...(outcome==='pending'?{progress:{phase:'sources',completed:4,total:5}}:{})});
+  expect(f.io.prepareMedia).not.toHaveBeenCalled();expect(f.io.prepareVoteRender.mock.calls.length).toBeLessThanOrEqual(3);
+  if(outcome!=='ready')expect(f.io.rpc.mock.calls.some(([n])=>n==='social_vote_link_stage')).toBe(false);
+ }
+});
+it('v2 rejects wrong media kind, extension, cross-choice rendered ordinal and duplicate render',()=>{
+ for(const mutate of [(m:Record<string,unknown>)=>m.sourcePath='private/source.enc',(m:Record<string,unknown>)=>m.destinationPath=String(m.destinationPath).replace('.enc','.jpg'),(m:Record<string,unknown>)=>m.renderedOrdinals=[3],(m:Record<string,unknown>)=>m.itemId=id(99)]){
+  const f=withRenders(1);mutate(f.r.media[0] as unknown as Record<string,unknown>);expect(()=>parseReservation(f.r,OWNER,VOTE,1)).toThrow();
+ }
 });

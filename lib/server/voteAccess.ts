@@ -2,14 +2,17 @@ import 'server-only';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { HASH, UUID, VoteBackend, VoteBudget, VoteError, record, sameHash, voteBackend } from './voteBackend';
-import { jpegResponse, readVoteImage } from './voteImages';
-import { VOTE_ORIGIN, tokenHash } from './votePublication';
+import { jpegResponse, readVoteImage, validateJpeg, sha256 } from './voteImages';
+import { VOTE_ORIGIN, tokenHash, validOrdinals } from './votePublication';
 
+type PublicVoteVisual = {kind:'pieces'}|{kind:'render';imageUrl:string;renderedOrdinals:number[]};
+type PublicVoteOption = {choice:'a'|'b';pieces:Array<{name:string|null;category:string|null;imageUrl:string}>;visual?:PublicVoteVisual};
 export type PublicVoteSnapshot = {
- version:1;occasion:string;firstName:string;initials:string;endsAt:string;expiresAt:string;closed:boolean;
- options:[PublicVoteOption,PublicVoteOption];
-};
-type PublicVoteOption = {choice:'a'|'b';pieces:Array<{name:string|null;category:string|null;imageUrl:string}>};
+ occasion:string;firstName:string;initials:string;endsAt:string;expiresAt:string;closed:boolean;
+} & (
+ | {version:1;options:[PublicVoteOption,PublicVoteOption]}
+ | {version:2;options:[PublicVoteOption & {visual:PublicVoteVisual},PublicVoteOption & {visual:PublicVoteVisual}]}
+);
 export type PublicVoteReadResult =
  | {status:'ok';snapshot:PublicVoteSnapshot;myChoice:'a'|'b'|null}
  | {status:'unavailable'} | {status:'limited';retryAfter:number} | {status:'service_unavailable'};
@@ -69,11 +72,11 @@ function mutation(request:Request) {
 function text(value:unknown,max:number): value is string { return typeof value==='string' && Array.from(value).length<=max; }
 function timestamp(value:unknown): value is string { return typeof value==='string' && Number.isFinite(Date.parse(value)); }
 /** Projection only: never forward SQL's object or any inventory metadata. */
-function snapshotOf(value:unknown,token:string,now:number): {snapshot:PublicVoteSnapshot;media:Set<string>} {
+function snapshotOf(value:unknown,token:string,now:number): {snapshot:PublicVoteSnapshot;media:Set<string>;renders:Set<string>} {
  const s=record(value);
- if (s.version!==1 || !text(s.occasion,120) || !s.occasion || !text(s.firstName,40) || !s.firstName || !text(s.initials,4) || !s.initials || !timestamp(s.endsAt) || !timestamp(s.expiresAt) || typeof s.closed!=='boolean' || !Array.isArray(s.options) || s.options.length!==2) throw new VoteError('unavailable');
+ if ((s.version!==1 && s.version!==2) || !text(s.occasion,120) || !s.occasion || !text(s.firstName,40) || !s.firstName || !text(s.initials,4) || !s.initials || !timestamp(s.endsAt) || !timestamp(s.expiresAt) || typeof s.closed!=='boolean' || !Array.isArray(s.options) || s.options.length!==2) throw new VoteError('unavailable');
  if (now>=Date.parse(s.expiresAt)) throw new PublicFailure('unavailable');
- const media=new Set<string>();
+ const media=new Set<string>(),renders=new Set<string>();
  const options=s.options.map((value,index)=>{
   const o=record(value);
   if (o.choice!==['a','b'][index] || !Array.isArray(o.pieces) || o.pieces.length<2 || o.pieces.length>9) throw new VoteError('unavailable');
@@ -83,9 +86,20 @@ function snapshotOf(value:unknown,token:string,now:number): {snapshot:PublicVote
    media.add(p.media_id);
    return {name:p.name as string|null,category:p.category as string|null,imageUrl:`${VOTE_ORIGIN}/v/${token}/media/${p.media_id}`};
   });
+  if(s.version===2) {
+   const visual=record(o.visual);
+   if(visual.kind==='render') {
+    if(typeof visual.media_id!=='string'||!UUID.test(visual.media_id)||media.has(visual.media_id)||!validOrdinals(visual.rendered_ordinals,pieces.length)) throw new VoteError('unavailable');
+    media.add(visual.media_id);renders.add(visual.media_id);
+    return {choice:o.choice as 'a'|'b',pieces,visual:{kind:'render' as const,imageUrl:`${VOTE_ORIGIN}/v/${token}/media/${visual.media_id}`,renderedOrdinals:visual.rendered_ordinals}};
+   }
+   if(visual.kind!=='pieces') throw new VoteError('unavailable');
+   return {choice:o.choice as 'a'|'b',pieces,visual:{kind:'pieces' as const}};
+  }
   return {choice:o.choice as 'a'|'b',pieces};
  }) as [PublicVoteOption,PublicVoteOption];
- return {snapshot:{version:1,occasion:s.occasion,firstName:s.firstName,initials:s.initials,endsAt:s.endsAt,expiresAt:s.expiresAt,closed:s.closed,options},media};
+ if(s.version===2&&!renders.size) throw new VoteError('unavailable');
+ return {snapshot:{version:s.version,occasion:s.occasion,firstName:s.firstName,initials:s.initials,endsAt:s.endsAt,expiresAt:s.expiresAt,closed:s.closed,options} as PublicVoteSnapshot,media,renders};
 }
 function sqlFailure(row:Record<string,unknown>) {
  if (row.status==='limited' && Number.isSafeInteger(row.retryAfter) && Number(row.retryAfter)>0) throw new PublicFailure('limited',Number(row.retryAfter));
@@ -171,12 +185,19 @@ export function voteAccess(backend:VoteBackend,budget=new VoteBudget()) {
     if(links.length!==1) throw new PublicFailure('unavailable');
     const link=record(links[0]);
     if(typeof link.vote_id!=='string' || link.vote_id.length!==36 || !UUID.test(link.vote_id) || !Number.isSafeInteger(link.revision) || Number(link.revision)<1 || link.state!=='ready' || !sameHash(link.token_hash,tokenHash(token))) throw new VoteError('unavailable');
-    const rows=await budget.run(signal=>backend.rows('style_vote_link_media','id,owner_id,vote_id,revision,path,sha256,state',{id:mediaId,vote_id:link.vote_id,revision:link.revision,state:'ready'},1,signal));
+    const rows=await budget.run(signal=>backend.rows('style_vote_link_media','id,owner_id,vote_id,revision,path,sha256,state,source_kind',{id:mediaId,vote_id:link.vote_id,revision:link.revision,state:'ready'},1,signal));
     if(rows.length!==1) throw new PublicFailure('unavailable');
-    const m=record(rows[0]);
-    if(m.id!==mediaId || m.vote_id!==link.vote_id || m.revision!==link.revision || m.state!=='ready' || typeof m.owner_id!=='string' || m.owner_id.length!==36 || !UUID.test(m.owner_id) || m.path!==`${m.owner_id}/votes/${link.vote_id}/${link.revision}/${mediaId}.jpg` || typeof m.sha256!=='string' || m.sha256.length!==64 || !HASH.test(m.sha256)) throw new VoteError('unavailable');
+    const m=record(rows[0]);const render=initial.renders.has(mediaId);
+    if(render?m.source_kind!=='vote_render':m.source_kind!==undefined&&m.source_kind!=='item') throw new PublicFailure('unavailable');
+    if(m.id!==mediaId || m.vote_id!==link.vote_id || m.revision!==link.revision || m.state!=='ready' || typeof m.owner_id!=='string' || m.owner_id.length!==36 || !UUID.test(m.owner_id) || m.path!==`${m.owner_id}/votes/${link.vote_id}/${link.revision}/${mediaId}.${render?'enc':'jpg'}` || typeof m.sha256!=='string' || m.sha256.length!==64 || !HASH.test(m.sha256)) throw new VoteError('unavailable');
     let bytes:Uint8Array;
-    try { bytes=await readVoteImage(backend,budget,'social-media',m.path as string,m.sha256); }
+    try {
+     if(render){
+      const data=await budget.run(signal=>backend.voteRender({operation:'public',tokenHash:tokenHash(token),mediaId},signal));
+      if(!('bytes' in data)) throw new VoteError('unavailable');bytes=validateJpeg(data.bytes,data.type);
+      if(!sameHash(sha256(bytes),m.sha256)) throw new VoteError('conflict');
+     } else bytes=await readVoteImage(backend,budget,'social-media',m.path as string,m.sha256);
+    }
     catch(error) { if(error instanceof VoteError && ['pending_media','selection_changed','conflict','too_large'].includes(error.code)) throw new PublicFailure('unavailable');throw error; }
     // Same token's authoritative read rechecks revision/account/rollout and
     // effective expiry after the final download, before the first byte.

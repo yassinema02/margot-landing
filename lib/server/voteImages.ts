@@ -1,7 +1,7 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
 import { VoteBackend, VoteBudget, VoteError, sameHash } from './voteBackend';
-import type { ReservedMedia } from './votePublication';
+import type { ReservedItem } from './votePublication';
 export const MAX_IMAGE_BYTES = 5_242_880;
 export function sha256(bytes:Uint8Array): string { return createHash('sha256').update(bytes).digest('hex'); }
 /** Technical envelope only. Provenance is checked separately, no content verdict or codec. */
@@ -17,7 +17,7 @@ export async function readVoteImage(backend:VoteBackend,budget:VoteBudget,bucket
  return bytes;
 }
 /** Mandatory group gates: no caller can opt out of revalidation around writes/readback. */
-export async function copyVoteImages(backend:VoteBackend,budget:VoteBudget,media:ReservedMedia[],bytes:Uint8Array[],authority:()=>Promise<unknown>): Promise<Array<{mediaId:string;sha256:string}>> {
+export async function copyVoteImages(backend:VoteBackend,budget:VoteBudget,media:ReservedItem[],bytes:Uint8Array[],authority:()=>Promise<unknown>): Promise<Array<{mediaId:string;sha256:string}>> {
  if (!media.length || media.length>2 || bytes.length!==media.length) throw new VoteError('invalid');
  const receipts=media.map((m,i)=>({mediaId:m.mediaId,sha256:sha256(bytes[i])}));
  await authority(); // Post-download gate immediately before the first mutation.

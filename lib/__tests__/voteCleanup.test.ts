@@ -23,3 +23,10 @@ it('retains inventory when a late upload is still present and rejects non-reserv
  expect(await purgeVoteCopiesWith(backend as never,new VoteBudget(),1)).toEqual({removed:0,pending:1});expect(backend.rpc).toHaveBeenCalledTimes(1);
  candidate.path='../private.jpg';await expect(purgeVoteCopiesWith(backend as never,new VoteBudget(),1)).rejects.toThrow();expect(backend.remove).toHaveBeenCalledTimes(1);
 });
+it('encrypted cleanup requires vote_render discriminant; legacy absence is JPEG only',async()=>{
+ const mediaId='00000000-0000-0000-0000-000000000001';
+ const c:Record<string,unknown>={mediaId,sweepAt:'2026-11-10T00:00:00.123456+00:00',sourceKind:'vote_render',bucket:'social-media',path:`00000000-0000-0000-0000-000000000002/votes/00000000-0000-0000-0000-000000000003/1/${mediaId}.enc`,leaseUntil:'2026-11-10T00:01:00Z'};
+ const io={rpc:vi.fn().mockResolvedValue([c]),remove:vi.fn().mockResolvedValue(undefined),exists:vi.fn().mockResolvedValue(false)};
+ expect(await purgeVoteCopiesWith(io as never,new VoteBudget(),1)).toEqual({removed:1,pending:0});
+ for(const kind of [undefined,'item','other']){c.sourceKind=kind;await expect(purgeVoteCopiesWith(io as never,new VoteBudget(),1)).rejects.toThrow();}
+});
