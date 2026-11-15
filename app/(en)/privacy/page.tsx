@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = "11 November 2026";
+const LAST_UPDATED = "15 November 2026";
 
 export default function PrivacyPage() {
   return (
@@ -177,10 +177,7 @@ export default function PrivacyPage() {
               closet can see.
             </P>
             <P>
-              <Strong>Public links.</Strong> A vote shared through a public link shows anyone with
-              the link the occasion, the first name you confirm and its initial, and the photos of
-              the clothes you approve, with their name and category. It never shows your avatar or your profile photo. The link expires
-              7 days after the vote ends and you can remove it at any time. People who vote without
+              <Strong>Public links.</Strong> A vote shared through a public link shows anyone with the link the occasion, the first name you confirm and its initial, and the photos of the clothes you approve, with their name and category. An outfit on your avatar is shown only if you select that preview, view it and confirm it before publishing the link. The link never shows your profile photo. The link expires 7 days after the vote ends and you can remove it at any time. People who vote without
               an account may leave a first name and a short reason, visible to the person who
               created the vote, and to our team if that person reports the reply. To record one vote per device and limit abuse, when you vote, the
               vote page sets a technical cookie (8 days) that identifies the device; we keep with

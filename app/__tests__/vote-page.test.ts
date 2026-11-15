@@ -123,3 +123,16 @@ it('report rights refusal masks the public content and all report controls',asyn
  const b=controlledBallot(null);vi.stubGlobal('fetch',vi.fn(async()=>Response.json({error:'unavailable'},{status:404})));b.reportOpen();b.sendReport();await vi.advanceTimersByTimeAsync(0);
  const html=b.html();expect(html).toContain(VOTE_COPY.fr.unavailable);expect(html).not.toContain('Élo');expect(html).not.toContain('Dîner');expect(html).not.toContain('<select');
 });
+
+it.each(['fr','en','es'] as const)('v2 %s shows each complete photo and all pieces with per-option actions after the common fields',locale=>{
+ const base=snapshot();
+ const s:PublicVoteSnapshot={...base,version:2,options:base.options.map((option,index)=>({...option,visual:index===0?{kind:'render',imageUrl:`/v/${token}/media/avatar`,renderedOrdinals:[1]}:{kind:'pieces'}})) as Extract<PublicVoteSnapshot,{version:2}>['options']};
+ const html=render({status:'ok',snapshot:s,myChoice:null},locale);
+ expect(html).toContain('h-auto w-full object-contain');expect(html).toContain('referrerPolicy="no-referrer"');
+ expect(html.replace(/&#x27;/g,"'")).toContain(VOTE_COPY[locale].notShown);expect(html).toContain('minmax(min(100%, 14rem), 1fr)');
+ expect(html.indexOf('vote-first-name')).toBeLessThan(html.indexOf('<section aria-label="A"'));
+ const a=html.slice(html.indexOf('<section aria-label="A"'),html.indexOf('<section aria-label="B"'));
+ expect(a).toContain(VOTE_COPY[locale].voteA);expect(a).not.toContain(VOTE_COPY[locale].voteB);
+ expect((html.match(/<img /g)||[]).length).toBe(5);
+ expect(html).not.toContain('Créer un vote');expect(html).not.toContain('srcSet');
+});
