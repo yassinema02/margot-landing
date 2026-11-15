@@ -14,8 +14,13 @@ const BUTTON='min-h-[44px] rounded-full px-5 py-3 font-medium focus-visible:outl
 
 function VoteImage({ src, alt, avatar = false, copy }: { src: string; alt: string; avatar?: boolean; copy: typeof VOTE_COPY[VoteLocale] }) {
  const [failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0);
+ const image=useRef<HTMLImageElement|null>(null);
  return failed ? <div className="py-4 text-sm" role="status"><p>{copy.imageFailed}</p><button type="button" className={`${BUTTON} mt-2 border border-ink3`} onClick={()=>{setFailed(false);setAttempt(value=>value+1);}}>{copy.retryImage}</button></div> :
-  <img key={`${src}:${attempt}`} src={src} alt={alt} referrerPolicy="no-referrer" onError={()=>setFailed(true)} className={avatar?'block h-auto w-full object-contain':'aspect-square w-full bg-white object-contain'}/>;
+  <img key={`${src}:${attempt}`} src={src} alt={alt} referrerPolicy="no-referrer" ref={node=>{
+   image.current=node;
+   // The error event may have fired before hydration attached its handler.
+   if(node?.complete && node.naturalWidth===0)setFailed(true);
+  }} onError={event=>{if(image.current===event.currentTarget)setFailed(true);}} className={avatar?'block h-auto w-full object-contain':'aspect-square w-full bg-white object-contain'}/>;
 }
 
 export function VoteBallot({snapshot,myChoice,locale}:{snapshot:PublicVoteSnapshot;myChoice:Choice|null;locale:VoteLocale}) {
