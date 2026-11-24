@@ -12,6 +12,7 @@ export function Footer({ lang }: { lang: HomeLocale }) {
     { title: "Margot", links: [
       { label: fr ? "L’application" : "The app", href: `${home}#dans-lapp` },
       { label: fr ? "Gratuit et Premium" : "Free and Premium", href: `${home}#offre` },
+      { label: fr ? "Parrainer un ami" : "Invite a friend", href: "/parrainage" },
       { label: fr ? "Télécharger" : "Download", href: `${home}#telecharger` },
       { label: fr ? "Découvrir mon style" : "Discover my style", href: `${fr ? "/fr" : ""}/studio-read` },
     ] },
