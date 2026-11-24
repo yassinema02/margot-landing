@@ -40,6 +40,7 @@ const AASA = {
             comment:
               "Liens d'authentification (reset de mot de passe, confirmation d'email)",
           },
+          { "/": "/r/*", comment: "Parrainage Margot" },
           {
             "/": "/i/*",
             comment: "Invitations sociales",

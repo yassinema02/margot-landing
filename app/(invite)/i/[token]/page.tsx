@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 
 import { InviteDownload } from "@/components/InviteDownload";
+import { SIGNUP_COPY, signupCode } from "@/lib/signupInvite";
 import { MargotMark } from "@/components/MargotMark";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/launch";
 import { clientIpFromHeaders, isRateLimited } from "@/lib/rateLimit";
@@ -69,7 +70,7 @@ async function lookUp(token: string, ip: string): Promise<InviteLookup> {
   return fetchInvitePreview(token);
 }
 
-export default async function InvitePage({ params }: { params: Params }) {
+export default async function InvitePage({ params, searchParams }: { params: Params; searchParams?: Promise<{ref?: string | string[]}> }) {
   const { token } = await params;
   const requestHeaders = await headers();
   const locale = pickInviteLocale(requestHeaders.get("accept-language"));
@@ -79,7 +80,9 @@ export default async function InvitePage({ params }: { params: Params }) {
 
   // A dead link is not copied: pasting it in the app would only repeat what
   // this page already said. A link we could not check is: the app checks it.
-  const copyUrl = lookup.status === "invalid" ? undefined : inviteUrl(token);
+  const code = lookup.status === "valid" ? signupCode((await searchParams)?.ref) : null;
+  const copyUrl = lookup.status === "invalid" ? undefined : inviteUrl(token) + (code ? `?ref=${code}` : "");
+
   const placement = `social_invite${lookup.status === "valid" ? "" : `_${lookup.status}`}`;
   const playUrl = `${PLAY_STORE_URL}&referrer=${encodeURIComponent("utm_source=margot_site&utm_campaign=social_invite")}`;
 
@@ -114,6 +117,7 @@ export default async function InvitePage({ params }: { params: Params }) {
         <MargotMark fontSize={26} />
       </a>
 
+      {code && <p className="ph-no-capture mt-6 max-w-sm">{SIGNUP_COPY[locale].detail} <strong className="select-all">{code}</strong></p>}
       {lookup.status === "valid" ? (
         <>
           <div

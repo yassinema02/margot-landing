@@ -26,7 +26,7 @@ describe("apple-app-site-association", () => {
     // Doit rester aligné sur les `pathPrefix` '/app/auth', '/i/' et '/v/' déclarés
     // côté Android dans apps/mobile/app.config.js : les deux plateformes
     // ouvrent les mêmes liens.
-    expect(paths).toEqual(["/v/*", "/app/auth/*", "/i/*"]);
+    expect(paths).toEqual(["/v/*", "/app/auth/*", "/r/*", "/i/*"]);
   });
 
   it("ouvre les invitations sociales dans l'app", async () => {
