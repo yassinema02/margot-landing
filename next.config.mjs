@@ -99,6 +99,15 @@ const nextConfig = {
         ],
       },
       {
+        source: "/parrainage/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://ynldmugsihrgwpvuvofu.supabase.co; form-action 'self'; base-uri 'self'; frame-ancestors 'none'" },
+        ],
+      },
+      {
         source: "/r/:path*",
         headers: [
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
