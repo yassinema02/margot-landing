@@ -99,6 +99,13 @@ const nextConfig = {
         ],
       },
       {
+        source: "/r/:path*",
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+        ],
+      },
+      {
         // Social invitation links carry a bearer token: never indexed, never
         // sent on as a referrer. Must stay AFTER the site-wide rule: for the
         // same key, Next keeps the last matching value.

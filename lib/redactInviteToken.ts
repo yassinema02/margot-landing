@@ -13,11 +13,12 @@ const INVITE_SEGMENT = /(^|\/\/[^/?#\s"'<>]*)\/i\/[^/?#\s"'<>]+/g;
 
 export function redactInviteToken(value: string): string {
   return value.replace(INVITE_SEGMENT, `$1${INVITE_PATH_PLACEHOLDER}`)
+    .replace(/(^|\/\/[^/?#\s"'<>]*)\/r\/[^\s"'<>]+/g, '$1/r/:code')
     .replace(/(^|\/\/[^/?#\s"'<>]*)\/v\/[^\s"'<>]+/g, '$1/v/:token')
     .replace(/([?&#])([^=&#\s"'<>]+)=[^&#\s"'<>]*/g, (pair, separator: string, encodedKey: string) => {
       let key:string;
       try { key=decodeURIComponent(encodedKey); } catch { return separator+'redacted=1'; }
-      return /%|^(?:access_?token|refresh_?token|token|code|first_?name|reason|name|invite|vote|device|owner|item|authorization|cookie)(?:_?id)?$/i.test(key) ? separator+'redacted=1' : pair;
+      return /%|^(?:access_?token|refresh_?token|token|code|ref|first_?name|reason|name|invite|vote|device|owner|item|authorization|cookie)(?:_?id)?$/i.test(key) ? separator+'redacted=1' : pair;
     })
     .replace(/(redacted=1[^#\s"'<>]*)#[^\s"'<>]*/g, '$1');
 }
